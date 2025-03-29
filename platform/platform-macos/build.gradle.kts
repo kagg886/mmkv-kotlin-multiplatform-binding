@@ -15,7 +15,7 @@ check(APP_VERSION.startsWith("v")) {
 group = "top.kagg886.mkmb"
 version = APP_VERSION.substring(1)
 
-println("LIB_PLATFORM_LINUX_VERSION: $version")
+println("LIB_PLATFORM_MACOS_VERSION: $version")
 
 kotlin {
     jvmToolchain(22)
