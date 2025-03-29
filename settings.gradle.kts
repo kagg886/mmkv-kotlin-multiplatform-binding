@@ -42,3 +42,6 @@ findProject(":platform:platform-linux")?.name = "platform-linux"
 
 include("platform:platform-macos")
 findProject(":platform:platform-macos")?.name = "platform-macos"
+
+include("platform:platform-android")
+findProject(":platform:platform-android")?.name = "platform-android"

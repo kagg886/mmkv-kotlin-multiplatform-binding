@@ -1,19 +1,34 @@
-import top.kagg886.mkmb.*
+import android.util.Log
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
+import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import top.kagg886.mkmb.MMKV
+import top.kagg886.mkmb.MMKVException
+import top.kagg886.mkmb.defaultMMKV
+import top.kagg886.mkmb.initialize
+import top.kagg886.mkmb.mmkvWithID
 import java.io.File
-import kotlin.test.*
 
-class MMKVInitTest {
-    @BeforeTest
-    fun beforeAll() {
-        if (!MMKV.initialized) {
-            val testFile = File("mmkv-test").apply {
-                if (!exists()) {
-                    mkdirs()
-                }
-                listFiles()?.forEach(File::deleteRecursively)
-            }
-            MMKV.initialize(testFile.absolutePath) {
-                logLevel = MMKVOptions.LogLevel.Debug
+
+@RunWith(AndroidJUnit4::class)
+@SmallTest
+class LogHistoryAndroidUnitTest {
+
+    @Before
+    fun init() {
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        appContext.cacheDir.listFiles()?.forEach(File::deleteRecursively)
+        MMKV.initialize(appContext.cacheDir.absolutePath) {
+            logFunc = { _,tag,string->
+                Log.i(tag,string)
             }
         }
     }
@@ -71,18 +86,18 @@ class MMKVInitTest {
     fun testMMKVByteArrayStore() {
         val dest = byteArrayOf(1, 2, 3, 4, 5)
         val mmkv = MMKV.defaultMMKV()
-        assertContentEquals(byteArrayOf(), mmkv.getByteArray("key"))
+        assertArrayEquals(byteArrayOf(), mmkv.getByteArray("key"))
         mmkv.set("key", dest)
-        assertContentEquals(dest, mmkv.getByteArray("key"))
+        assertArrayEquals(dest, mmkv.getByteArray("key"))
     }
 
     @Test
     fun testMMKVStringListStore() {
-        val target = listOf("qww", "UTF-8", "字符串？")
+        val target = arrayOf("qww", "UTF-8", "字符串？")
         val mmkv = MMKV.defaultMMKV()
-        assertContentEquals(listOf(), mmkv.getStringList("key"))
-        mmkv.set("key", target)
-        assertContentEquals(target, mmkv.getStringList("key"))
+        assertArrayEquals(emptyArray(), mmkv.getStringList("key").toTypedArray())
+        mmkv.set("key", target.toList())
+        assertArrayEquals(target, mmkv.getStringList("key").toTypedArray())
     }
 
     @Test
@@ -123,7 +138,7 @@ class MMKVInitTest {
     fun testMMKVMemoryProtect() {
         val mmkv = MMKV.defaultMMKV()
         mmkv.destroy()
-        assertFailsWith(MMKVException::class) {
+        assertThrows(MMKVException::class.java) {
             mmkv.set("key",1)
         }
     }
@@ -132,9 +147,9 @@ class MMKVInitTest {
     fun testMMKVAllKeys() {
         val mmkv = MMKV.defaultMMKV()
         mmkv.set("key",1)
-        assertContentEquals(listOf("key"),mmkv.allKeys())
+        assertArrayEquals(listOf("key").toTypedArray(),mmkv.allKeys().toTypedArray())
         mmkv.set("qwq","awa")
-        assertContentEquals(listOf("key","qwq"),mmkv.allKeys())
+        assertArrayEquals(listOf("key","qwq").toTypedArray(),mmkv.allKeys().toTypedArray())
     }
 
     @Test

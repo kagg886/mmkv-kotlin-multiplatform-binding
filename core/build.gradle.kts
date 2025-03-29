@@ -27,7 +27,7 @@ val hostTarget by lazy {
 kotlin {
     jvmToolchain(22)
 
-//    androidTarget { publishLibraryVariants("release") }
+    androidTarget { publishLibraryVariants("release") }
     jvm()
 
 //    iosX64()
@@ -39,6 +39,17 @@ kotlin {
             implementation(kotlin("test"))
             implementation(project(":platform:platform-${hostTarget.name.lowercase()}"))
         }
+
+        androidMain.dependencies {
+            implementation(project(":platform:platform-android"))
+        }
+
+
+        androidInstrumentedTest.dependencies {
+            implementation(libs.androidx.junit)
+            implementation(libs.junit)
+            implementation(libs.androidx.espresso.core)
+        }
     }
 }
 
@@ -47,6 +58,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 28
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 }

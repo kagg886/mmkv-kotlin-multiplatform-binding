@@ -1,10 +1,8 @@
 package top.kagg886.mkmb
 
-import kotlinx.atomicfu.atomic
-
 interface MMKV {
     companion object {
-        var initialized: Boolean by atomic(false)
+        var initialized: Boolean = false
             internal set
     }
 
