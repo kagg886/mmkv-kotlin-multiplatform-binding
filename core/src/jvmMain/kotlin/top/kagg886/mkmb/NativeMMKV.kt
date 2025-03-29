@@ -1,6 +1,5 @@
 package top.kagg886.mkmb
 
-import jdk.internal.foreign.abi.SharedUtils.C_POINTER
 import kotlinx.atomicfu.atomic
 import java.lang.foreign.*
 import java.lang.foreign.ValueLayout.*
