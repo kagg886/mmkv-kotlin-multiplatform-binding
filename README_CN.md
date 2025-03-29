@@ -12,31 +12,60 @@ The English Version is [Here](./README.md)
 
 ## 支持的平台
 
-- [ ] Windows
-  - [ ] JVM
+- [x] Windows
+  - [x] JVM
   - [ ] Native
-- [ ] Linux
-  - [ ] JVM
+- [x] Linux
+  - [x] JVM
   - [ ] Native
-- [ ] macOS
-  - [ ] JVM
+- [x] macOS
+  - [x] JVM
   - [ ] Native
-- [ ] Android(JVM)
+- [x] Android(JVM)
 - [ ] IOS
 
 
 
 ## 安装引入(正在施工，发版后可以正常使用)
 
-建议您使用 `Gradle KTS` 完成配置：
+1. 引入`core`模块，这是一个 `Kotlin-MultiPlatform` 模块，提供访问各个操作系统的门面。
 
-```
-dependencies {
-    implementation("top.kagg886.mkmb:mkmb:1.0.0")
-}
-```
+   ```kotlin
+   dependencies {
+       implementation("top.kagg886.mkmb:core:1.0.0")
+   }
+   ```
 
-> 必须使用JDK22+
+2. 根据所需平台引入不同的动态库：
+
+   ```kotlin
+   enum class JvmTarget {
+       MACOS,
+       WINDOWS,
+       LINUX;
+   }
+   
+   val hostTarget by lazy {
+       val osName = System.getProperty("os.name")
+       when {
+           osName == "Mac OS X" -> JvmTarget.MACOS
+           osName.startsWith("Win") -> JvmTarget.WINDOWS
+           osName.startsWith("Linux") -> JvmTarget.LINUX
+           else -> error("Unsupported OS: $osName")
+       }
+   }
+   
+   androidMain.dependencies {
+       implementation("top.kagg886.mkmb:platform-android:1.0.0")
+   }
+   
+   //不同操作系统引入不同的二进制文件
+   jvmMain.dependencies {
+       implementation("top.kagg886.mkmb:platform-${hostTarget.name.lowercase()}:1.0.0")
+   }
+   ```
+
+   
 
 
 
@@ -65,26 +94,36 @@ println(mmkv.getInt("qwq")) //2
 
 MKMB计划支持：
 
+### 实例化
 
+- 获取默认MMKV实例
+- 根据 `mmapID` 获取MMKV实例
 
-以下类型的存/取：
+### 类型存取
 
 - Int
 - String
-- ByteArray
-- List\<String\>
 - Boolean
 - Long
 - Float
 - Double
+- ByteArray
+- List\<String\>
 
-下列集合操作：
+### 集合操作
 
 - 根据Key移除Value
 - 清空
 - 获取大小
 - 获取键集合
 - 检查key是否存在
+
+### 实例操作
+
+- 销毁MMKV及其本地存储
+- 检测MMKV实例是否被销毁
+
+
 
 
 
