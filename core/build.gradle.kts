@@ -35,6 +35,10 @@ kotlin {
 //    iosSimulatorArm64()
 
     sourceSets {
+        commonMain.dependencies {
+            implementation(libs.atomicfu)
+        }
+
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(project(":platform:platform-${hostTarget.name.lowercase()}"))

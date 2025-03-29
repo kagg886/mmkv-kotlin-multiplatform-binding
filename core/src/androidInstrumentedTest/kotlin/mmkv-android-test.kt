@@ -1,6 +1,5 @@
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -19,7 +18,6 @@ import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
-@SmallTest
 class LogHistoryAndroidUnitTest {
 
     @Before
@@ -28,7 +26,7 @@ class LogHistoryAndroidUnitTest {
         appContext.cacheDir.listFiles()?.forEach(File::deleteRecursively)
         MMKV.initialize(appContext.cacheDir.absolutePath) {
             logFunc = { _,tag,string->
-                Log.i(tag,string)
+                println("$tag : $string")
             }
         }
     }

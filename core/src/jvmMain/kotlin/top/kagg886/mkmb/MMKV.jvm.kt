@@ -10,92 +10,92 @@ import java.lang.foreign.SymbolLookup
 internal class PanamaMMKV(private val ptr: MemorySegment) : MMKV {
     private var alive by atomic(true)
     override fun set(key: String, value: Int) {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         NativeMMKV.mmkvc_setInt(ptr, key, value)
     }
 
     override fun set(key: String, value: String) {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         NativeMMKV.mmkvc_setString(ptr, key, value)
     }
 
     override fun set(key: String, value: ByteArray) {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         NativeMMKV.mmkvc_setByteArray(ptr, key, value)
     }
 
     override fun set(key: String, value: List<String>) {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         NativeMMKV.mmkvc_setStringList(ptr, key, value)
     }
 
     override fun set(key: String, value: Boolean) {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         NativeMMKV.mmkvc_setBoolean(ptr, key, value)
     }
 
     override fun set(key: String, value: Long) {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         NativeMMKV.mmkvc_setLong(ptr, key, value)
     }
 
     override fun set(key: String, value: Float) {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         NativeMMKV.mmkvc_setFloat(ptr, key, value)
     }
 
     override fun set(key: String, value: Double) {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         NativeMMKV.mmkvc_setDouble(ptr, key, value)
     }
 
     override fun getInt(key: String): Int {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_getInt(ptr, key)
     }
 
     override fun getString(key: String): String {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_getString(ptr, key)
     }
 
     override fun getByteArray(key: String): ByteArray {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_getByteArray(ptr, key)
     }
 
     override fun getStringList(key: String): List<String> {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_getStringList(ptr, key)
     }
 
     override fun getBoolean(key: String): Boolean {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_getBoolean(ptr, key)
     }
 
     override fun getLong(key: String): Long {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_getLong(ptr, key)
     }
 
     override fun getFloat(key: String): Float {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_getFloat(ptr, key)
     }
 
     override fun getDouble(key: String): Double {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_getDouble(ptr, key)
     }
 
     override fun remove(key: String): Boolean {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_remove(ptr, key)
     }
 
     override fun clear() {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         NativeMMKV.mmkvc_clear(ptr)
     }
 
@@ -110,17 +110,17 @@ internal class PanamaMMKV(private val ptr: MemorySegment) : MMKV {
     }
 
     override fun size(): Int {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_size(ptr)
     }
 
     override fun allKeys(): List<String> {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_allKeys(ptr)
     }
 
     override fun exists(key: String): Boolean {
-        if (!alive) throw MMKVException("MMKV instance was destroyed")
+        if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
         return NativeMMKV.mmkvc_exists(ptr, key)
     }
 
