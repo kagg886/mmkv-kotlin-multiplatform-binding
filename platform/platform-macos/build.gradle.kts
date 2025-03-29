@@ -1,14 +1,24 @@
+import com.vanniktech.maven.publish.KotlinJvm
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
-    alias(libs.plugins.multiplatform)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.maven.publish)
+}
+
+val SKIP_SIGN = (System.getenv("SKIP_SIGN") ?: project.findProperty("SKIP_SIGN") as? String ?: "false").toBooleanStrict()
+val APP_VERSION = System.getenv("APP_VERSION") ?: project.findProperty("APP_VERSION") as? String ?: "unsetted."
+check(APP_VERSION.startsWith("v")) {
+    "APP_VERSION not supported, current is $APP_VERSION"
 }
 
 group = "top.kagg886.mkmb"
-version = "1.0.0"
+version = APP_VERSION.substring(1)
 
+println("LIB_PLATFORM_LINUX_VERSION: $version")
 
 kotlin {
     jvmToolchain(22)
-    jvm()
 }
 
 val processBuild = tasks.register<Exec>("processBuild") {
@@ -28,7 +38,7 @@ val processBuild = tasks.register<Exec>("processBuild") {
 }
 
 // 配置JVM的processResources任务
-tasks.named<ProcessResources>("jvmProcessResources") {
+tasks.named<ProcessResources>("processResources") {
     dependsOn(processBuild)
     from(project.file("native-binding-macos/build/libmmkvc.dylib"))
 }

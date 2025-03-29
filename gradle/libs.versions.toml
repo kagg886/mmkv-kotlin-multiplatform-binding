@@ -3,7 +3,6 @@ atomicfu = "0.27.0"
 kotlin = "2.1.0"
 kotlinx-atomicfu = "0.27.0"
 agp = "8.6.1"
-core-ktx = "1.15.0"
 junit = "4.13.2"
 junit-version = "1.2.1"
 espresso-core = "3.6.1"
@@ -16,6 +15,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 [plugins]
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlinx-atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "kotlinx-atomicfu" }
+maven-publish = { id = "com.vanniktech.maven.publish", version = "0.31.0" }
