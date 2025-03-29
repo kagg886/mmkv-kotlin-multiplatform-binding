@@ -13,30 +13,37 @@ internal class PanamaMMKV(private val ptr: MemorySegment) : MMKV {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         NativeMMKV.mmkvc_setInt(ptr, key, value)
     }
+
     override fun set(key: String, value: String) {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         NativeMMKV.mmkvc_setString(ptr, key, value)
     }
+
     override fun set(key: String, value: ByteArray) {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         NativeMMKV.mmkvc_setByteArray(ptr, key, value)
     }
+
     override fun set(key: String, value: List<String>) {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         NativeMMKV.mmkvc_setStringList(ptr, key, value)
     }
+
     override fun set(key: String, value: Boolean) {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         NativeMMKV.mmkvc_setBoolean(ptr, key, value)
     }
+
     override fun set(key: String, value: Long) {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         NativeMMKV.mmkvc_setLong(ptr, key, value)
     }
+
     override fun set(key: String, value: Float) {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         NativeMMKV.mmkvc_setFloat(ptr, key, value)
     }
+
     override fun set(key: String, value: Double) {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         NativeMMKV.mmkvc_setDouble(ptr, key, value)
@@ -46,46 +53,57 @@ internal class PanamaMMKV(private val ptr: MemorySegment) : MMKV {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         return NativeMMKV.mmkvc_getInt(ptr, key)
     }
+
     override fun getString(key: String): String {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         return NativeMMKV.mmkvc_getString(ptr, key)
     }
+
     override fun getByteArray(key: String): ByteArray {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         return NativeMMKV.mmkvc_getByteArray(ptr, key)
     }
+
     override fun getStringList(key: String): List<String> {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         return NativeMMKV.mmkvc_getStringList(ptr, key)
     }
+
     override fun getBoolean(key: String): Boolean {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         return NativeMMKV.mmkvc_getBoolean(ptr, key)
     }
+
     override fun getLong(key: String): Long {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         return NativeMMKV.mmkvc_getLong(ptr, key)
     }
+
     override fun getFloat(key: String): Float {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         return NativeMMKV.mmkvc_getFloat(ptr, key)
     }
+
     override fun getDouble(key: String): Double {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         return NativeMMKV.mmkvc_getDouble(ptr, key)
     }
+
     override fun remove(key: String): Boolean {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         return NativeMMKV.mmkvc_remove(ptr, key)
     }
+
     override fun clear() {
         if (!alive) throw MMKVException("MMKV instance was destroyed")
         NativeMMKV.mmkvc_clear(ptr)
     }
+
     override fun destroy(): Boolean {
         if (!alive) return false
         return alive.apply { alive = !NativeMMKV.mmkvc_destroy(ptr) }
     }
+
     override fun isAlive(): Boolean {
         if (!alive) return false
         return alive.apply { alive = NativeMMKV.mmkvc_isAlive(ptr) }
@@ -130,12 +148,13 @@ actual fun MMKV.Companion.mmkvWithID(id: String): MMKV {
 
 actual val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader by lazy {
     MMKVOptions.MMKVCLibLoader {
-        val name = when(jvmTarget) {
-            MACOS,LINUX -> "libmmkvc"
+        val name = when (jvmTarget) {
+            MACOS, LINUX -> "libmmkvc"
             WINDOWS -> "mmkvc"
         }
-        val ext = when(jvmTarget) {
-            MACOS,LINUX -> "so"
+        val ext = when (jvmTarget) {
+            MACOS -> "dylib"
+            LINUX -> "so"
             WINDOWS -> "dll"
         }
         val tmp = File(System.getProperty("user.home")).resolve(".cache").resolve("$name.$ext")
