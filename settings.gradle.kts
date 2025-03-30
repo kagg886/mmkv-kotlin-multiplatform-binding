@@ -45,3 +45,4 @@ findProject(":platform:platform-macos")?.name = "platform-macos"
 
 include("platform:platform-android")
 findProject(":platform:platform-android")?.name = "platform-android"
+include("core-java")

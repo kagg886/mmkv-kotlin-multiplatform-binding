@@ -132,9 +132,8 @@ class JNIPointerMMKV(private val handle: Long) : MMKV {
 
 actual fun MMKV.Companion.initialize(
     path: String,
-    conf: MMKVOptions.() -> Unit
+    options: MMKVOptions
 ) {
-    val options = MMKVOptions().apply(conf)
     NativeMMKV.initialize(options.libLoader.load())
     val data = MMKVInternalLog { level, tag, message ->
         options.logFunc.invoke(MMKVOptions.LogLevel.from(level), tag, message)

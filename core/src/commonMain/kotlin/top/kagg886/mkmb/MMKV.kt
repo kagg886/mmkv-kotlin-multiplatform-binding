@@ -242,7 +242,14 @@ expect val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader
  * @param path 存储路径
  * @param conf 配置选项
  */
-expect fun MMKV.Companion.initialize(path: String, conf: MMKVOptions.() -> Unit = {})
+fun MMKV.Companion.initialize(path: String, conf: MMKVOptions.() -> Unit = {}) = MMKV.initialize(path, MMKVOptions().apply(conf))
+
+/**
+ * 初始化MMKV
+ * @param path 存储路径
+ * @param conf 配置选项
+ */
+expect fun MMKV.Companion.initialize(path: String, options:MMKVOptions)
 
 /**
  * 获取默认的MMKV实例
