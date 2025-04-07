@@ -32,6 +32,7 @@ dependencyResolutionManagement {
     }
 }
 include(":core")
+include("core-java")
 
 include("platform:platform-windows")
 findProject(":platform:platform-windows")?.name = "platform-windows"
@@ -45,4 +46,6 @@ findProject(":platform:platform-macos")?.name = "platform-macos"
 
 include("platform:platform-android")
 findProject(":platform:platform-android")?.name = "platform-android"
-include("core-java")
+
+include("platform:platform-ios")
+findProject(":platform:platform-ios")?.name = "platform-ios"

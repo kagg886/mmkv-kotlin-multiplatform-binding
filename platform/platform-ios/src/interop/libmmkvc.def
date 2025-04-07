@@ -1,0 +1,7 @@
+headers = mmkvc.h
+staticLibraries = libnative-binding-ios.a
+linkerOpts.ios_arm64 = -Bstatic -Lbuild/mmkvc/Release-iphoneos -lmmkvc
+libraryPaths.ios_arm64 = build/mmkvc/Release-iphoneos
+
+linkerOpts.ios_simulator_arm64 = -Bstatic -Lbuild/mmkvc/Release-iphoneos -lmmkvc
+libraryPaths.ios_simulator_arm64 = build/mmkvc/Release-iphoneos

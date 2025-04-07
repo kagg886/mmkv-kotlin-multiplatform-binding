@@ -3,8 +3,6 @@ import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     alias(libs.plugins.multiplatform)
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlinx.atomicfu)
     alias(libs.plugins.maven.publish)
 }
 
@@ -17,68 +15,48 @@ check(APP_VERSION.startsWith("v")) {
 group = "top.kagg886.mkmb"
 version = APP_VERSION.substring(1)
 
-println("LIB_CORE_VERSION: $version")
-
-enum class JvmTarget {
-    MACOS,
-    WINDOWS,
-    LINUX;
-}
-
-val hostTarget by lazy {
-    val osName = System.getProperty("os.name")
-    when {
-        osName == "Mac OS X" -> JvmTarget.MACOS
-        osName.startsWith("Win") -> JvmTarget.WINDOWS
-        osName.startsWith("Linux") -> JvmTarget.LINUX
-        else -> error("Unsupported OS: $osName")
-    }
-}
-
+println("LIB_PLATFORM_IOS_VERSION: $version")
 
 kotlin {
     jvmToolchain(22)
 
-    androidTarget { publishLibraryVariants("release") }
-    jvm()
-
-    iosArm64()
-    iosSimulatorArm64()
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach { targets->
+        targets.apply {
+            compilations.all {
+                cinterops {
+                    val mmkvc by creating {
+                        defFile("src/interop/libmmkvc.def")
+                        packageName("mmkvc")
+                        includeDirs("src/interop/include")
+                    }
+                }
+            }
+        }
+    }
 
     sourceSets {
-        commonMain.dependencies {
-            implementation(libs.atomicfu)
-        }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-            implementation(project(":platform:platform-${hostTarget.name.lowercase()}"))
-        }
-
-        androidMain.dependencies {
-            implementation(project(":platform:platform-android"))
-        }
-
-        iosMain.dependencies {
-            implementation(project(":platform:platform-ios"))
-        }
-
-
-        androidInstrumentedTest.dependencies {
-            implementation(libs.androidx.junit)
-            implementation(libs.junit)
-            implementation(libs.androidx.espresso.core)
-        }
     }
 }
 
-android {
-    namespace = "top.kagg886.mkmb"
-    compileSdk = 35
+val processIosArm64Build = tasks.register<Exec>("processIosArm64Build") {
+    onlyIf {
+        System.getProperty("os.name").startsWith("Mac")
+    }
+    workingDir(project.file("native-binding-ios"))
+    val cmd = "xcodebuild -scheme native-binding-ios -configuration Release -sdk iphoneos ARCHS=arm64 BUILD_DIR=${project.file("build/mmkvc")}"
+    commandLine("bash","-c",cmd)
+}
+//cinteropTestMmkvcIosSimulatorArm64
+//cinteropTestMmkvcIosArm64
+//cinterop    MmkvcIosSimulatorArm64
+//cinterop    MmkvcIosArm64
 
-    defaultConfig {
-        minSdk = 28
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+for (task in listOf("cinteropTestMmkvcIosSimulatorArm64", "cinteropTestMmkvcIosArm64", "cinteropMmkvcIosSimulatorArm64", "cinteropMmkvcIosArm64")) {
+    tasks.named(task) {
+        dependsOn(processIosArm64Build)
     }
 }
 

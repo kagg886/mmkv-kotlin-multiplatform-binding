@@ -36,7 +36,7 @@ The English Version is [Here](./README.md)
    }
    ```
 
-2. 根据所需平台引入不同的动态库：
+2. 如果是JVM平台，需要引入不同的动态库：
 
    ```kotlin
    enum class JvmTarget {
@@ -54,11 +54,6 @@ The English Version is [Here](./README.md)
            else -> error("Unsupported OS: $osName")
        }
    }
-   
-   androidMain.dependencies {
-       implementation("top.kagg886.mkmb:platform-android:1.0.0")
-   }
-   
    //不同操作系统引入不同的二进制文件
    jvmMain.dependencies {
        implementation("top.kagg886.mkmb:platform-${hostTarget.name.lowercase()}:1.0.0")
