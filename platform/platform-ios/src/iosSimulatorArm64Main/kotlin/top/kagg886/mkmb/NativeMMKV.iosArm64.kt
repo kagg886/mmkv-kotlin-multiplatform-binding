@@ -141,12 +141,19 @@ actual object NativeMMKVImpl : NativeMMKV {
 
     override fun destroy(handle: NSObject): Boolean {
         val mmkv = handle as MMKV
-        return MMKV.removeStorage(mmkv.mmapID(),MMKV.mmkvBasePath())
+        val removed =  MMKV.removeStorage(mmkv.mmapID(),MMKV.mmkvBasePath())
+        if (removed) {
+            while (MMKV.isFileValid(mmkv.mmapID(),MMKV.mmkvBasePath())) {
+                println("waiting for close...")
+            }
+            return true
+        }
+        return false
     }
 
     override fun isAlive(handle: NSObject): Boolean {
         val mmkv = handle as MMKV
-        return MMKV.isFileValid(mmkv.mmapID())
+        return MMKV.isFileValid(mmkv.mmapID(),MMKV.mmkvBasePath())
     }
 
     override fun size(handle: NSObject): Int {
