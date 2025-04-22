@@ -34,13 +34,14 @@ actual object NativeMMKVImpl : NativeMMKV {
     override fun setData(handle: NSObject, key: String, value: ByteArray) {
         val mmkv = handle as MMKV
 
-        mmkv.setData(value.toNSData(), key)
+        value.useAsNSData {
+            mmkv.setData(this, key)
+        }
     }
 
     override fun setStringList(handle: NSObject, key: String, value: List<String>) {
         val mmkv = handle as MMKV
-        val list = MMKVStringList(value)
-        mmkv.setObject(list, key)
+        TODO()
     }
 
     override fun setBool(handle: NSObject, key: String, value: Boolean) {
@@ -82,8 +83,9 @@ actual object NativeMMKVImpl : NativeMMKV {
     @OptIn(BetaInteropApi::class)
     override fun getStringList(handle: NSObject, key: String): List<String> {
         val mmkv = handle as MMKV
-        val list = mmkv.getObjectOfClass(MMKVStringList.`class`(), key) as MMKVStringList
-        return list
+        TODO()
+//        val list = mmkv.getObjectOfClass(MMKVStringList.`class`(), key) as MMKVStringList
+//        return list
     }
 
     override fun getBool(handle: NSObject, key: String): Boolean {
@@ -108,6 +110,9 @@ actual object NativeMMKVImpl : NativeMMKV {
 
     override fun remove(handle: NSObject, key: String): Boolean {
         val mmkv = handle as MMKV
+        if (!mmkv.containsKey(key)) {
+            return false
+        }
         mmkv.removeValueForKey(key)
         return true
     }

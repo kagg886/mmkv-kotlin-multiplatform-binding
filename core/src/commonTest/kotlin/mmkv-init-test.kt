@@ -1,18 +1,20 @@
+import okio.FileSystem
+import okio.Path.Companion.toPath
+import okio.SYSTEM
 import top.kagg886.mkmb.*
-import java.io.File
 import kotlin.test.*
 
 class MMKVInitTest {
     @BeforeTest
     fun beforeAll() {
         if (!MMKV.initialized) {
-            val testFile = File("mmkv-test").apply {
-                if (!exists()) {
-                    mkdirs()
+            val testFile = "mmkv-test".toPath().apply {
+                if (FileSystem.SYSTEM.exists(this)) {
+                    FileSystem.SYSTEM.deleteRecursively(this)
                 }
-                listFiles()?.forEach(File::deleteRecursively)
+                FileSystem.SYSTEM.createDirectory(this)
             }
-            MMKV.initialize(testFile.absolutePath) {
+            MMKV.initialize(FileSystem.SYSTEM.canonicalize(testFile.normalized()).toString()) {
                 logLevel = MMKVOptions.LogLevel.Debug
             }
         }
@@ -114,15 +116,15 @@ class MMKVInitTest {
     @Test
     fun testMMKVAlive() {
         val mmkv = MMKV.defaultMMKV()
-        assertTrue(mmkv.isAlive())
         mmkv.set("key",1)
+        assertTrue(mmkv.isAlive())
         mmkv.destroy()
         assertFalse(mmkv.isAlive())
     }
     @Test
     fun testMMKVMemoryProtect() {
         val mmkv = MMKV.defaultMMKV()
-        mmkv.destroy()
+        assertTrue(mmkv.destroy())
         assertFailsWith(MMKVException::class) {
             mmkv.set("key",1)
         }
@@ -134,7 +136,7 @@ class MMKVInitTest {
         mmkv.set("key",1)
         assertContentEquals(listOf("key"),mmkv.allKeys())
         mmkv.set("qwq","awa")
-        assertContentEquals(listOf("key","qwq"),mmkv.allKeys())
+        assertContentEquals(listOf("key","qwq"),mmkv.allKeys().sorted())
     }
 
     @Test
