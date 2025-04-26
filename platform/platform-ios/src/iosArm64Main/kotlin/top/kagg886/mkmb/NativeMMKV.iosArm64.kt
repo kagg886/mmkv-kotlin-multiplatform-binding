@@ -4,6 +4,7 @@ import kotlinx.cinterop.*
 import mmkv.MMKV
 import mmkv.MMKVHandlerProtocol
 import mmkv.MMKVLogLevel
+import platform.Foundation.NSMutableArray
 import platform.darwin.NSObject
 
 
@@ -41,7 +42,11 @@ actual object NativeMMKVImpl : NativeMMKV {
 
     override fun setStringList(handle: NSObject, key: String, value: List<String>) {
         val mmkv = handle as MMKV
-        TODO()
+        val arr = NSMutableArray()
+        for (i in value) {
+            arr.addObject(i)
+        }
+        mmkv.setObject(arr,key)
     }
 
     override fun setBool(handle: NSObject, key: String, value: Boolean) {
@@ -83,9 +88,19 @@ actual object NativeMMKVImpl : NativeMMKV {
     @OptIn(BetaInteropApi::class)
     override fun getStringList(handle: NSObject, key: String): List<String> {
         val mmkv = handle as MMKV
-        TODO()
-//        val list = mmkv.getObjectOfClass(MMKVStringList.`class`(), key) as MMKVStringList
-//        return list
+
+        val arr = mmkv.getObjectOfClass(NSMutableArray.`class`()!!,key) as NSMutableArray?
+        if (arr == null) {
+            return emptyList()
+        }
+
+        val list = mutableListOf<String>()
+
+        for (i in 0.toULong()..<arr.count()) {
+            val data = arr.objectAtIndex(i) as String
+            list.add(data)
+        }
+        return list
     }
 
     override fun getBool(handle: NSObject, key: String): Boolean {
@@ -129,7 +144,7 @@ actual object NativeMMKVImpl : NativeMMKV {
 
     override fun isAlive(handle: NSObject): Boolean {
         val mmkv = handle as MMKV
-        return MMKV.isFileValid(mmkv.mmapID())
+        return MMKV.checkExist(mmkv.mmapID(),MMKV.mmkvBasePath())
     }
 
     override fun size(handle: NSObject): Int {

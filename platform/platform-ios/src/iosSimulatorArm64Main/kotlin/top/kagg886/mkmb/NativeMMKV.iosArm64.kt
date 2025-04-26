@@ -5,8 +5,6 @@ import mmkv.MMKV
 import mmkv.MMKVHandlerProtocol
 import mmkv.MMKVLogLevel
 import platform.Foundation.NSMutableArray
-import platform.Foundation.arrayWithArray
-import platform.Foundation.arrayWithObjects
 import platform.darwin.NSObject
 
 
@@ -141,19 +139,12 @@ actual object NativeMMKVImpl : NativeMMKV {
 
     override fun destroy(handle: NSObject): Boolean {
         val mmkv = handle as MMKV
-        val removed =  MMKV.removeStorage(mmkv.mmapID(),MMKV.mmkvBasePath())
-        if (removed) {
-            while (MMKV.isFileValid(mmkv.mmapID(),MMKV.mmkvBasePath())) {
-                println("waiting for close...")
-            }
-            return true
-        }
-        return false
+        return MMKV.removeStorage(mmkv.mmapID(),MMKV.mmkvBasePath())
     }
 
     override fun isAlive(handle: NSObject): Boolean {
         val mmkv = handle as MMKV
-        return MMKV.isFileValid(mmkv.mmapID(),MMKV.mmkvBasePath())
+        return MMKV.checkExist(mmkv.mmapID(),MMKV.mmkvBasePath())
     }
 
     override fun size(handle: NSObject): Int {

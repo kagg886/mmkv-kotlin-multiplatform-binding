@@ -51,8 +51,9 @@ kotlin {
         }
 
         commonTest.dependencies {
+            implementation("com.squareup.okio:okio:3.10.2")
             implementation(kotlin("test"))
-            implementation(project(":platform:platform-${hostTarget.name.lowercase()}"))
+//            implementation(project(":platform:platform-${hostTarget.name.lowercase()}"))
         }
 
         androidMain.dependencies {
