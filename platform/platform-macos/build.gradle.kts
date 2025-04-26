@@ -42,3 +42,38 @@ tasks.named<ProcessResources>("processResources") {
     dependsOn(processBuild)
     from(project.file("native-binding-macos/build/libmmkvc.dylib"))
 }
+
+
+mavenPublishing {
+    configure(KotlinJvm())
+    publishToMavenCentral(SonatypeHost.S01)
+    if (!SKIP_SIGN) {
+        signAllPublications()
+    }
+    coordinates(group.toString(), project.name, version.toString())
+    pom {
+        name = "MMKV-multiplatform-binding"
+        description = "An api accesser wrapped tencent-mmkv by kotlin "
+        inceptionYear = "2025"
+        url = "https://github.com/kagg886/mmkv-kotlin-multiplatform-binding"
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "kagg886"
+                name = "kagg886"
+                url = "https://github.com/kagg886/"
+            }
+        }
+        scm {
+            url = "https://github.com/kagg886/mmkv-kotlin-multiplatform-binding"
+            connection = "scm:git:git://github.com/kagg886/mmkv-kotlin-multiplatform-binding.git"
+            developerConnection = "scm:git:ssh://git@github.com/kagg886/mmkv-kotlin-multiplatform-binding.git"
+        }
+    }
+}

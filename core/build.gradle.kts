@@ -28,7 +28,7 @@ enum class JvmTarget {
 val hostTarget by lazy {
     val osName = System.getProperty("os.name")
     when {
-        osName == "Mac OS X" -> JvmTarget.MACOS
+        osName.startsWith("Mac") -> JvmTarget.MACOS
         osName.startsWith("Win") -> JvmTarget.WINDOWS
         osName.startsWith("Linux") -> JvmTarget.LINUX
         else -> error("Unsupported OS: $osName")
@@ -53,7 +53,10 @@ kotlin {
         commonTest.dependencies {
             implementation("com.squareup.okio:okio:3.10.2")
             implementation(kotlin("test"))
-//            implementation(project(":platform:platform-${hostTarget.name.lowercase()}"))
+        }
+
+        jvmTest.dependencies {
+            implementation(project(":platform:platform-${hostTarget.name.lowercase()}"))
         }
 
         androidMain.dependencies {

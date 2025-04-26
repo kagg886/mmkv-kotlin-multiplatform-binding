@@ -266,11 +266,12 @@ internal object NativeMMKV {
                 (funcHandle.invoke(mmkv, it) as? MemorySegment)?.reinterpret(MMKVC_BYTE_ARRAY_RETURN_STRUCT.byteSize())
                     ?: error("mmkvc_getByteArray return null")
             }
-            val ptrSegment = segment.get(ADDRESS, ptrOffset).reinterpret(Long.MAX_VALUE)
             val len = segment.get(JAVA_LONG, lenOffset)
+            val ptrSegment = segment.get(ADDRESS, ptrOffset).reinterpret(len)
 
             val array = ptrSegment.reinterpret(len).toArray(JAVA_BYTE)
 
+            free(ptrSegment)
             free(segment) //release native memory
 
             array
@@ -413,8 +414,9 @@ internal object NativeMMKV {
 
 
         return@lazy { mmkv ->
-            val segment = (funcHandle.invoke(mmkv) as? MemorySegment)?.reinterpret(MMKVC_STRING_SET_RETURN_STRUCT.byteSize())
-                ?: error("mmkvc_allKeys return null")
+            val segment =
+                (funcHandle.invoke(mmkv) as? MemorySegment)?.reinterpret(MMKVC_STRING_SET_RETURN_STRUCT.byteSize())
+                    ?: error("mmkvc_allKeys return null")
 
             // 获取字符串数组指针和数组长度
             val len = segment.get(JAVA_LONG, lenOffset)
