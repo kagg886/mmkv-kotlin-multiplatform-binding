@@ -1,6 +1,7 @@
 #include <string>
 #include "jni.h"
 #include <MMKV/MMKV.h>
+#include "android/log.h"
 
 using namespace std;
 
@@ -123,7 +124,7 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setString(JNIEnv *env, jclass clazz, jlo
     env->ReleaseStringUTFChars(key, keyStr);
 
     auto valueStr = env->GetStringUTFChars(value, nullptr);
-    auto len1 = env->GetStringLength(key);
+    auto len1 = env->GetStringUTFLength(value);
     string values(valueStr, len1);
     env->ReleaseStringUTFChars(value, valueStr);
 
@@ -304,7 +305,7 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1getDouble(JNIEnv *env, jclass clazz, jlo
     auto len = env->GetStringLength(key);
     string keys(keyStr, len);
     env->ReleaseStringUTFChars(key, keyStr);
-    return (jdouble) mmkv->getFloat(keys);
+    return (jdouble) mmkv->getDouble(keys);
 }
 extern "C"
 JNIEXPORT jboolean JNICALL
@@ -336,7 +337,7 @@ extern "C"
 JNIEXPORT jboolean JNICALL
 Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1isAlive(JNIEnv *env, jclass clazz, jlong handle) {
     MMKV *mmkv = (MMKV *) handle;
-    return MMKV::isFileValid(mmkv->mmapID(), (&mmkv->getRootDir()));
+    return MMKV::checkExist(mmkv->mmapID(), (&mmkv->getRootDir()));
 }
 extern "C"
 JNIEXPORT jint JNICALL

@@ -33,7 +33,7 @@ class LogHistoryAndroidUnitTest {
 
     @Test
     fun testMMKVIntStore() {
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-int-store")
         assertEquals(0, mmkv.getInt("key"))
         mmkv.set("key", 2)
         assertEquals(2, mmkv.getInt("key"))
@@ -42,7 +42,7 @@ class LogHistoryAndroidUnitTest {
     @Test
     fun testMMKVStringStore() {
         val target = "UTF-8测试字符串，这个时候char*可以解析吗？"
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-string-store")
         assertEquals("", mmkv.getString("key"))
         mmkv.set("key", target)
         assertEquals(target, mmkv.getString("key"))
@@ -50,7 +50,7 @@ class LogHistoryAndroidUnitTest {
 
     @Test
     fun testMMKVBooleanStore() {
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-bool-store")
         assertEquals(false, mmkv.getBoolean("key"))
         mmkv.set("key", true)
         assertEquals(true, mmkv.getBoolean("key"))
@@ -58,7 +58,7 @@ class LogHistoryAndroidUnitTest {
 
     @Test
     fun testMMKVLongStore() {
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-long-store")
         assertEquals(0L, mmkv.getLong("key"))
         mmkv.set("key", 2L)
         assertEquals(2L, mmkv.getLong("key"))
@@ -66,7 +66,7 @@ class LogHistoryAndroidUnitTest {
 
     @Test
     fun testMMKVFloatStore() {
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-float-store")
         assertEquals(0f, mmkv.getFloat("key"))
         mmkv.set("key", 2f)
         assertEquals(2f, mmkv.getFloat("key"))
@@ -74,16 +74,16 @@ class LogHistoryAndroidUnitTest {
 
     @Test
     fun testMMKVDoubleStore() {
-        val mmkv = MMKV.defaultMMKV()
-        assertEquals(0.0, mmkv.getDouble("key"))
+        val mmkv = MMKV.mmkvWithID("test-double-store")
+        assertEquals(0.0, mmkv.getDouble("key"),1e-10)
         mmkv.set("key", 2.0)
-        assertEquals(2.0, mmkv.getDouble("key"))
+        assertEquals(2.0, mmkv.getDouble("key"),1e-10)
     }
 
     @Test
     fun testMMKVByteArrayStore() {
         val dest = byteArrayOf(1, 2, 3, 4, 5)
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-bytes-store")
         assertArrayEquals(byteArrayOf(), mmkv.getByteArray("key"))
         mmkv.set("key", dest)
         assertArrayEquals(dest, mmkv.getByteArray("key"))
@@ -91,24 +91,16 @@ class LogHistoryAndroidUnitTest {
 
     @Test
     fun testMMKVStringListStore() {
-        val target = arrayOf("qww", "UTF-8", "字符串？")
-        val mmkv = MMKV.defaultMMKV()
+        val target = listOf("qww", "UTF-8", "字符串？")
+        val mmkv = MMKV.mmkvWithID("test-string-list-store")
         assertArrayEquals(emptyArray(), mmkv.getStringList("key").toTypedArray())
-        mmkv.set("key", target.toList())
-        assertArrayEquals(target, mmkv.getStringList("key").toTypedArray())
-    }
-
-    @Test
-    fun testMMKVNamedStore() {
-        val mmkv = MMKV.mmkvWithID("awa")
-        assertEquals(0, mmkv.getInt("key"))
-        mmkv.set("key", 2)
-        assertEquals(2, mmkv.getInt("key"))
+        mmkv.set("key", target)
+        assertArrayEquals(target.toTypedArray(), mmkv.getStringList("key").toTypedArray())
     }
 
     @Test
     fun testMMKVRemove() {
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-remove-store")
         assertFalse(mmkv.remove("key"))
         mmkv.set("key",1)
         assertTrue(mmkv.remove("key"))
@@ -116,26 +108,26 @@ class LogHistoryAndroidUnitTest {
 
     @Test
     fun testMMKVClear() {
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-clear")
         mmkv.set("key",1)
         mmkv.set("qwq","awa")
         mmkv.clear()
 
-        assertEquals(0,mmkv.getInt("key"))
+        assertEquals(0, mmkv.getInt("key"))
     }
 
     @Test
     fun testMMKVAlive() {
-        val mmkv = MMKV.defaultMMKV()
-        assertTrue(mmkv.isAlive())
+        val mmkv = MMKV.mmkvWithID("test-alive")
         mmkv.set("key",1)
+        assertTrue(mmkv.isAlive())
         mmkv.destroy()
         assertFalse(mmkv.isAlive())
     }
     @Test
     fun testMMKVMemoryProtect() {
-        val mmkv = MMKV.defaultMMKV()
-        mmkv.destroy()
+        val mmkv = MMKV.mmkvWithID("test-mem-protect")
+        assertTrue(mmkv.destroy())
         assertThrows(MMKVException::class.java) {
             mmkv.set("key",1)
         }
@@ -143,16 +135,16 @@ class LogHistoryAndroidUnitTest {
 
     @Test
     fun testMMKVAllKeys() {
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-all-keys")
         mmkv.set("key",1)
         assertArrayEquals(listOf("key").toTypedArray(),mmkv.allKeys().toTypedArray())
         mmkv.set("qwq","awa")
-        assertArrayEquals(listOf("key","qwq").toTypedArray(),mmkv.allKeys().toTypedArray())
+        assertArrayEquals(listOf("key","qwq").toTypedArray().sortedArray(),mmkv.allKeys().toTypedArray().sortedArray())
     }
 
     @Test
     fun testMMKVExists() {
-        val mmkv = MMKV.defaultMMKV()
+        val mmkv = MMKV.mmkvWithID("test-exists")
         mmkv.set("key",1)
         assertTrue(mmkv.exists("key"))
         assertFalse(mmkv.exists("qwq"))
@@ -163,13 +155,13 @@ class LogHistoryAndroidUnitTest {
 
     @Test
     fun testMMKVSize() {
-        val mmkv = MMKV.defaultMMKV()
-        assertEquals(0,mmkv.size())
+        val mmkv = MMKV.mmkvWithID("test-size")
+        assertEquals(0, mmkv.size())
         mmkv.set("key",1)
-        assertEquals(1,mmkv.size())
+        assertEquals(1, mmkv.size())
         mmkv.set("qwq","awa")
-        assertEquals(2,mmkv.size())
+        assertEquals(2, mmkv.size())
         mmkv.clear()
-        assertEquals(0,mmkv.size())
+        assertEquals(0, mmkv.size())
     }
 }
