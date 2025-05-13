@@ -159,11 +159,15 @@ actual val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader by lazy {
         val tmp = File(System.getProperty("user.home")).resolve(".cache").resolve("$name.$ext")
 
         if (!tmp.exists()) {
-            tmp.parentFile!!.mkdirs()
-            val stream = MMKV::class.java.getResourceAsStream("/$name.$ext")!!
-            tmp.createNewFile()
-            stream.use {
-                tmp.writeBytes(it.readAllBytes())
+            val sha256 = tmp.sha256()
+            val resourceSha256 = MMKV::class.java.getResourceAsStream("/build.hash")!!.readAllBytes().decodeToString()
+            if (sha256 != resourceSha256) {
+                tmp.parentFile!!.mkdirs()
+                val stream = MMKV::class.java.getResourceAsStream("/$name.$ext")!!
+                tmp.createNewFile()
+                stream.use {
+                    tmp.writeBytes(it.readAllBytes())
+                }
             }
         }
 
