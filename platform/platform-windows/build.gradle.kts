@@ -35,7 +35,7 @@ val processBuild = tasks.register<Exec>("processBuild") {
             "mmkvc.dll not found, please check your build environment."
         }
         val hash = file.sha256()
-        val hashFile = project.file("native-binding-windows/x64/Release/build.hash")
+        val hashFile = project.file("native-binding-windows/x64/Release/build-windows.hash")
         if (hashFile.exists()) hashFile.delete()
         hashFile.createNewFile()
         hashFile.writeText(hash)
@@ -46,7 +46,7 @@ val processBuild = tasks.register<Exec>("processBuild") {
 tasks.named<ProcessResources>("processResources") {
     dependsOn(processBuild)
     from(project.file("native-binding-windows/x64/Release/mmkvc.dll"))
-    from(project.file("native-binding-windows/x86/Release/build.hash"))
+    from(project.file("native-binding-windows/x86/Release/build-windows.hash"))
 }
 
 mavenPublishing {

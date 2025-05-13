@@ -44,7 +44,7 @@ val processBuild = tasks.register<Exec>("processBuild") {
             "libmmkvc.so not found, please check your build environment."
         }
         val hash = file.sha256()
-        val hashFile = project.file("native-binding-linux/build/build.hash")
+        val hashFile = project.file("native-binding-linux/build/build-linux.hash")
         if (hashFile.exists()) hashFile.delete()
         hashFile.createNewFile()
         hashFile.writeText(hash)
@@ -55,7 +55,7 @@ val processBuild = tasks.register<Exec>("processBuild") {
 tasks.named<ProcessResources>("processResources") {
     dependsOn(processBuild)
     from(project.file("native-binding-linux/build/libmmkvc.so"))
-    from(project.file("native-binding-linux/build/build.hash"))
+    from(project.file("native-binding-linux/build/build-linux.hash"))
 }
 
 mavenPublishing {
