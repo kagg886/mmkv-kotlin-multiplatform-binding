@@ -15,11 +15,6 @@ internal object NativeMMKV {
     internal var global by atomic<Arena?>(null)
     internal var dll by atomic<SymbolLookup?>(null)
 
-    val MMKVC_BYTE_ARRAY_RETURN_STRUCT: StructLayout = MemoryLayout.structLayout(
-        ADDRESS.withName("ptr"),
-        JAVA_LONG.withName("length"),
-    )
-
     val MMKVC_STRING_SET_RETURN_STRUCT: StructLayout = MemoryLayout.structLayout(
         ADDRESS.withName("items"),
         JAVA_LONG.withName("size"),
@@ -254,27 +249,20 @@ internal object NativeMMKV {
     val mmkvc_getByteArray: (MemorySegment, String) -> ByteArray by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_getByteArray").orElseThrow(),
-            FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS)
+            FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS,ADDRESS)
         )
-
-        // 获取字段的偏移量
-        val ptrOffset = MMKVC_BYTE_ARRAY_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("ptr"))
-        val lenOffset = MMKVC_BYTE_ARRAY_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("length"))
-
         return@lazy { mmkv, key ->
-            val segment = key.makeCString {
-                (funcHandle.invoke(mmkv, it) as? MemorySegment)?.reinterpret(MMKVC_BYTE_ARRAY_RETURN_STRUCT.byteSize())
-                    ?: error("mmkvc_getByteArray return null")
+            useArena {
+                val keyPtr = allocateFrom(key)
+                val sizePtr = allocate(JAVA_LONG).reinterpret(JAVA_LONG.byteSize())
+                val memoryPtr = funcHandle.invoke(mmkv, keyPtr, sizePtr) as MemorySegment
+
+                val size = sizePtr.get(JAVA_LONG,0)
+
+                val array = memoryPtr.reinterpret(size).toArray(JAVA_BYTE)
+                free(memoryPtr)
+                array
             }
-            val len = segment.get(JAVA_LONG, lenOffset)
-            val ptrSegment = segment.get(ADDRESS, ptrOffset).reinterpret(len)
-
-            val array = ptrSegment.reinterpret(len).toArray(JAVA_BYTE)
-
-            free(ptrSegment)
-            free(segment) //release native memory
-
-            array
         }
     }
     val mmkvc_setByteArray: (MemorySegment, String, ByteArray) -> Unit by lazy {

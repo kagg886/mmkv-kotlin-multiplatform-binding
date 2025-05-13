@@ -102,29 +102,12 @@ extern "C" __declspec(dllexport) void mmkvc_setBool(MMKV* mmkv, const char* key,
     mmkv->set(value, key);
 }
 
-struct MMKVCByteArrayReturn {
-    void* ptr;
-    size_t length;
-};
-
-extern "C" __declspec(dllexport) MMKVCByteArrayReturn* mmkvc_getByteArray(MMKV* mmkv, const char* key) {
-    mmkv::MMBuffer buffer = mmkv->getBytes(key);
-
-    auto rtn = (MMKVCByteArrayReturn*) malloc(sizeof(MMKVCByteArrayReturn));
-
-    if (rtn == nullptr){
-        return nullptr;
-    }
-
-    auto cPtr = malloc(buffer.length());
-    if (cPtr == nullptr){
-        return nullptr;
-    }
-    memcpy(cPtr,buffer.getPtr(),buffer.length());
-
-    rtn->length = buffer.length();
-    rtn->ptr = cPtr;
-    return rtn;
+extern "C" void mmkvc_setByteArray(MMKV* mmkv,
+                                   const char* key,
+                                   uint8_t* value,
+                                   size_t size) {
+    auto buffer = mmkv::MMBuffer(value, size, mmkv::MMBufferNoCopy);
+    mmkv->set(buffer, key);
 }
 
 extern "C" __declspec(dllexport) void mmkvc_setByteArray(MMKV* mmkv, const char* key, void* value,size_t size) {
@@ -161,7 +144,7 @@ extern "C" __declspec(dllexport) MMKVCStringListReturn* mmkvc_getStringList(MMKV
 
 extern "C" __declspec(dllexport) void mmkvc_setStringList(MMKV* mmkv, const char* key,const char** value,size_t size) {
     std::vector<std::string> vector;
-    
+
     for (size_t i = 0; i < size; i++) {
         std::string tmp(value[i],strlen(value[i]));
         vector.push_back(tmp);

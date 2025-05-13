@@ -10,6 +10,10 @@ internal fun <T> String.makeCString(block: (MemorySegment) -> T) = with(Arena.of
     }
 }
 
+internal fun <T> useArena(block: Arena.() -> T): T = with(Arena.ofConfined()) {
+    use(block)
+}
+
 internal val jvmTarget by lazy {
     val osName = System.getProperty("os.name")
     when {

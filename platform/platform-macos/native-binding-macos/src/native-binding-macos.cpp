@@ -92,38 +92,21 @@ extern "C" void mmkvc_setBool(MMKV* mmkv, const char* key, bool value) {
     mmkv->set(value, key);
 }
 
-struct MMKVCByteArrayReturn {
-    void* ptr;
-    size_t length;
-};
-
-extern "C" MMKVCByteArrayReturn* mmkvc_getByteArray(MMKV* mmkv,
-                                                    const char* key) {
-    mmkv::MMBuffer buffer = mmkv->getBytes(key);
-
-    auto rtn = (MMKVCByteArrayReturn*)malloc(sizeof(MMKVCByteArrayReturn));
-
-    if (rtn == nullptr) {
-        return nullptr;
-    }
-
-    auto cPtr = malloc(buffer.length());
-    if (cPtr == nullptr) {
-        return nullptr;
-    }
-    memcpy(cPtr, buffer.getPtr(), buffer.length());
-
-    rtn->length = buffer.length();
-    rtn->ptr = cPtr;
+extern "C" uint8_t* mmkvc_getByteArray(MMKV* mmkv,
+                                       const char* key,
+                                       size_t* size) {
+    auto buffer = mmkv->getBytes(key);
+    auto rtn = (uint8_t*)malloc(buffer.length());
+    *size = buffer.length();
+    memcpy(rtn, buffer.getPtr(), buffer.length());
     return rtn;
 }
 
 extern "C" void mmkvc_setByteArray(MMKV* mmkv,
                                    const char* key,
-                                   void* value,
+                                   uint8_t* value,
                                    size_t size) {
-    auto buffer = new mmkv::MMBuffer(value, size,
-                                     mmkv::MMBufferNoCopy);  // managed from JVM
+    auto buffer = mmkv::MMBuffer(value, size, mmkv::MMBufferNoCopy);
     mmkv->set(buffer, key);
 }
 
