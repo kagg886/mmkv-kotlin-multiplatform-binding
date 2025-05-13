@@ -102,16 +102,21 @@ extern "C" __declspec(dllexport) void mmkvc_setBool(MMKV* mmkv, const char* key,
     mmkv->set(value, key);
 }
 
-extern "C" void mmkvc_setByteArray(MMKV* mmkv,
+extern "C" __declspec(dllexport) uint8_t* mmkvc_getByteArray(MMKV* mmkv,
+    const char* key,
+    size_t* size) {
+    auto buffer = mmkv->getBytes(key);
+    auto rtn = (uint8_t*)malloc(buffer.length());
+    *size = buffer.length();
+    memcpy(rtn, buffer.getPtr(), buffer.length());
+    return rtn;
+}
+
+extern "C" __declspec(dllexport) void mmkvc_setByteArray(MMKV* mmkv,
                                    const char* key,
                                    uint8_t* value,
                                    size_t size) {
     auto buffer = mmkv::MMBuffer(value, size, mmkv::MMBufferNoCopy);
-    mmkv->set(buffer, key);
-}
-
-extern "C" __declspec(dllexport) void mmkvc_setByteArray(MMKV* mmkv, const char* key, void* value,size_t size) {
-    auto buffer = mmkv::MMBuffer::MMBuffer(value,size,mmkv::MMBufferNoCopy); // managed from JVM
     mmkv->set(buffer, key);
 }
 

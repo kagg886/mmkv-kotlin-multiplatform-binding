@@ -14,6 +14,7 @@ class MMKVInitTest {
                 }
                 FileSystem.SYSTEM.createDirectory(this)
             }
+            //if you test in jvm, please delete the release file such as: ~/.cache/libmmkvc.so
             MMKV.initialize(FileSystem.SYSTEM.canonicalize(testFile.normalized()).toString()) {
                 logLevel = MMKVOptions.LogLevel.Debug
             }
