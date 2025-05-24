@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add MMKV as a subdirectory
-add_subdirectory(../../../mmkv/POSIX/src mmkv)
+add_subdirectory(../../../MMKV/POSIX/src mmkv)
 
 # Create shared library
 add_library(mmkv_binding SHARED src/native-binding-linux.cpp)

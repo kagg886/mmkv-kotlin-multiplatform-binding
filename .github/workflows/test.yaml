@@ -32,7 +32,7 @@ jobs:
       - name: Test it
         run: ./gradlew jvmTest
 
-  test-jvm-liux:
+  test-jvm-linux:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -99,7 +99,7 @@ jobs:
         name: Setup Gradle
 
       - name: Test it
-        run: ./gradlew iosTest
+        run: ./gradlew iosSimulatorArm64Test
 
   test-android:
     runs-on: ubuntu-latest
@@ -131,4 +131,5 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
+          system-image-api-level: 34-ext9
           script: ./gradlew connectedAndroidTest
