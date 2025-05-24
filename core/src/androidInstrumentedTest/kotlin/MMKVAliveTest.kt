@@ -1,13 +1,15 @@
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import top.kagg886.mkmb.MMKV
 import top.kagg886.mkmb.MMKVException
 import top.kagg886.mkmb.initialize
 import top.kagg886.mkmb.mmkvWithID
 import java.io.File
 
-
+@RunWith(AndroidJUnit4::class)
 class MMKVAliveTest {
     @Before
     fun beforeAll() {
