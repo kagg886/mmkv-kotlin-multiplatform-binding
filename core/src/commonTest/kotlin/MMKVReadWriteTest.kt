@@ -4,17 +4,16 @@ import okio.SYSTEM
 import top.kagg886.mkmb.*
 import kotlin.test.*
 
-class MMKVInitTest {
+class MMKVReadWriteTest {
     @BeforeTest
     fun beforeAll() {
         if (!MMKV.initialized) {
-            val testFile = "mmkv-test".toPath().apply {
+            val testFile = "mmkv-read-write-test".toPath().apply {
                 if (FileSystem.SYSTEM.exists(this)) {
                     FileSystem.SYSTEM.deleteRecursively(this)
                 }
                 FileSystem.SYSTEM.createDirectory(this)
             }
-            //if you test in jvm, please delete the release file such as: ~/.cache/libmmkvc.so
             MMKV.initialize(FileSystem.SYSTEM.canonicalize(testFile.normalized()).toString()) {
                 logLevel = MMKVOptions.LogLevel.Debug
             }
@@ -94,64 +93,5 @@ class MMKVInitTest {
         assertFalse(mmkv.remove("key"))
         mmkv.set("key",1)
         assertTrue(mmkv.remove("key"))
-    }
-
-    @Test
-    fun testMMKVClear() {
-        val mmkv = MMKV.mmkvWithID("test-clear")
-        mmkv.set("key",1)
-        mmkv.set("qwq","awa")
-        mmkv.clear()
-
-        assertEquals(0,mmkv.getInt("key"))
-    }
-
-    @Test
-    fun testMMKVAlive() {
-        val mmkv = MMKV.mmkvWithID("test-alive")
-        mmkv.set("key",1)
-        assertTrue(mmkv.isAlive())
-        mmkv.destroy()
-        assertFalse(mmkv.isAlive())
-    }
-    @Test
-    fun testMMKVMemoryProtect() {
-        val mmkv = MMKV.mmkvWithID("test-mem-protect")
-        assertTrue(mmkv.destroy())
-        assertFailsWith(MMKVException::class) {
-            mmkv.set("key",1)
-        }
-    }
-
-    @Test
-    fun testMMKVAllKeys() {
-        val mmkv = MMKV.mmkvWithID("test-all-keys")
-        mmkv.set("key",1)
-        assertContentEquals(listOf("key"),mmkv.allKeys())
-        mmkv.set("qwq","awa")
-        assertContentEquals(listOf("key","qwq"),mmkv.allKeys().sorted())
-    }
-
-    @Test
-    fun testMMKVExists() {
-        val mmkv = MMKV.mmkvWithID("test-exists")
-        mmkv.set("key",1)
-        assertTrue(mmkv.exists("key"))
-        assertFalse(mmkv.exists("qwq"))
-        mmkv.set("qwq","awa")
-        assertTrue(mmkv.exists("qwq"))
-        assertFalse(mmkv.exists("awa"))
-    }
-
-    @Test
-    fun testMMKVSize() {
-        val mmkv = MMKV.mmkvWithID("test-size")
-        assertEquals(0,mmkv.size())
-        mmkv.set("key",1)
-        assertEquals(1,mmkv.size())
-        mmkv.set("qwq","awa")
-        assertEquals(2,mmkv.size())
-        mmkv.clear()
-        assertEquals(0,mmkv.size())
     }
 }
