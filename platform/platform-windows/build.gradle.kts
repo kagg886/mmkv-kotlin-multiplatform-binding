@@ -28,18 +28,10 @@ val processBuild = tasks.register<Exec>("processBuild") {
         System.getProperty("os.name").startsWith("Win")
     }
     workingDir = project.file("native-binding-windows")
-    commandLine("msbuild","native-binding-windows.sln","/p:Configuration=Release")
-    doLast {
-        val file = project.file("native-binding-windows/x64/Release/mmkvc.dll")
-        check(file.exists()) {
-            "mmkvc.dll not found, please check your build environment."
-        }
-        val hash = file.sha256()
-        val hashFile = project.file("native-binding-windows/x64/Release/build-windows.hash")
-        if (hashFile.exists()) hashFile.delete()
-        hashFile.createNewFile()
-        hashFile.writeText(hash)
-    }
+    commandLine("pwsh","-c","""
+        msbuild native-binding-windows.sln /p:Configuration=Release
+        (Get-FileHash -Algorithm SHA256 -Path "x64/Release/mmkvc.dll").Hash | Out-File -FilePath "build-windows.hash"
+    """.trimIndent())
 }
 
 // 配置JVM的processResources任务
@@ -81,18 +73,4 @@ mavenPublishing {
             developerConnection = "scm:git:ssh://git@github.com/kagg886/mmkv-kotlin-multiplatform-binding.git"
         }
     }
-}
-
-fun File.sha256(): String {
-    val buffer = ByteArray(8192)
-    val digest = MessageDigest.getInstance("SHA-256")
-
-    FileInputStream(this).use { inputStream ->
-        var bytesRead: Int
-        while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-            digest.update(buffer, 0, bytesRead)
-        }
-    }
-
-    return digest.digest().joinToString("") { "%02x".format(it) }
 }

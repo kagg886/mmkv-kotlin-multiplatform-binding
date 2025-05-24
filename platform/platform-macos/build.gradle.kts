@@ -34,20 +34,10 @@ val processBuild = tasks.register<Exec>("processBuild") {
             mkdir -p build && \
             cd build && \
             cmake .. && \
-            make
+            make &&\
+            echo $(shasum -a 256 libmmkvc.dylib | cut -d ' ' -f 1) > build-macos.hash
         """.trimIndent()
     )
-    doLast {
-        val file = project.file("native-binding-macos/build/libmmkvc.dylib")
-        check(file.exists()) {
-            "libmmkvc.dylib not found, please check your build environment."
-        }
-        val hash = file.sha256()
-        val hashFile = project.file("native-binding-macos/build/build-macos.hash")
-        if (hashFile.exists()) hashFile.delete()
-        hashFile.createNewFile()
-        hashFile.writeText(hash)
-    }
 }
 
 // 配置JVM的processResources任务
@@ -90,18 +80,4 @@ mavenPublishing {
             developerConnection = "scm:git:ssh://git@github.com/kagg886/mmkv-kotlin-multiplatform-binding.git"
         }
     }
-}
-
-fun File.sha256(): String {
-    val buffer = ByteArray(8192)
-    val digest = MessageDigest.getInstance("SHA-256")
-
-    FileInputStream(this).use { inputStream ->
-        var bytesRead: Int
-        while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-            digest.update(buffer, 0, bytesRead)
-        }
-    }
-
-    return digest.digest().joinToString("") { "%02x".format(it) }
 }
