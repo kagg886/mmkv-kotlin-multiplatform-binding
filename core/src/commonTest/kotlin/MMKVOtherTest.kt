@@ -16,7 +16,7 @@ class MMKVOtherTest {
     @BeforeTest
     fun beforeAll() {
         if (!MMKV.initialized) {
-            val testFile = "mmkv-alive-test".toPath().apply {
+            val testFile = "mmkv-other-test".toPath().apply {
                 if (FileSystem.SYSTEM.exists(this)) {
                     FileSystem.SYSTEM.deleteRecursively(this)
                 }
