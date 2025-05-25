@@ -1,140 +1,63 @@
-name: test
+name: test.yaml
 on:
   push:
     branches:
       - '*'
   pull_request:
-  workflow_dispatch:
+
 jobs:
   test-jvm-windows:
     runs-on: windows-latest
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - name: Setup Environment
+        uses: ./.github/workflows/meta/setup/setup-windows.yaml
 
-      - name: Fetch submodules
-        run: |
-          git submodule update --init --recursive
-
-      - uses: microsoft/setup-msbuild@v1.0.2
-        name: Set up MSBuild
-
-      - uses: actions/setup-java@v4
-        name: Set up JDK 22
-        with:
-          java-version: '22'
-          distribution: 'temurin'
-
-      - uses: gradle/actions/setup-gradle@v4
-        name: Setup Gradle
-
-      - name: Test it
-        run: ./gradlew jvmTest
+      - name: Run Test
+        uses: ./.github/workflows/meta/test/test-jvm.yaml
 
   test-jvm-linux:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - name: Setup Environment
+        uses: ./.github/workflows/meta/setup/setup-linux.yaml
 
-      - name: Fetch submodules
-        run: |
-          git submodule update --init --recursive
-
-      - uses: actions/setup-java@v4
-        name: Set up JDK 22
-        with:
-          java-version: '22'
-          distribution: 'temurin'
-
-      - uses: gradle/actions/setup-gradle@v4
-        name: Setup Gradle
-
-      - name: Test it
-        run: ./gradlew jvmTest
+      - name: Run Test
+        uses: ./.github/workflows/meta/test/test-jvm.yaml
 
   test-jvm-macos:
     runs-on: macos-15
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - name: Setup Environment
+        uses: ./.github/workflows/meta/setup/setup-macos.yaml
 
-      - name: Fetch submodules
-        run: |
-          git submodule update --init --recursive
+      - name: Run Test
+        uses: ./.github/workflows/meta/test/test-jvm.yaml
 
-      - uses: actions/setup-java@v4
-        name: Set up JDK 22
-        with:
-          java-version: '22'
-          distribution: 'temurin'
 
-      - uses: gradle/actions/setup-gradle@v4
-        name: Setup Gradle
+  test-android:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Setup Environment
+        uses: ./.github/workflows/meta/setup/setup-linux.yaml
 
-      - name: Test it
-        run: ./gradlew jvmTest
+      - name: Run Test
+        uses: ./.github/workflows/meta/test/test-android.yaml
 
   test-ios:
     runs-on: macos-15
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - name: Setup Environment
+        uses: ./.github/workflows/meta/setup/setup-macos.yaml
 
-      - name: Fetch submodules
-        run: |
-          git submodule update --init --recursive
-
-      - uses: actions/setup-java@v4
-        name: Set up JDK 22
-        with:
-          java-version: '22'
-          distribution: 'temurin'
-
-      - uses: gradle/actions/setup-gradle@v4
-        name: Setup Gradle
-
-      - name: Test it
-        run: ./gradlew iosSimulatorArm64Test
-
-  test-android:
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Fetch submodules
-        run: |
-          git submodule update --init --recursive
-
-      - uses: actions/setup-java@v4
-        name: Set up JDK 22
-        with:
-          java-version: '22'
-          distribution: 'temurin'
-
-      - uses: gradle/actions/setup-gradle@v4
-        name: Setup Gradle
-
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-      # should be failed, but can generate the header to include in the project
-      - name: Generate Native Header For NDK
-        run: ./gradlew externalNativeBuildDebug
-        continue-on-error: true
-
-      - name: Test it
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 34
-          arch: x86_64
-          script: ./gradlew connectedAndroidTest
+      - name: Run Test
+        uses: ./.github/workflows/meta/test/test-ios.yaml

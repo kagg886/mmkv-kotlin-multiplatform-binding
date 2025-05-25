@@ -1,0 +1,13 @@
+name: test-ios.yaml
+on:
+  workflow_call:
+
+
+jobs:
+  test-ios:
+    runs-on: ${{ github.run_id }}-${{ github.run_attempt }}
+    permissions:
+      contents: read
+    steps:
+      - name: Test it
+        run: ./gradlew iosSimulatorArm64Test
