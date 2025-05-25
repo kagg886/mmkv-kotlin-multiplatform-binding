@@ -6,6 +6,16 @@
 
 **MMKV-Kotlin-Multiplatform-Binding** (abbreviated as **MKMB**) is a Kotlin wrapper for [MMKV](https://github.com/Tencent/MMKV).
 
+## Version
+
+| core                                                         | core-java                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/core) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/core-java) |
+
+| platform-windows                                             | platform-linux                                               | platform-macos                                               | platform-android                                             | platform-ios                                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-windows) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-linux) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-macos) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-android) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-ios) |
+
 ## Supported Platforms
 
 - [x] Windows

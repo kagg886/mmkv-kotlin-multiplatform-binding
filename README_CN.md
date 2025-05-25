@@ -6,6 +6,16 @@ The English Version is [Here](./README.md)
 
 **MMKV-Kotlin-Multiplatform-Binding**(后文简称**MKMB**)是[MMKV](https://github.com/Tencent/MMKV)的Kotlin封装。
 
+## 版本
+
+| core                                                         | core-java                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/core) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/core-java) |
+
+| platform-windows                                             | platform-linux                                               | platform-macos                                               | platform-android                                             | platform-ios                                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-windows) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-linux) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-macos) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-android) | ![](https://img.shields.io/maven-central/v/top.kagg886.mkmb/platform-ios) |
+
 ## 支持的平台
 
 - [x] Windows
