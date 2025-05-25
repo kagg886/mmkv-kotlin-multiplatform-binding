@@ -39,8 +39,89 @@ on:
         type: string
 
 jobs:
+  test-jvm-windows:
+    if: ${{ inputs.LIB_PLATFORM_JVM_WINDOWS_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+        with:
+          windows: 'true'
+
+      - name: Run Test
+        uses: ./.github/actions/test-jvm
+
+  test-jvm-linux:
+    if: ${{ inputs.LIB_PLATFORM_JVM_LINUX_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - name: Run Test
+        uses: ./.github/actions/test-jvm
+
+  test-jvm-macos:
+    if: ${{ inputs.LIB_PLATFORM_JVM_MACOS_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    runs-on: macos-15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - name: Run Test
+        uses: ./.github/actions/test-jvm
+
+  test-android:
+    if: ${{ inputs.LIB_PLATFORM_ANDROID_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - name: Run Test
+        uses: ./.github/actions/test-android
+
+  test-ios:
+    if: ${{ inputs.LIB_PLATFORM_IOS_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    runs-on: macos-15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - name: Run Test
+        uses: ./.github/actions/test-ios
+
   release-core:
     if: ${{ inputs.LIB_CORE_VERSION != '' }}
+    needs:
+      - test-jvm-windows
+      - test-jvm-linux
+      - test-jvm-macos
+      - test-android
+      - test-ios
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -65,6 +146,12 @@ jobs:
 
   release-core-java:
     if: ${{ inputs.LIB_CORE_JAVA_VERSION != '' }}
+    needs:
+      - test-jvm-windows
+      - test-jvm-linux
+      - test-jvm-macos
+      - test-android
+      - test-ios
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -89,6 +176,8 @@ jobs:
 
   release-platform-jvm-windows:
     if: ${{ inputs.LIB_PLATFORM_JVM_WINDOWS_VERSION != '' }}
+    needs:
+      - test-jvm-windows
     runs-on: windows-latest
     permissions:
       contents: read
@@ -115,6 +204,8 @@ jobs:
 
   release-platform-jvm-linux:
     if: ${{ inputs.LIB_PLATFORM_JVM_LINUX_VERSION != '' }}
+    needs:
+      - test-jvm-linux
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -139,6 +230,8 @@ jobs:
 
   release-platform-jvm-macos:
     if: ${{ inputs.LIB_PLATFORM_JVM_MACOS_VERSION != '' }}
+    needs:
+      - test-jvm-macos
     runs-on: macos-15
     permissions:
       contents: read
@@ -163,6 +256,8 @@ jobs:
 
   release-platform-android:
     if: ${{ inputs.LIB_PLATFORM_ANDROID_VERSION != '' }}
+    needs:
+      - test-android
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -187,6 +282,8 @@ jobs:
 
   release-platform-ios:
     if: ${{ inputs.LIB_PLATFORM_IOS_VERSION != '' }}
+    needs:
+      - test-ios
     runs-on: macos-15
     permissions:
       contents: read
