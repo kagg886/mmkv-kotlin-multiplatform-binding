@@ -34,7 +34,7 @@ tasks.test {
 }
 
 mavenPublishing {
-    configure(JavaLibrary(javadocJar = JavadocJar.None()))
+    configure(JavaLibrary(javadocJar = JavadocJar.Empty()))
     publishToMavenCentral(SonatypeHost.S01)
     if (!SKIP_SIGN) {
         signAllPublications()
