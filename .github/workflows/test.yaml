@@ -15,10 +15,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Environment
-        uses: ./.github/workflows/meta/setup/setup-windows.yaml
+        uses: ../.github/workflows/meta/setup/setup-windows.yaml
 
       - name: Run Test
-        uses: ./.github/workflows/meta/test/test-jvm.yaml
+        uses: ../.github/workflows/meta/test/test-jvm.yaml
 
   test-jvm-linux:
     runs-on: ubuntu-latest
@@ -29,10 +29,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Environment
-        uses: ./.github/workflows/meta/setup/setup-linux.yaml
+        uses: ../.github/workflows/meta/setup/setup-linux.yaml
 
       - name: Run Test
-        uses: ./.github/workflows/meta/test/test-jvm.yaml
+        uses: ../.github/workflows/meta/test/test-jvm.yaml
 
   test-jvm-macos:
     runs-on: macos-15
@@ -42,10 +42,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Environment
-        uses: ./.github/workflows/meta/setup/setup-macos.yaml
+        uses: ../.github/workflows/meta/setup/setup-macos.yaml
 
       - name: Run Test
-        uses: ./.github/workflows/meta/test/test-jvm.yaml
+        uses: ../.github/workflows/meta/test/test-jvm.yaml
 
 
   test-android:
@@ -56,10 +56,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Environment
-        uses: ./.github/workflows/meta/setup/setup-linux.yaml
+        uses: ../.github/workflows/meta/setup/setup-linux.yaml
 
       - name: Run Test
-        uses: ./.github/workflows/meta/test/test-android.yaml
+        uses: ../.github/workflows/meta/test/test-android.yaml
 
   test-ios:
     runs-on: macos-15
@@ -70,7 +70,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Environment
-        uses: ./.github/workflows/meta/setup/setup-macos.yaml
+        uses: ../.github/workflows/meta/setup/setup-macos.yaml
 
       - name: Run Test
-        uses: ./.github/workflows/meta/test/test-ios.yaml
+        uses: ../.github/workflows/meta/test/test-ios.yaml
