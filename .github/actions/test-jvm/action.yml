@@ -1,0 +1,8 @@
+name: 'Run JVM Tests'
+description: 'Runs JVM tests using Gradle'
+runs:
+  using: "composite"
+  steps:
+    - name: Test it
+      run: ./gradlew jvmTest
+      shell: bash 

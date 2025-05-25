@@ -1,0 +1,8 @@
+name: 'Run iOS Tests'
+description: 'Runs iOS tests using Gradle'
+runs:
+  using: "composite"
+  steps:
+    - name: Test it
+      run: ./gradlew iosSimulatorArm64Test
+      shell: bash 
