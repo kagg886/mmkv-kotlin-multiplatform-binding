@@ -35,4 +35,4 @@ interface NativeMMKV {
 
 }
 
-expect object NativeMMKVImpl : NativeMMKV
+expect val NativeMMKVImpl : NativeMMKV
