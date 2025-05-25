@@ -1,0 +1,210 @@
+name: release.yaml
+on:
+  workflow_dispatch:
+    inputs:
+      LIB_CORE_VERSION:
+        description: 'Core library version'
+        required: false
+        default: ''
+        type: string
+      LIB_CORE_JAVA_VERSION:
+        description: 'Core Java library version'
+        required: false
+        default: ''
+        type: string
+      LIB_PLATFORM_JVM_WINDOWS_VERSION:
+        description: 'JVM Windows platform version'
+        required: false
+        default: ''
+        type: string
+      LIB_PLATFORM_JVM_LINUX_VERSION:
+        description: 'JVM Linux platform version'
+        required: false
+        default: ''
+        type: string
+      LIB_PLATFORM_JVM_MACOS_VERSION:
+        description: 'JVM macOS platform version'
+        required: false
+        default: ''
+        type: string
+      LIB_PLATFORM_ANDROID_VERSION:
+        description: 'Android platform version'
+        required: false
+        default: ''
+        type: string
+      LIB_PLATFORM_IOS_VERSION:
+        description: 'iOS platform version'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  release-core:
+    if: ${{ inputs.LIB_CORE_VERSION != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - uses: gradle/gradle-build-action@v3
+      - name: Publish
+        run: ./gradlew :core:publishAndReleaseToMavenCentral
+        env:
+          org.gradle.configuration-cache: false
+          LIB_CORE_VERSION: ${{ inputs.LIB_CORE_VERSION }}
+          APP_VERSION: ${{ github.ref_name }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+
+  release-core-java:
+    if: ${{ inputs.LIB_CORE_JAVA_VERSION != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - uses: gradle/gradle-build-action@v3
+      - name: Publish
+        run: ./gradlew :core-java:publishAndReleaseToMavenCentral
+        env:
+          org.gradle.configuration-cache: false
+          LIB_CORE_JAVA_VERSION: ${{ inputs.LIB_CORE_JAVA_VERSION }}
+          APP_VERSION: ${{ github.ref_name }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+
+  release-platform-jvm-windows:
+    if: ${{ inputs.LIB_PLATFORM_JVM_WINDOWS_VERSION != '' }}
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+        with:
+          windows: 'true'
+
+      - uses: gradle/gradle-build-action@v3
+      - name: Publish
+        run: ./gradlew :platform:platform-windows:publishAndReleaseToMavenCentral
+        env:
+          org.gradle.configuration-cache: false
+          APP_VERSION: ${{ github.ref_name }}
+          LIB_PLATFORM_JVM_WINDOWS_VERSION: ${{ inputs.LIB_PLATFORM_JVM_WINDOWS_VERSION }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+
+  release-platform-jvm-linux:
+    if: ${{ inputs.LIB_PLATFORM_JVM_LINUX_VERSION != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - uses: gradle/gradle-build-action@v3
+      - name: Publish
+        run: ./gradlew :platform:platform-linux:publishAndReleaseToMavenCentral
+        env:
+          org.gradle.configuration-cache: false
+          LIB_PLATFORM_JVM_LINUX_VERSION: ${{ inputs.LIB_PLATFORM_JVM_LINUX_VERSION }}
+          APP_VERSION: ${{ github.ref_name }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+
+  release-platform-jvm-macos:
+    if: ${{ inputs.LIB_PLATFORM_JVM_MACOS_VERSION != '' }}
+    runs-on: macos-15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - uses: gradle/gradle-build-action@v3
+      - name: Publish
+        run: ./gradlew :platform:platform-macos:publishAndReleaseToMavenCentral
+        env:
+          org.gradle.configuration-cache: false
+          LIB_PLATFORM_JVM_MACOS_VERSION: ${{ inputs.LIB_PLATFORM_JVM_MACOS_VERSION }}
+          APP_VERSION: ${{ github.ref_name }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+
+  release-platform-android:
+    if: ${{ inputs.LIB_PLATFORM_ANDROID_VERSION != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - uses: gradle/gradle-build-action@v3
+      - name: Publish
+        run: ./gradlew :platform:platform-android:publishAndReleaseToMavenCentral
+        env:
+          org.gradle.configuration-cache: false
+          LIB_PLATFORM_ANDROID_VERSION: ${{ inputs.LIB_PLATFORM_ANDROID_VERSION }}
+          APP_VERSION: ${{ github.ref_name }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+
+  release-platform-ios:
+    if: ${{ inputs.LIB_PLATFORM_IOS_VERSION != '' }}
+    runs-on: macos-15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - uses: gradle/gradle-build-action@v3
+      - name: Publish
+        run: ./gradlew :platform:platform-ios:publishAndReleaseToMavenCentral
+        env:
+          org.gradle.configuration-cache: false
+          LIB_PLATFORM_IOS_VERSION: ${{ inputs.LIB_PLATFORM_IOS_VERSION }}
+          APP_VERSION: ${{ github.ref_name }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
