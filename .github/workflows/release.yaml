@@ -132,13 +132,11 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
-      - uses: gradle/gradle-build-action@v3
       - name: Publish
         run: ./gradlew :core:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
           LIB_CORE_VERSION: ${{ inputs.LIB_CORE_VERSION }}
-          APP_VERSION: ${{ github.ref_name }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
@@ -162,13 +160,11 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
-      - uses: gradle/gradle-build-action@v3
       - name: Publish
         run: ./gradlew :core-java:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
           LIB_CORE_JAVA_VERSION: ${{ inputs.LIB_CORE_JAVA_VERSION }}
-          APP_VERSION: ${{ github.ref_name }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
@@ -190,12 +186,10 @@ jobs:
         with:
           windows: 'true'
 
-      - uses: gradle/gradle-build-action@v3
       - name: Publish
         run: ./gradlew :platform:platform-windows:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
-          APP_VERSION: ${{ github.ref_name }}
           LIB_PLATFORM_JVM_WINDOWS_VERSION: ${{ inputs.LIB_PLATFORM_JVM_WINDOWS_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
@@ -216,13 +210,11 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
-      - uses: gradle/gradle-build-action@v3
       - name: Publish
         run: ./gradlew :platform:platform-linux:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
           LIB_PLATFORM_JVM_LINUX_VERSION: ${{ inputs.LIB_PLATFORM_JVM_LINUX_VERSION }}
-          APP_VERSION: ${{ github.ref_name }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
@@ -242,13 +234,11 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
-      - uses: gradle/gradle-build-action@v3
       - name: Publish
         run: ./gradlew :platform:platform-macos:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
           LIB_PLATFORM_JVM_MACOS_VERSION: ${{ inputs.LIB_PLATFORM_JVM_MACOS_VERSION }}
-          APP_VERSION: ${{ github.ref_name }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
@@ -268,13 +258,11 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
-      - uses: gradle/gradle-build-action@v3
       - name: Publish
         run: ./gradlew :platform:platform-android:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
           LIB_PLATFORM_ANDROID_VERSION: ${{ inputs.LIB_PLATFORM_ANDROID_VERSION }}
-          APP_VERSION: ${{ github.ref_name }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
@@ -294,13 +282,11 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
-      - uses: gradle/gradle-build-action@v3
       - name: Publish
         run: ./gradlew :platform:platform-ios:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
           LIB_PLATFORM_IOS_VERSION: ${{ inputs.LIB_PLATFORM_IOS_VERSION }}
-          APP_VERSION: ${{ github.ref_name }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
