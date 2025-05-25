@@ -8,7 +8,7 @@ on:
         default: false
         type: boolean
       RELEASE_LIB_CORE_JAVA:
-        description: 'Core Library Java Version'
+        description: 'Release Core Java Library'
         required: false
         default: false
         type: boolean
@@ -86,7 +86,7 @@ jobs:
         uses: ./.github/actions/test-jvm
 
   test-android:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_ANDROID || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_ANDROID || inputs.RELEASE_LIB_CORE }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -100,7 +100,7 @@ jobs:
         uses: ./.github/actions/test-android
 
   test-ios:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_IOS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_IOS || inputs.RELEASE_LIB_CORE }}
     runs-on: macos-15
     permissions:
       contents: read
