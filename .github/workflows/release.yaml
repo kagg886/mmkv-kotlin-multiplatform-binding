@@ -2,45 +2,45 @@ name: release.yaml
 on:
   workflow_dispatch:
     inputs:
-      LIB_CORE_VERSION:
-        description: 'Core library version'
+      RELEASE_LIB_CORE:
+        description: 'Release Core Library'
         required: false
-        default: ''
-        type: string
-      LIB_CORE_JAVA_VERSION:
-        description: 'Core Java library version'
+        default: false
+        type: boolean
+      RELEASE_LIB_CORE_JAVA:
+        description: 'Core Library Java Version'
         required: false
-        default: ''
-        type: string
-      LIB_PLATFORM_JVM_WINDOWS_VERSION:
-        description: 'JVM Windows platform version'
+        default: false
+        type: boolean
+      RELEASE_LIB_PLATFORM_JVM_WINDOWS:
+        description: 'Release JVM Windows Platform'
         required: false
-        default: ''
-        type: string
-      LIB_PLATFORM_JVM_LINUX_VERSION:
-        description: 'JVM Linux platform version'
+        default: false
+        type: boolean
+      RELEASE_LIB_PLATFORM_JVM_LINUX:
+        description: 'Release JVM Linux Platform'
         required: false
-        default: ''
-        type: string
-      LIB_PLATFORM_JVM_MACOS_VERSION:
-        description: 'JVM macOS platform version'
+        default: false
+        type: boolean
+      RELEASE_LIB_PLATFORM_JVM_MACOS:
+        description: 'Release JVM macOS Platform'
         required: false
-        default: ''
-        type: string
-      LIB_PLATFORM_ANDROID_VERSION:
-        description: 'Android platform version'
-        required: false
-        default: ''
-        type: string
-      LIB_PLATFORM_IOS_VERSION:
-        description: 'iOS platform version'
-        required: false
-        default: ''
-        type: string
+        default: false
+        type: boolean
 
+      RELEASE_LIB_PLATFORM_ANDROID:
+        description: 'Release Android Platform'
+        required: false
+        default: false
+        type: boolean
+      RELEASE_LIB_PLATFORM_IOS:
+        description: 'Release iOS Platform'
+        required: false
+        default: false
+        type: boolean
 jobs:
   test-jvm-windows:
-    if: ${{ inputs.LIB_PLATFORM_JVM_WINDOWS_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
     runs-on: windows-latest
     permissions:
       contents: read
@@ -57,7 +57,7 @@ jobs:
         uses: ./.github/actions/test-jvm
 
   test-jvm-linux:
-    if: ${{ inputs.LIB_PLATFORM_JVM_LINUX_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -72,7 +72,7 @@ jobs:
         uses: ./.github/actions/test-jvm
 
   test-jvm-macos:
-    if: ${{ inputs.LIB_PLATFORM_JVM_MACOS_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_MACOS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
     runs-on: macos-15
     permissions:
       contents: read
@@ -86,7 +86,7 @@ jobs:
         uses: ./.github/actions/test-jvm
 
   test-android:
-    if: ${{ inputs.LIB_PLATFORM_ANDROID_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_ANDROID || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -100,7 +100,7 @@ jobs:
         uses: ./.github/actions/test-android
 
   test-ios:
-    if: ${{ inputs.LIB_PLATFORM_IOS_VERSION != '' || inputs.LIB_CORE_JAVA_VERSION!= '' || inputs.LIB_CORE_VERSION!= '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_IOS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
     runs-on: macos-15
     permissions:
       contents: read
@@ -115,7 +115,7 @@ jobs:
         uses: ./.github/actions/test-ios
 
   release-core:
-    if: ${{ inputs.LIB_CORE_VERSION != '' }}
+    if: ${{ inputs.RELEASE_LIB_CORE }}
     needs:
       - test-jvm-windows
       - test-jvm-linux
@@ -137,14 +137,13 @@ jobs:
         env:
           org.gradle.configuration-cache: false
           SKIP_SIGN: false
-          LIB_CORE_VERSION: ${{ inputs.LIB_CORE_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
   release-core-java:
-    if: ${{ inputs.LIB_CORE_JAVA_VERSION != '' }}
+    if: ${{ inputs.RELEASE_LIB_CORE_JAVA }}
     needs:
       - test-jvm-windows
       - test-jvm-linux
@@ -166,14 +165,13 @@ jobs:
         env:
           org.gradle.configuration-cache: false
           SKIP_SIGN: false
-          LIB_CORE_JAVA_VERSION: ${{ inputs.LIB_CORE_JAVA_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
   release-platform-jvm-windows:
-    if: ${{ inputs.LIB_PLATFORM_JVM_WINDOWS_VERSION != '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_WINDOWS }}
     needs:
       - test-jvm-windows
     runs-on: windows-latest
@@ -193,14 +191,13 @@ jobs:
         env:
           org.gradle.configuration-cache: false
           SKIP_SIGN: false
-          LIB_PLATFORM_JVM_WINDOWS_VERSION: ${{ inputs.LIB_PLATFORM_JVM_WINDOWS_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
   release-platform-jvm-linux:
-    if: ${{ inputs.LIB_PLATFORM_JVM_LINUX_VERSION != '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_LINUX }}
     needs:
       - test-jvm-linux
     runs-on: ubuntu-latest
@@ -218,14 +215,13 @@ jobs:
         env:
           org.gradle.configuration-cache: false
           SKIP_SIGN: false
-          LIB_PLATFORM_JVM_LINUX_VERSION: ${{ inputs.LIB_PLATFORM_JVM_LINUX_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
   release-platform-jvm-macos:
-    if: ${{ inputs.LIB_PLATFORM_JVM_MACOS_VERSION != '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_MACOS }}
     needs:
       - test-jvm-macos
     runs-on: macos-15
@@ -243,14 +239,13 @@ jobs:
         env:
           org.gradle.configuration-cache: false
           SKIP_SIGN: false
-          LIB_PLATFORM_JVM_MACOS_VERSION: ${{ inputs.LIB_PLATFORM_JVM_MACOS_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
   release-platform-android:
-    if: ${{ inputs.LIB_PLATFORM_ANDROID_VERSION != '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_ANDROID }}
     needs:
       - test-android
     runs-on: ubuntu-latest
@@ -268,14 +263,13 @@ jobs:
         env:
           org.gradle.configuration-cache: false
           SKIP_SIGN: false
-          LIB_PLATFORM_ANDROID_VERSION: ${{ inputs.LIB_PLATFORM_ANDROID_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
   release-platform-ios:
-    if: ${{ inputs.LIB_PLATFORM_IOS_VERSION != '' }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_IOS }}
     needs:
       - test-ios
     runs-on: macos-15
@@ -293,7 +287,6 @@ jobs:
         env:
           org.gradle.configuration-cache: false
           SKIP_SIGN: false
-          LIB_PLATFORM_IOS_VERSION: ${{ inputs.LIB_PLATFORM_IOS_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
