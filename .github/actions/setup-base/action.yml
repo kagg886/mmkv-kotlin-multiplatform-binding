@@ -8,9 +8,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
     - uses: microsoft/setup-msbuild@v1.0.2
       name: Set up MSBuild
       if: ${{ inputs.windows == 'true' }}
