@@ -11,6 +11,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Environment
         uses: ./.github/actions/setup-base
         with:
@@ -24,6 +27,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
@@ -35,6 +41,8 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
@@ -47,6 +55,8 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
@@ -58,6 +68,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Environment
         uses: ./.github/actions/setup-base
 
