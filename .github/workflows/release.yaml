@@ -148,8 +148,6 @@ jobs:
       - test-jvm-windows
       - test-jvm-linux
       - test-jvm-macos
-      - test-android
-      - test-ios
     runs-on: ubuntu-latest
     permissions:
       contents: read
