@@ -8,13 +8,13 @@ plugins {
 }
 
 val SKIP_SIGN = (System.getenv("SKIP_SIGN") ?: project.findProperty("SKIP_SIGN") as? String ?: "false").toBooleanStrict()
-val APP_VERSION = System.getenv("APP_VERSION") ?: project.findProperty("APP_VERSION") as? String ?: "unsetted."
-check(APP_VERSION.startsWith("v")) {
-    "APP_VERSION not supported, current is $APP_VERSION"
+val LIB_CORE_JAVA_VERSION = System.getenv("LIB_CORE_JAVA_VERSION") ?: project.findProperty("LIB_CORE_JAVA_VERSION") as? String ?: "unsetted."
+check(LIB_CORE_JAVA_VERSION.startsWith("v")) {
+    "LIB_CORE_JAVA_VERSION not supported, current is $LIB_CORE_JAVA_VERSION"
 }
 
 group = "top.kagg886.mkmb"
-version = APP_VERSION.substring(1)
+version = LIB_CORE_JAVA_VERSION.substring(1)
 
 println("LIB_CORE_JAVA_VERSION: $version")
 
