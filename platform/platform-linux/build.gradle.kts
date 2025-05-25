@@ -35,7 +35,7 @@ val processBuild = tasks.register<Exec>("processBuild") {
             cd build && \
             cmake .. && \
             make && \
-            sha256sum libmmkvc.so | awk '{print $\{'$'}1}' > build-linux.hash
+            sha256sum libmmkvc.so | cut -d ' ' -f 1 > build-linux.hash
         """.trimIndent()
     )
 }

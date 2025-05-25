@@ -102,7 +102,7 @@ jobs:
         run: ./gradlew iosSimulatorArm64Test
 
   test-android:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       contents: read
     steps:
@@ -131,5 +131,4 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
-          system-image-api-level: 34-ext9
           script: ./gradlew connectedAndroidTest
