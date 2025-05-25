@@ -11,6 +11,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Environment
         uses: ./.github/workflows/meta/setup/setup-windows.yaml
 
@@ -22,6 +25,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Environment
         uses: ./.github/workflows/meta/setup/setup-linux.yaml
 
@@ -33,6 +39,8 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Setup Environment
         uses: ./.github/workflows/meta/setup/setup-macos.yaml
 
@@ -45,6 +53,8 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Setup Environment
         uses: ./.github/workflows/meta/setup/setup-linux.yaml
 
@@ -56,6 +66,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Environment
         uses: ./.github/workflows/meta/setup/setup-macos.yaml
 

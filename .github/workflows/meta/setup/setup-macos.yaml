@@ -9,8 +9,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
-
       - name: Fetch submodules
         run: |
           git submodule update --init --recursive
