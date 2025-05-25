@@ -136,6 +136,7 @@ jobs:
         run: ./gradlew :core:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
+          SKIP_SIGN: false
           LIB_CORE_VERSION: ${{ inputs.LIB_CORE_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
@@ -164,6 +165,7 @@ jobs:
         run: ./gradlew :core-java:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
+          SKIP_SIGN: false
           LIB_CORE_JAVA_VERSION: ${{ inputs.LIB_CORE_JAVA_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
@@ -190,6 +192,7 @@ jobs:
         run: ./gradlew :platform:platform-windows:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
+          SKIP_SIGN: false
           LIB_PLATFORM_JVM_WINDOWS_VERSION: ${{ inputs.LIB_PLATFORM_JVM_WINDOWS_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
@@ -214,6 +217,7 @@ jobs:
         run: ./gradlew :platform:platform-linux:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
+          SKIP_SIGN: false
           LIB_PLATFORM_JVM_LINUX_VERSION: ${{ inputs.LIB_PLATFORM_JVM_LINUX_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
@@ -238,6 +242,7 @@ jobs:
         run: ./gradlew :platform:platform-macos:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
+          SKIP_SIGN: false
           LIB_PLATFORM_JVM_MACOS_VERSION: ${{ inputs.LIB_PLATFORM_JVM_MACOS_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
@@ -262,6 +267,7 @@ jobs:
         run: ./gradlew :platform:platform-android:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
+          SKIP_SIGN: false
           LIB_PLATFORM_ANDROID_VERSION: ${{ inputs.LIB_PLATFORM_ANDROID_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
@@ -286,6 +292,7 @@ jobs:
         run: ./gradlew :platform:platform-ios:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
+          SKIP_SIGN: false
           LIB_PLATFORM_IOS_VERSION: ${{ inputs.LIB_PLATFORM_IOS_VERSION }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
