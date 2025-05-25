@@ -2,13 +2,9 @@
 
 The English Version is [Here](./README.md)
 
-
-
 ## 简介
 
 **MMKV-Kotlin-Multiplatform-Binding**(后文简称**MKMB**)是[MMKV](https://github.com/Tencent/MMKV)的Kotlin封装。
-
-
 
 ## 支持的平台
 
@@ -22,21 +18,19 @@ The English Version is [Here](./README.md)
   - [x] JVM
   - [ ] Native
 - [x] Android(JVM)
-- [ ] IOS
+- [x] IOS
 
-
-
-## 安装引入(正在施工，发版后可以正常使用)
+## 安装引入
 
 1. 引入`core`模块，这是一个 `Kotlin-MultiPlatform` 模块，提供访问各个操作系统的门面。
 
    ```kotlin
    dependencies {
-       implementation("top.kagg886.mkmb:core:1.0.0")
+       implementation("top.kagg886.mkmb:core:${latest_version}")
    }
    ```
 
-2. 如果是JVM平台，需要引入不同的动态库：
+2. JVM平台需要引入不同的动态库：
 
    ```kotlin
    enum class JvmTarget {
@@ -54,15 +48,15 @@ The English Version is [Here](./README.md)
            else -> error("Unsupported OS: $osName")
        }
    }
-   //不同操作系统引入不同的二进制文件
+   //不同操作系统引入不同的二进制文件，若要引入所有平台就写3个implementation。
    jvmMain.dependencies {
-       implementation("top.kagg886.mkmb:platform-${hostTarget.name.lowercase()}:1.0.0")
+       implementation("top.kagg886.mkmb:platform-${hostTarget.name.lowercase()}:${latest_version}")
    }
    ```
 
-   
+   > 在Desktop平台使用了 [Project Panama](https://openjdk.org/projects/panama/) 做FFI绑定，因此使用该库要求你的**JAVA版本>=22**。
 
-
+3. Android，iOS平台会自动随着`core`模块引入。
 
 ## 快速上手
 
@@ -72,8 +66,6 @@ The English Version is [Here](./README.md)
 MMKV.initialize("base-path")
 ```
 
-
-
 随后便可以向C++的MMKVApi一样进行操作：
 
 ```kotlin
@@ -82,8 +74,6 @@ println(mmkv.getInt("qwq")) //0
 mmkv.set("qwq",2)
 println(mmkv.getInt("qwq")) //2
 ```
-
-
 
 ## 支持操作
 
