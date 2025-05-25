@@ -127,6 +127,11 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      # should be failed, but can generate the header to include in the project
+      - name: Generate Native Header For NDK
+        run: ./gradlew externalNativeBuildDebug
+        continue-on-error: true
+
       - name: Test it
         uses: reactivecircus/android-emulator-runner@v2
         with:
