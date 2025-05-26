@@ -129,7 +129,7 @@ internal class PanamaMMKV(private val ptr: MemorySegment) : MMKV {
 
 
 actual fun MMKV.Companion.initialize(path: String, options: MMKVOptions) {
-    NativeMMKV.global = Arena.ofConfined()
+    NativeMMKV.global = Arena.ofShared()
     NativeMMKV.dll = SymbolLookup.libraryLookup(options.libLoader.load(), NativeMMKV.global)
     NativeMMKV.mmkvc_init(path, options.logLevel.level) { level, tag, it ->
         options.logFunc(MMKVOptions.LogLevel.from(level), tag, it)

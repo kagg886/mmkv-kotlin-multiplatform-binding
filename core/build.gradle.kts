@@ -53,6 +53,7 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.okio)
             implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.core)
         }
 
         jvmTest.dependencies {

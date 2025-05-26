@@ -6,14 +6,7 @@ import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.security.MessageDigest
 
-internal fun <T> String.makeCString(block: (MemorySegment) -> T) = with(Arena.ofConfined()) {
-    use {
-        val data = it.allocateFrom(this@makeCString)
-        block(data)
-    }
-}
-
-internal fun <T> useArena(block: Arena.() -> T): T = with(Arena.ofConfined()) {
+internal fun <T> useArena(arena: Arena = Arena.ofConfined(), block: Arena.() -> T): T = with(arena) {
     use(block)
 }
 

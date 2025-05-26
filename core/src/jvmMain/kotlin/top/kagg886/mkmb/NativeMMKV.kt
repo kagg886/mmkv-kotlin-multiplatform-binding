@@ -56,7 +56,11 @@ internal object NativeMMKV {
                 global,
             )
 
-            path.makeCString { cPath ->
+//            path.makeCString { cPath ->
+//                funcHandle.invoke(cPath, logLevel, loggerStub)
+//            }
+            useArena {
+                val cPath = allocateFrom(path)
                 funcHandle.invoke(cPath, logLevel, loggerStub)
             }
         }
@@ -80,8 +84,9 @@ internal object NativeMMKV {
         )
 
         return@lazy {
-            val ptr = it.makeCString {
-                funcHandle.invoke(it) as? MemorySegment ?: error("mmkvc_mmkvWithID return null")
+            val ptr = useArena {
+                val cId = allocateFrom(it)
+                funcHandle.invoke(cId) as? MemorySegment ?: error("mmkvc_mmkvWithID return null")
             }
             PanamaMMKV(ptr)
         }
@@ -94,12 +99,10 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key ->
-
-            var rtn = 0
-            key.makeCString {
-                rtn = funcHandle.invoke(mmkv, it) as Int
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey) as Int
             }
-            rtn
         }
     }
     val mmkvc_setInt: (MemorySegment, String, Int) -> Unit by lazy {
@@ -109,10 +112,10 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key, value ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it, value)
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey, value)
             }
-
         }
     }
 
@@ -123,8 +126,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key ->
-            val segment = key.makeCString {
-                funcHandle.invoke(mmkv, it) as? MemorySegment ?: error("mmkvc_getString return null")
+            val segment = useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey) as? MemorySegment ?: error("mmkvc_getString return null")
             }
             val str = segment.reinterpret(Long.MAX_VALUE).getString(0);
             free(segment)
@@ -138,10 +142,10 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key, value ->
-            key.makeCString { keySegment ->
-                value.makeCString { valueSegment ->
-                    funcHandle.invoke(mmkv, keySegment, valueSegment)
-                }
+            useArena {
+                val cKey = allocateFrom(key)
+                val cValue = allocateFrom(value)
+                funcHandle.invoke(mmkv, cKey, cValue)
             }
         }
     }
@@ -153,8 +157,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it) as Float
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey) as Float
             }
         }
     }
@@ -165,8 +170,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key, value ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it, value)
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey, value)
             }
         }
     }
@@ -178,8 +184,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it) as Long
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey) as Long
             }
         }
     }
@@ -190,8 +197,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key, value ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it, value)
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey, value)
             }
         }
     }
@@ -203,8 +211,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it) as Double
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey) as Double
             }
         }
     }
@@ -215,8 +224,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key, value ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it, value)
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey, value)
             }
         }
     }
@@ -228,8 +238,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it) as Boolean
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey) as Boolean
             }
         }
     }
@@ -240,8 +251,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key, value ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it, value)
+            useArena {
+                val cKey = allocateFrom(key)
+                funcHandle.invoke(mmkv, cKey, value)
             }
         }
     }
@@ -272,13 +284,19 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key, value ->
-            key.makeCString {
-                Arena.ofConfined()!!.use { arena: Arena ->
-                    val segment = arena.allocate(value.size.toLong())
-                    segment.copyFrom(MemorySegment.ofArray(value))
-                    funcHandle.invoke(mmkv, it, segment, value.size.toLong())
-                }
-
+//            key.makeCString {
+//                Arena.ofConfined()!!.use { arena: Arena ->
+//                    val segment = arena.allocate(value.size.toLong())
+//                    segment.copyFrom(MemorySegment.ofArray(value))
+//                    funcHandle.invoke(mmkv, it, segment, value.size.toLong())
+//                }
+//
+//            }
+            useArena {
+                val keyPtr = allocateFrom(key)
+                val valuePtr = allocate(value.size.toLong())
+                valuePtr.copyFrom(MemorySegment.ofArray(value))
+                funcHandle.invoke(mmkv, keyPtr, valuePtr, value.size.toLong())
             }
         }
     }
@@ -293,9 +311,9 @@ internal object NativeMMKV {
         val lenOffset = MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("size"))
 
         return@lazy { mmkv, key ->
-            val segment = key.makeCString {
-                (funcHandle.invoke(mmkv, it) as? MemorySegment)?.reinterpret(MMKVC_STRING_SET_RETURN_STRUCT.byteSize())
-                    ?: error("mmkvc_getStringList return null")
+            val segment = useArena {
+                val keyPtr = allocateFrom(key)
+                (funcHandle.invoke(mmkv, keyPtr) as? MemorySegment)?.reinterpret(MMKVC_STRING_SET_RETURN_STRUCT.byteSize()) ?: error("mmkvc_getStringList return null")
             }
 
             // 获取字符串数组指针和数组长度
@@ -322,15 +340,23 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key, value ->
-            Arena.ofConfined()!!.use { arena ->
-                val valueSegment = arena.allocate(ADDRESS.byteSize() * value.size);
-
-                value.map { arena.allocateFrom(it) }.forEachIndexed { index, segment ->
+//            Arena.ofConfined()!!.use { arena ->
+//                val valueSegment = arena.allocate(ADDRESS.byteSize() * value.size);
+//
+//                value.map { arena.allocateFrom(it) }.forEachIndexed { index, segment ->
+//                    valueSegment.setAtIndex(ADDRESS, index.toLong(), segment);
+//                }
+//                key.makeCString {
+//                    funcHandle.invoke(mmkv, it, valueSegment, value.size.toLong())
+//                }
+//            }
+            useArena {
+                val valueSegment = allocate(ADDRESS.byteSize() * value.size);
+                value.map { allocateFrom(it) }.forEachIndexed { index, segment ->
                     valueSegment.setAtIndex(ADDRESS, index.toLong(), segment);
                 }
-                key.makeCString {
-                    funcHandle.invoke(mmkv, it, valueSegment, value.size.toLong())
-                }
+                val keyPtr = allocateFrom(key)
+                funcHandle.invoke(mmkv, keyPtr, valueSegment, value.size.toLong())
             }
         }
     }
@@ -342,8 +368,9 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it) as Boolean
+            useArena {
+                val keyPtr = allocateFrom(key)
+                funcHandle.invoke(mmkv, keyPtr) as Boolean
             }
         }
     }
@@ -431,20 +458,22 @@ internal object NativeMMKV {
         )
 
         return@lazy { mmkv, key ->
-            key.makeCString {
-                funcHandle.invoke(mmkv, it) as Boolean
+            useArena {
+                val keyPtr = allocateFrom(key)
+                funcHandle.invoke(mmkv, keyPtr) as Boolean
             }
         }
     }
 
-    private fun free(message: MemorySegment) {
-        //call stdlib_free, don't use it in C++ class!!
+    private val free by lazy {
         val func = with(Linker.nativeLinker()) {
             downcallHandle(
                 defaultLookup().find("free").orElseThrow(),
                 FunctionDescriptor.ofVoid(ADDRESS)
             )
         }
-        func.invoke(message)
+        return@lazy { message: MemorySegment ->
+            func.invoke(message)
+        }
     }
 }

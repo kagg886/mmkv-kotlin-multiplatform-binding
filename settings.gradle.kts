@@ -32,7 +32,8 @@ dependencyResolutionManagement {
     }
 }
 include(":core")
-include("core-java")
+include(":core-java")
+include(":benchmark")
 
 include("platform:platform-windows")
 findProject(":platform:platform-windows")?.name = "platform-windows"
