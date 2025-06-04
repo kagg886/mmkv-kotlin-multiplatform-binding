@@ -21,7 +21,7 @@ println("LIB_PLATFORM_ANDROID_VERSION: $version")
 
 android {
     namespace = "top.kagg886.mkmb.android"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 28

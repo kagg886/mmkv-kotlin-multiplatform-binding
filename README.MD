@@ -97,6 +97,8 @@ MKMB plans to support:
 
 ### Type Storage and Retrieval
 
+#### 1. Common
+
 - Int
 - String
 - Boolean
@@ -105,6 +107,10 @@ MKMB plans to support:
 - Double
 - ByteArray
 - List\<String\>
+
+#### 2. Android
+
+- An object which implements `Parcelable` interface
 
 ### Collection Operations
 

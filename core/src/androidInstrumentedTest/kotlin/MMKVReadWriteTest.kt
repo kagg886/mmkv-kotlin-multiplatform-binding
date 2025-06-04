@@ -1,11 +1,15 @@
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import data.TestParcel
+import junit.framework.TestCase.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import top.kagg886.mkmb.MMKV
+import top.kagg886.mkmb.get
 import top.kagg886.mkmb.initialize
 import top.kagg886.mkmb.mmkvWithID
+import top.kagg886.mkmb.set
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -96,5 +100,15 @@ class MMKVReadWriteTest {
         assertFalse(mmkv.remove("key"))
         mmkv.set("key",1)
         assertTrue(mmkv.remove("key"))
+    }
+
+    @Test
+    fun testMMKVParcelableStore() {
+        val data = TestParcel("886","kagg",21,false,55.4f,123.456)
+
+        val mmkv = MMKV.mmkvWithID("test-parcelable-store")
+        assertNull(mmkv.get("key"))
+        mmkv.set("key",data)
+        assertEquals(data,mmkv.get("key"))
     }
 }

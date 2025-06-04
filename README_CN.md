@@ -96,7 +96,10 @@ MKMB计划支持：
 
 ### 类型存取
 
+#### 1. Common平台
+
 - Int
+
 - String
 - Boolean
 - Long
@@ -104,6 +107,10 @@ MKMB计划支持：
 - Double
 - ByteArray
 - List\<String\>
+
+#### 2. Android平台
+
+- 任何实现了`Parcelable`的对象
 
 ### 集合操作
 
