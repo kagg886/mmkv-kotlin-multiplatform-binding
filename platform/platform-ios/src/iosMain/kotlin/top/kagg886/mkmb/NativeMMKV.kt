@@ -34,19 +34,19 @@ object NativeMMKVImpl {
 
     fun setInt(handle: NSObject, key: String, value: Int, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setInt32(value,key)
+        mmkv.setInt32(value,key,expire.toUInt())
     }
 
     fun setString(handle: NSObject, key: String, value: String, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setString(value,key)
+        mmkv.setString(value,key,expire.toUInt())
     }
 
     fun setData(handle: NSObject, key: String, value: ByteArray, expire: Int) {
         val mmkv = handle as MMKV
 
         value.useAsNSData {
-            mmkv.setData(this, key)
+            mmkv.setData(this, key,expire.toUInt())
         }
     }
 
@@ -56,27 +56,27 @@ object NativeMMKVImpl {
         for (i in value) {
             arr.addObject(i)
         }
-        mmkv.setObject(arr,key)
+        mmkv.setObject(arr,key,expire.toUInt())
     }
 
     fun setBool(handle: NSObject, key: String, value: Boolean, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setBool(value, key)
+        mmkv.setBool(value, key,expire.toUInt())
     }
 
     fun setLong(handle: NSObject, key: String, value: Long, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setInt64(value, key)
+        mmkv.setInt64(value, key,expire.toUInt())
     }
 
     fun setFloat(handle: NSObject, key: String, value: Float, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setFloat(value, key)
+        mmkv.setFloat(value, key,expire.toUInt())
     }
 
     fun setDouble(handle: NSObject, key: String, value: Double, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setDouble(value, key)
+        mmkv.setDouble(value, key,expire.toUInt())
     }
 
     fun getInt(handle: NSObject, key: String): Int {
