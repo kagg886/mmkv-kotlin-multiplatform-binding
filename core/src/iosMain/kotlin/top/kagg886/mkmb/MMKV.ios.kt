@@ -3,47 +3,47 @@ package top.kagg886.mkmb
 import kotlinx.atomicfu.atomic
 import platform.darwin.NSObject
 
-class AppleMMKV(internal val handle: NSObject): MMKV {
+class AppleMMKV(internal val handle: NSObject) : MMKV {
     private var alive by atomic(true)
 
-    override fun set(key: String, value: Int) {
+    override fun set(key: String, value: Int, expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $handle was destroyed")
-        NativeMMKVImpl.setInt(handle, key, value)
+        NativeMMKVImpl.setInt(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: String) {
+    override fun set(key: String, value: String,expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $handle was destroyed")
-        NativeMMKVImpl.setString(handle, key, value)
+        NativeMMKVImpl.setString(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: ByteArray) {
+    override fun set(key: String, value: ByteArray,expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $handle was destroyed")
-        NativeMMKVImpl.setData(handle, key, value)
+        NativeMMKVImpl.setData(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: List<String>) {
+    override fun set(key: String, value: List<String>,expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $handle was destroyed")
-        NativeMMKVImpl.setStringList(handle, key, value)
+        NativeMMKVImpl.setStringList(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: Boolean) {
+    override fun set(key: String, value: Boolean,expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $handle was destroyed")
-        NativeMMKVImpl.setBool(handle, key, value)
+        NativeMMKVImpl.setBool(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: Long) {
+    override fun set(key: String, value: Long,expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $handle was destroyed")
-        NativeMMKVImpl.setLong(handle, key, value)
+        NativeMMKVImpl.setLong(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: Float) {
+    override fun set(key: String, value: Float,expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $handle was destroyed")
-        NativeMMKVImpl.setFloat(handle, key, value)
+        NativeMMKVImpl.setFloat(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: Double) {
+    override fun set(key: String, value: Double,expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $handle was destroyed")
-        NativeMMKVImpl.setDouble(handle, key, value)
+        NativeMMKVImpl.setDouble(handle, key, value,expire)
     }
 
     override fun getInt(key: String): Int {
@@ -98,7 +98,7 @@ class AppleMMKV(internal val handle: NSObject): MMKV {
 
     override fun destroy(): Boolean {
         if (!alive) throw MMKVException("MMKV instance $handle was destroyed")
-        val bool =  NativeMMKVImpl.destroy(handle)
+        val bool = NativeMMKVImpl.destroy(handle)
         if (bool) {
             alive = false
         }

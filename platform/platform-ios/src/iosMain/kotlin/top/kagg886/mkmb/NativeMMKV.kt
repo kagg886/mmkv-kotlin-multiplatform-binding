@@ -32,17 +32,17 @@ object NativeMMKVImpl {
         MMKV.initializeMMKV(rootDir = path, logLevel = level, handler = MMKVHandler(log))
     }
 
-    fun setInt(handle: NSObject, key: String, value: Int) {
+    fun setInt(handle: NSObject, key: String, value: Int, expire: Int) {
         val mmkv = handle as MMKV
         mmkv.setInt32(value,key)
     }
 
-    fun setString(handle: NSObject, key: String, value: String) {
+    fun setString(handle: NSObject, key: String, value: String, expire: Int) {
         val mmkv = handle as MMKV
         mmkv.setString(value,key)
     }
 
-    fun setData(handle: NSObject, key: String, value: ByteArray) {
+    fun setData(handle: NSObject, key: String, value: ByteArray, expire: Int) {
         val mmkv = handle as MMKV
 
         value.useAsNSData {
@@ -50,7 +50,7 @@ object NativeMMKVImpl {
         }
     }
 
-    fun setStringList(handle: NSObject, key: String, value: List<String>) {
+    fun setStringList(handle: NSObject, key: String, value: List<String>, expire: Int) {
         val mmkv = handle as MMKV
         val arr = NSMutableArray()
         for (i in value) {
@@ -59,22 +59,22 @@ object NativeMMKVImpl {
         mmkv.setObject(arr,key)
     }
 
-    fun setBool(handle: NSObject, key: String, value: Boolean) {
+    fun setBool(handle: NSObject, key: String, value: Boolean, expire: Int) {
         val mmkv = handle as MMKV
         mmkv.setBool(value, key)
     }
 
-    fun setLong(handle: NSObject, key: String, value: Long) {
+    fun setLong(handle: NSObject, key: String, value: Long, expire: Int) {
         val mmkv = handle as MMKV
         mmkv.setInt64(value, key)
     }
 
-    fun setFloat(handle: NSObject, key: String, value: Float) {
+    fun setFloat(handle: NSObject, key: String, value: Float, expire: Int) {
         val mmkv = handle as MMKV
         mmkv.setFloat(value, key)
     }
 
-    fun setDouble(handle: NSObject, key: String, value: Double) {
+    fun setDouble(handle: NSObject, key: String, value: Double, expire: Int) {
         val mmkv = handle as MMKV
         mmkv.setDouble(value, key)
     }
