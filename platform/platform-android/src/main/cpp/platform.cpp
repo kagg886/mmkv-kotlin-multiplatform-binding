@@ -84,7 +84,9 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1init(JNIEnv* env,
 
 extern "C" JNIEXPORT jlong JNICALL
 Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1defaultMMKV(JNIEnv* env, jclass clazz) {
-    return (jlong)MMKV::defaultMMKV();
+    auto mmkv = MMKV::defaultMMKV();
+    mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
+    return (jlong) mmkv;
 }
 
 extern "C" JNIEXPORT jlong JNICALL
@@ -92,7 +94,9 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1mmkvWithID(JNIEnv* env,
                                                    jclass clazz,
                                                    jstring id) {
     auto mmapIDStr = jstring2cppstring(env, id);
-    return (jlong)MMKV::mmkvWithID(mmapIDStr);
+    auto mmkv = MMKV::mmkvWithID(mmapIDStr);
+    mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
+    return (jlong) mmkv;
 }
 
 extern "C" JNIEXPORT void JNICALL

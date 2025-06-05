@@ -44,11 +44,15 @@ extern "C" __declspec(dllexport) void mmkvc_init(char* path,int level,Logger* lo
 }
 
 extern "C" __declspec(dllexport) MMKV* mmkvc_defaultMMKV() {
-    return MMKV::defaultMMKV();
+    auto mmkv = MMKV::defaultMMKV();
+    mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
+    return mmkv;
 }
 
 extern "C" __declspec(dllexport) MMKV* mmkvc_mmkvWithID(char* id) {
-    return MMKV::mmkvWithID(id);
+    auto mmkv = MMKV::mmkvWithID(id);
+    mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
+    return mmkv;
 }
 
 extern "C" __declspec(dllexport) int mmkvc_getInt(MMKV* mmkv,const char* key) {

@@ -34,11 +34,15 @@ extern "C" void mmkvc_init(char* path, int level, Logger* logger) {
 }
 
 extern "C" MMKV* mmkvc_defaultMMKV() {
-    return MMKV::defaultMMKV();
+    auto mmkv = MMKV::defaultMMKV();
+    mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
+    return mmkv;
 }
 
 extern "C" MMKV* mmkvc_mmkvWithID(char* id) {
-    return MMKV::mmkvWithID(id);
+    auto mmkv = MMKV::mmkvWithID();
+    mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
+    return mmkv;
 }
 
 extern "C" int mmkvc_getInt(MMKV* mmkv, const char* key) {
