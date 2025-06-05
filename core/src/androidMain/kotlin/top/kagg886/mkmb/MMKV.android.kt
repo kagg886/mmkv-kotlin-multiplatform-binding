@@ -10,45 +10,45 @@ actual val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader by lazy {
 class JNIPointerMMKV(private val handle: Long) : MMKV {
     private var alive by atomic(true)
 
-    override fun set(key: String, value: Int) {
+    override fun set(key: String, value: Int,expire:Int) {
         if (!alive) throw MMKVException("MMKV instance ${handle.toHexString()} was destroyed")
-        NativeMMKV.mmkvc_setInt(handle, key, value)
+        NativeMMKV.mmkvc_setInt(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: String) {
+    override fun set(key: String, value: String,expire:Int) {
         if (!alive) throw MMKVException("MMKV instance ${handle.toHexString()} was destroyed")
-        NativeMMKV.mmkvc_setString(handle, key, value)
+        NativeMMKV.mmkvc_setString(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: ByteArray) {
+    override fun set(key: String, value: ByteArray,expire:Int) {
         if (!alive) throw MMKVException("MMKV instance ${handle.toHexString()} was destroyed")
-        NativeMMKV.mmkvc_setByteArray(handle, key, value)
+        NativeMMKV.mmkvc_setByteArray(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: List<String>) {
+    override fun set(key: String, value: List<String>,expire:Int) {
         if (!alive) throw MMKVException("MMKV instance ${handle.toHexString()} was destroyed")
-        NativeMMKV.mmkvc_setStringList(handle, key, value)
+        NativeMMKV.mmkvc_setStringList(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: Boolean) {
+    override fun set(key: String, value: Boolean,expire:Int) {
         if (!alive) throw MMKVException("MMKV instance ${handle.toHexString()} was destroyed")
-        NativeMMKV.mmkvc_setBoolean(handle, key, value)
+        NativeMMKV.mmkvc_setBoolean(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: Long) {
+    override fun set(key: String, value: Long,expire:Int) {
         if (!alive) throw MMKVException("MMKV instance ${handle.toHexString()} was destroyed")
-        NativeMMKV.mmkvc_setLong(handle, key, value)
+        NativeMMKV.mmkvc_setLong(handle, key, value,expire)
     }
 
 
-    override fun set(key: String, value: Float) {
+    override fun set(key: String, value: Float,expire:Int) {
         if (!alive) throw MMKVException("MMKV instance ${handle.toHexString()} was destroyed")
-        NativeMMKV.mmkvc_setFloat(handle, key, value)
+        NativeMMKV.mmkvc_setFloat(handle, key, value,expire)
     }
 
-    override fun set(key: String, value: Double) {
+    override fun set(key: String, value: Double,expire:Int) {
         if (!alive) throw MMKVException("MMKV instance ${handle.toHexString()} was destroyed")
-        NativeMMKV.mmkvc_setDouble(handle, key, value)
+        NativeMMKV.mmkvc_setDouble(handle, key, value,expire)
     }
 
     override fun getInt(key: String): Int {

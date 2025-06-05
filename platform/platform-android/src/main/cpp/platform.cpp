@@ -61,8 +61,8 @@ static void LogCallback(MMKVLogLevel level,
     JNIEnv* global = nullptr;
     GetJNIEnv(global);
     jmethodID j2 = global->GetMethodID(
-        global->FindClass("top/kagg886/mkmb/MMKVInternalLog"), "invoke",
-        "(ILjava/lang/String;Ljava/lang/String;)V");
+            global->FindClass("top/kagg886/mkmb/MMKVInternalLog"), "invoke",
+            "(ILjava/lang/String;Ljava/lang/String;)V");
 
     jstring jFile = global->NewStringUTF(file);
     jstring jMessage = global->NewStringUTF(message.c_str());
@@ -86,7 +86,7 @@ extern "C" JNIEXPORT jlong JNICALL
 Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1defaultMMKV(JNIEnv* env, jclass clazz) {
     auto mmkv = MMKV::defaultMMKV();
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
-    return (jlong) mmkv;
+    return (jlong)mmkv;
 }
 
 extern "C" JNIEXPORT jlong JNICALL
@@ -96,7 +96,7 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1mmkvWithID(JNIEnv* env,
     auto mmapIDStr = jstring2cppstring(env, id);
     auto mmkv = MMKV::mmkvWithID(mmapIDStr);
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
-    return (jlong) mmkv;
+    return (jlong)mmkv;
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -104,10 +104,11 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setInt(JNIEnv* env,
                                                jclass clazz,
                                                jlong handle,
                                                jstring key,
-                                               jint value) {
+                                               jint value,
+                                               jint expire) {
     MMKV* mmkv = (MMKV*)handle;
     auto keyStr = jstring2cppstring(env, key);
-    mmkv->set((int)value, keyStr);
+    mmkv->set((int)value, keyStr, expire);
 }
 
 extern "C" JNIEXPORT jint JNICALL
@@ -125,13 +126,14 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setString(JNIEnv* env,
                                                   jclass clazz,
                                                   jlong handle,
                                                   jstring key,
-                                                  jstring value) {
+                                                  jstring value,
+                                                  jint expire) {
     MMKV* mmkv = (MMKV*)handle;
 
     auto keys = jstring2cppstring(env, key);
     auto values = jstring2cppstring(env, value);
 
-    mmkv->set(values, keys);
+    mmkv->set(values, keys, expire);
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -139,7 +141,8 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setByteArray(JNIEnv* env,
                                                      jclass clazz,
                                                      jlong handle,
                                                      jstring key,
-                                                     jbyteArray value) {
+                                                     jbyteArray value,
+                                                     jint expire) {
     MMKV* mmkv = (MMKV*)handle;
     jbyte* bytes = env->GetByteArrayElements(value, nullptr);
     jsize size = env->GetArrayLength(value);
@@ -148,7 +151,7 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setByteArray(JNIEnv* env,
 
     auto keyStr = jstring2cppstring(env, key);
 
-    mmkv->set(buffer, keyStr);
+    mmkv->set(buffer, keyStr, expire);
 
     env->ReleaseByteArrayElements(value, bytes, 0);
 }
@@ -158,13 +161,14 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setStringList(JNIEnv* env,
                                                       jclass clazz,
                                                       jlong handle,
                                                       jstring key,
-                                                      jobject value) {
+                                                      jobject value,
+                                                      jint expire) {
     MMKV* mmkv = (MMKV*)handle;
     vector<string> string;
 
     auto listClass = env->FindClass("java/util/List");
     jmethodID getMethod =
-        env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
+            env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
     jmethodID sizeMethod = env->GetMethodID(listClass, "size", "()I");
 
     jint size = env->CallIntMethod(value, sizeMethod);
@@ -174,7 +178,7 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setStringList(JNIEnv* env,
         string.push_back(itemStr);
     }
     auto keyStr = jstring2cppstring(env, key);
-    mmkv->set(string, keyStr);
+    mmkv->set(string, keyStr, expire);
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -182,10 +186,11 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setBoolean(JNIEnv* env,
                                                    jclass clazz,
                                                    jlong handle,
                                                    jstring key,
-                                                   jboolean value) {
+                                                   jboolean value,
+                                                   jint expire) {
     MMKV* mmkv = (MMKV*)handle;
     auto keyStr = jstring2cppstring(env, key);
-    mmkv->set(value, keyStr);
+    mmkv->set(value == JNI_TRUE, keyStr,expire);
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -193,10 +198,11 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setLong(JNIEnv* env,
                                                 jclass clazz,
                                                 jlong handle,
                                                 jstring key,
-                                                jlong value) {
+                                                jlong value,
+                                                jint expire) {
     MMKV* mmkv = (MMKV*)handle;
     auto keyStr = jstring2cppstring(env, key);
-    mmkv->set(value, keyStr);
+    mmkv->set(value, keyStr, expire);
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -204,10 +210,11 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setFloat(JNIEnv* env,
                                                  jclass clazz,
                                                  jlong handle,
                                                  jstring key,
-                                                 jfloat value) {
+                                                 jfloat value,
+                                                 jint expire) {
     MMKV* mmkv = (MMKV*)handle;
     auto keyStr = jstring2cppstring(env, key);
-    mmkv->set(value, keyStr);
+    mmkv->set(value, keyStr, expire);
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -215,10 +222,11 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1setDouble(JNIEnv* env,
                                                   jclass clazz,
                                                   jlong handle,
                                                   jstring key,
-                                                  jdouble value) {
+                                                  jdouble value,
+                                                  jint expire) {
     MMKV* mmkv = (MMKV*)handle;
     auto keyStr = jstring2cppstring(env, key);
-    mmkv->set(value, keyStr);
+    mmkv->set(value, keyStr, expire);
 }
 
 extern "C" JNIEXPORT jstring JNICALL
@@ -263,7 +271,7 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1getStringList(JNIEnv* env,
     jmethodID listConstructor = env->GetMethodID(listClass, "<init>", "()V");
     jobject list = env->NewObject(listClass, listConstructor);
     jmethodID addMethod =
-        env->GetMethodID(listClass, "add", "(Ljava/lang/Object;)Z");
+            env->GetMethodID(listClass, "add", "(Ljava/lang/Object;)Z");
 
     for (auto item : result) {
         jstring itemString = env->NewStringUTF(item.c_str());
@@ -366,7 +374,7 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1allKeys(JNIEnv* env,
     jmethodID listConstructor = env->GetMethodID(listClass, "<init>", "()V");
     jobject list = env->NewObject(listClass, listConstructor);
     jmethodID addMethod =
-        env->GetMethodID(listClass, "add", "(Ljava/lang/Object;)Z");
+            env->GetMethodID(listClass, "add", "(Ljava/lang/Object;)Z");
 
     for (auto item : mmkv->allKeys()) {
         jstring itemString = env->NewStringUTF(item.c_str());

@@ -22,28 +22,28 @@ object NativeMMKV {
     external fun mmkvc_getInt(handle: Long, key: String): Int
 
     @JvmStatic
-    external fun mmkvc_setInt(handle: Long, key: String, value: Int)
+    external fun mmkvc_setInt(handle: Long, key: String, value: Int, expire: Int)
     
     @JvmStatic
-    external fun mmkvc_setString(handle: Long, key: String, value: String)
+    external fun mmkvc_setString(handle: Long, key: String, value: String, expire: Int)
 
     @JvmStatic
-    external fun mmkvc_setByteArray(handle: Long, key: String, value: ByteArray)
+    external fun mmkvc_setByteArray(handle: Long, key: String, value: ByteArray, expire: Int)
 
     @JvmStatic
-    external fun mmkvc_setStringList(handle: Long, key: String, value: List<String>) 
+    external fun mmkvc_setStringList(handle: Long, key: String, value: List<String>, expire: Int)
 
     @JvmStatic
-    external fun mmkvc_setBoolean(handle: Long, key: String, value: Boolean)
+    external fun mmkvc_setBoolean(handle: Long, key: String, value: Boolean, expire: Int)
 
     @JvmStatic
-    external fun mmkvc_setLong(handle: Long, key: String, value: Long)
+    external fun mmkvc_setLong(handle: Long, key: String, value: Long, expire: Int)
 
     @JvmStatic
-    external fun mmkvc_setFloat(handle: Long, key: String, value: Float)
+    external fun mmkvc_setFloat(handle: Long, key: String, value: Float, expire: Int)
 
     @JvmStatic
-    external fun mmkvc_setDouble(handle: Long, key: String, value: Double)
+    external fun mmkvc_setDouble(handle: Long, key: String, value: Double, expire: Int)
 
 
     @JvmStatic
