@@ -112,6 +112,10 @@ MKMB计划支持：
 
 - 任何实现了`Parcelable`的对象
 
+#### 3. iOS平台
+
+- 任何实现了`NSCoding`协议的对象
+
 ### 集合操作
 
 - 根据Key移除Value
