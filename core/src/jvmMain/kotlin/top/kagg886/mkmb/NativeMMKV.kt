@@ -55,10 +55,6 @@ internal object NativeMMKV {
                 ),
                 global,
             )
-
-//            path.makeCString { cPath ->
-//                funcHandle.invoke(cPath, logLevel, loggerStub)
-//            }
             useArena {
                 val cPath = allocateFrom(path)
                 funcHandle.invoke(cPath, logLevel, loggerStub)
@@ -73,7 +69,8 @@ internal object NativeMMKV {
         )
 
         return@lazy {
-            val ptr = funcHandle.invoke() as? MemorySegment ?: error("mmkvc_defaultMMKV return null")
+            val ptr =
+                funcHandle.invoke() as? MemorySegment ?: error("mmkvc_defaultMMKV return null")
             PanamaMMKV(ptr)
         }
     }
@@ -105,16 +102,16 @@ internal object NativeMMKV {
             }
         }
     }
-    val mmkvc_setInt: (MemorySegment, String, Int) -> Unit by lazy {
+    val mmkvc_setInt: (MemorySegment, String, Int, Int) -> Unit by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_setInt").orElseThrow(),
-            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_INT)
+            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_INT, JAVA_INT)
         )
 
-        return@lazy { mmkv, key, value ->
+        return@lazy { mmkv, key, value, expire ->
             useArena {
                 val cKey = allocateFrom(key)
-                funcHandle.invoke(mmkv, cKey, value)
+                funcHandle.invoke(mmkv, cKey, value, expire)
             }
         }
     }
@@ -128,24 +125,25 @@ internal object NativeMMKV {
         return@lazy { mmkv, key ->
             val segment = useArena {
                 val cKey = allocateFrom(key)
-                funcHandle.invoke(mmkv, cKey) as? MemorySegment ?: error("mmkvc_getString return null")
+                funcHandle.invoke(mmkv, cKey) as? MemorySegment
+                    ?: error("mmkvc_getString return null")
             }
             val str = segment.reinterpret(Long.MAX_VALUE).getString(0);
             free(segment)
             str
         }
     }
-    val mmkvc_setString: (MemorySegment, String, String) -> Unit by lazy {
+    val mmkvc_setString: (MemorySegment, String, String, Int) -> Unit by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_setString").orElseThrow(),
-            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, ADDRESS)
+            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, ADDRESS, JAVA_INT)
         )
 
-        return@lazy { mmkv, key, value ->
+        return@lazy { mmkv, key, value, expire ->
             useArena {
                 val cKey = allocateFrom(key)
                 val cValue = allocateFrom(value)
-                funcHandle.invoke(mmkv, cKey, cValue)
+                funcHandle.invoke(mmkv, cKey, cValue, expire)
             }
         }
     }
@@ -163,16 +161,16 @@ internal object NativeMMKV {
             }
         }
     }
-    val mmkvc_setFloat: (MemorySegment, String, Float) -> Unit by lazy {
+    val mmkvc_setFloat: (MemorySegment, String, Float, Int) -> Unit by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_setFloat").orElseThrow(),
-            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_FLOAT)
+            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_FLOAT, JAVA_INT)
         )
 
-        return@lazy { mmkv, key, value ->
+        return@lazy { mmkv, key, value, expire ->
             useArena {
                 val cKey = allocateFrom(key)
-                funcHandle.invoke(mmkv, cKey, value)
+                funcHandle.invoke(mmkv, cKey, value, expire)
             }
         }
     }
@@ -190,16 +188,16 @@ internal object NativeMMKV {
             }
         }
     }
-    val mmkvc_setLong: (MemorySegment, String, Long) -> Unit by lazy {
+    val mmkvc_setLong: (MemorySegment, String, Long, Int) -> Unit by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_setLong").orElseThrow(),
-            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_LONG)
+            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_LONG, JAVA_INT)
         )
 
-        return@lazy { mmkv, key, value ->
+        return@lazy { mmkv, key, value, expire ->
             useArena {
                 val cKey = allocateFrom(key)
-                funcHandle.invoke(mmkv, cKey, value)
+                funcHandle.invoke(mmkv, cKey, value, expire)
             }
         }
     }
@@ -217,16 +215,16 @@ internal object NativeMMKV {
             }
         }
     }
-    val mmkvc_setDouble: (MemorySegment, String, Double) -> Unit by lazy {
+    val mmkvc_setDouble: (MemorySegment, String, Double, Int) -> Unit by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_setDouble").orElseThrow(),
-            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_DOUBLE)
+            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_DOUBLE, JAVA_INT)
         )
 
-        return@lazy { mmkv, key, value ->
+        return@lazy { mmkv, key, value, expire ->
             useArena {
                 val cKey = allocateFrom(key)
-                funcHandle.invoke(mmkv, cKey, value)
+                funcHandle.invoke(mmkv, cKey, value, expire)
             }
         }
     }
@@ -244,16 +242,16 @@ internal object NativeMMKV {
             }
         }
     }
-    val mmkvc_setBoolean: (MemorySegment, String, Boolean) -> Unit by lazy {
+    val mmkvc_setBoolean: (MemorySegment, String, Boolean, Int) -> Unit by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_setBool").orElseThrow(),
-            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_BOOLEAN)
+            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, JAVA_BOOLEAN, JAVA_INT)
         )
 
-        return@lazy { mmkv, key, value ->
+        return@lazy { mmkv, key, value, expire ->
             useArena {
                 val cKey = allocateFrom(key)
-                funcHandle.invoke(mmkv, cKey, value)
+                funcHandle.invoke(mmkv, cKey, value, expire)
             }
         }
     }
@@ -261,7 +259,7 @@ internal object NativeMMKV {
     val mmkvc_getByteArray: (MemorySegment, String) -> ByteArray by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_getByteArray").orElseThrow(),
-            FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS,ADDRESS)
+            FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS, ADDRESS)
         )
         return@lazy { mmkv, key ->
             useArena {
@@ -269,7 +267,7 @@ internal object NativeMMKV {
                 val sizePtr = allocate(JAVA_LONG).reinterpret(JAVA_LONG.byteSize())
                 val memoryPtr = funcHandle.invoke(mmkv, keyPtr, sizePtr) as MemorySegment
 
-                val size = sizePtr.get(JAVA_LONG,0)
+                val size = sizePtr.get(JAVA_LONG, 0)
 
                 val array = memoryPtr.reinterpret(size).toArray(JAVA_BYTE)
                 free(memoryPtr)
@@ -277,26 +275,18 @@ internal object NativeMMKV {
             }
         }
     }
-    val mmkvc_setByteArray: (MemorySegment, String, ByteArray) -> Unit by lazy {
+    val mmkvc_setByteArray: (MemorySegment, String, ByteArray, Int) -> Unit by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_setByteArray").orElseThrow(),
-            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, ADDRESS, JAVA_LONG)
+            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, ADDRESS, JAVA_LONG, JAVA_INT)
         )
 
-        return@lazy { mmkv, key, value ->
-//            key.makeCString {
-//                Arena.ofConfined()!!.use { arena: Arena ->
-//                    val segment = arena.allocate(value.size.toLong())
-//                    segment.copyFrom(MemorySegment.ofArray(value))
-//                    funcHandle.invoke(mmkv, it, segment, value.size.toLong())
-//                }
-//
-//            }
+        return@lazy { mmkv, key, value, expire ->
             useArena {
                 val keyPtr = allocateFrom(key)
                 val valuePtr = allocate(value.size.toLong())
                 valuePtr.copyFrom(MemorySegment.ofArray(value))
-                funcHandle.invoke(mmkv, keyPtr, valuePtr, value.size.toLong())
+                funcHandle.invoke(mmkv, keyPtr, valuePtr, value.size.toLong(), expire)
             }
         }
     }
@@ -307,13 +297,17 @@ internal object NativeMMKV {
             FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS)
         )
         // 获取字段的偏移量
-        val itemOffset = MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("items"))
-        val lenOffset = MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("size"))
+        val itemOffset =
+            MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("items"))
+        val lenOffset =
+            MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("size"))
 
         return@lazy { mmkv, key ->
             val segment = useArena {
                 val keyPtr = allocateFrom(key)
-                (funcHandle.invoke(mmkv, keyPtr) as? MemorySegment)?.reinterpret(MMKVC_STRING_SET_RETURN_STRUCT.byteSize()) ?: error("mmkvc_getStringList return null")
+                (funcHandle.invoke(mmkv, keyPtr) as? MemorySegment)?.reinterpret(
+                    MMKVC_STRING_SET_RETURN_STRUCT.byteSize()
+                ) ?: error("mmkvc_getStringList return null")
             }
 
             // 获取字符串数组指针和数组长度
@@ -333,30 +327,20 @@ internal object NativeMMKV {
             result
         }
     }
-    val mmkvc_setStringList: (MemorySegment, String, List<String>) -> Unit by lazy {
+    val mmkvc_setStringList: (MemorySegment, String, List<String>, Int) -> Unit by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_setStringList").orElseThrow(),
-            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, ADDRESS, JAVA_LONG)
+            FunctionDescriptor.ofVoid(ADDRESS, ADDRESS, ADDRESS, JAVA_LONG, JAVA_INT)
         )
 
-        return@lazy { mmkv, key, value ->
-//            Arena.ofConfined()!!.use { arena ->
-//                val valueSegment = arena.allocate(ADDRESS.byteSize() * value.size);
-//
-//                value.map { arena.allocateFrom(it) }.forEachIndexed { index, segment ->
-//                    valueSegment.setAtIndex(ADDRESS, index.toLong(), segment);
-//                }
-//                key.makeCString {
-//                    funcHandle.invoke(mmkv, it, valueSegment, value.size.toLong())
-//                }
-//            }
+        return@lazy { mmkv, key, value, expire ->
             useArena {
                 val valueSegment = allocate(ADDRESS.byteSize() * value.size);
                 value.map { allocateFrom(it) }.forEachIndexed { index, segment ->
                     valueSegment.setAtIndex(ADDRESS, index.toLong(), segment);
                 }
                 val keyPtr = allocateFrom(key)
-                funcHandle.invoke(mmkv, keyPtr, valueSegment, value.size.toLong())
+                funcHandle.invoke(mmkv, keyPtr, valueSegment, value.size.toLong(), expire)
             }
         }
     }
@@ -424,13 +408,17 @@ internal object NativeMMKV {
             dll!!.find("mmkvc_allKeys").orElseThrow(),
             FunctionDescriptor.of(ADDRESS, ADDRESS)
         )
-        val itemOffset = MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("items"))
-        val lenOffset = MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("size"))
+        val itemOffset =
+            MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("items"))
+        val lenOffset =
+            MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("size"))
 
 
         return@lazy { mmkv ->
             val segment =
-                (funcHandle.invoke(mmkv) as? MemorySegment)?.reinterpret(MMKVC_STRING_SET_RETURN_STRUCT.byteSize())
+                (funcHandle.invoke(mmkv) as? MemorySegment)?.reinterpret(
+                    MMKVC_STRING_SET_RETURN_STRUCT.byteSize()
+                )
                     ?: error("mmkvc_allKeys return null")
 
             // 获取字符串数组指针和数组长度

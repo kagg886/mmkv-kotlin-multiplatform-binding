@@ -21,8 +21,9 @@ interface MMKV {
      * 设置整型值
      * @param key 键
      * @param value 值
+     * @param expire 过期时间，单位：秒。默认为0，表示不过期
      */
-    fun set(key: String, value: Int)
+    fun set(key: String, value: Int, expire: Int = 0)
 
     /**
      * 获取整型值
@@ -35,8 +36,9 @@ interface MMKV {
      * 设置字符串值
      * @param key 键
      * @param value 值
+     * @param expire 过期时间，单位：秒。默认为0，表示不过期
      */
-    fun set(key: String, value: String)
+    fun set(key: String, value: String,expire: Int = 0)
 
     /**
      * 获取字符串值
@@ -49,8 +51,9 @@ interface MMKV {
      * 设置字节数组值
      * @param key 键
      * @param value 值
+     * @param expire 过期时间，单位：秒。默认为0，表示不过期
      */
-    fun set(key: String, value: ByteArray)
+    fun set(key: String, value: ByteArray,expire: Int = 0)
 
     /**
      * 获取字节数组值
@@ -63,8 +66,9 @@ interface MMKV {
      * 设置字符串列表值
      * @param key 键
      * @param value 值
+     * @param expire 过期时间，单位：秒。默认为0，表示不过期
      */
-    fun set(key: String, value: List<String>)
+    fun set(key: String, value: List<String>,expire: Int = 0)
 
     /**
      * 获取字符串列表值
@@ -77,8 +81,9 @@ interface MMKV {
      * 设置布尔值
      * @param key 键
      * @param value 值
+     * @param expire 过期时间，单位：秒。默认为0，表示不过期
      */
-    fun set(key: String, value: Boolean)
+    fun set(key: String, value: Boolean,expire: Int = 0)
 
     /**
      * 获取布尔值
@@ -91,8 +96,9 @@ interface MMKV {
      * 设置长整型值
      * @param key 键
      * @param value 值
+     * @param expire 过期时间，单位：秒。默认为0，表示不过期
      */
-    fun set(key: String, value: Long)
+    fun set(key: String, value: Long,expire: Int = 0)
 
     /**
      * 获取长整型值
@@ -105,8 +111,9 @@ interface MMKV {
      * 设置浮点型值
      * @param key 键
      * @param value 值
+     * @param expire 过期时间，单位：秒。默认为0，表示不过期
      */
-    fun set(key: String, value: Float)
+    fun set(key: String, value: Float,expire: Int = 0)
 
     /**
      * 获取浮点型值
@@ -119,8 +126,9 @@ interface MMKV {
      * 设置双精度浮点型值
      * @param key 键
      * @param value 值
+     * @param expire 过期时间，单位：秒。默认为0，表示不过期
      */
-    fun set(key: String, value: Double)
+    fun set(key: String, value: Double,expire: Int = 0)
 
     /**
      * 获取双精度浮点型值
@@ -212,7 +220,8 @@ class MMKVOptions {
              * @throws IllegalArgumentException 如果级别值无效
              */
             fun from(level: Int): LogLevel =
-                entries.find { it.level == level } ?: throw IllegalArgumentException("Invalid log level: $level")
+                entries.find { it.level == level }
+                    ?: throw IllegalArgumentException("Invalid log level: $level")
         }
     }
 
@@ -229,7 +238,8 @@ class MMKVOptions {
     /**
      * 日志函数
      */
-    var logFunc: (LogLevel, String, String) -> Unit = { level, tag, it -> println("[$tag]: $level - $it") }
+    var logFunc: (LogLevel, String, String) -> Unit =
+        { level, tag, it -> println("[$tag]: $level - $it") }
 }
 
 /**
@@ -242,14 +252,15 @@ expect val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader
  * @param path 存储路径
  * @param conf 配置选项
  */
-fun MMKV.Companion.initialize(path: String, conf: MMKVOptions.() -> Unit = {}) = MMKV.initialize(path, MMKVOptions().apply(conf))
+fun MMKV.Companion.initialize(path: String, conf: MMKVOptions.() -> Unit = {}) =
+    MMKV.initialize(path, MMKVOptions().apply(conf))
 
 /**
  * 初始化MMKV
  * @param path 存储路径
  * @param conf 配置选项
  */
-expect fun MMKV.Companion.initialize(path: String, options:MMKVOptions)
+expect fun MMKV.Companion.initialize(path: String, options: MMKVOptions)
 
 /**
  * 获取默认的MMKV实例

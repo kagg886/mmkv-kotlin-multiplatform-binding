@@ -9,44 +9,44 @@ import java.lang.foreign.SymbolLookup
 
 internal class PanamaMMKV(private val ptr: MemorySegment) : MMKV {
     private var alive by atomic(true)
-    override fun set(key: String, value: Int) {
+    override fun set(key: String, value: Int, expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
-        NativeMMKV.mmkvc_setInt(ptr, key, value)
+        NativeMMKV.mmkvc_setInt(ptr, key, value,expire)
     }
 
-    override fun set(key: String, value: String) {
+    override fun set(key: String, value: String, expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
-        NativeMMKV.mmkvc_setString(ptr, key, value)
+        NativeMMKV.mmkvc_setString(ptr, key, value,expire)
     }
 
-    override fun set(key: String, value: ByteArray) {
+    override fun set(key: String, value: ByteArray, expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
-        NativeMMKV.mmkvc_setByteArray(ptr, key, value)
+        NativeMMKV.mmkvc_setByteArray(ptr, key, value,expire)
     }
 
-    override fun set(key: String, value: List<String>) {
+    override fun set(key: String, value: List<String>, expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
-        NativeMMKV.mmkvc_setStringList(ptr, key, value)
+        NativeMMKV.mmkvc_setStringList(ptr, key, value,expire)
     }
 
-    override fun set(key: String, value: Boolean) {
+    override fun set(key: String, value: Boolean, expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
-        NativeMMKV.mmkvc_setBoolean(ptr, key, value)
+        NativeMMKV.mmkvc_setBoolean(ptr, key, value,expire)
     }
 
-    override fun set(key: String, value: Long) {
+    override fun set(key: String, value: Long, expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
-        NativeMMKV.mmkvc_setLong(ptr, key, value)
+        NativeMMKV.mmkvc_setLong(ptr, key, value,expire)
     }
 
-    override fun set(key: String, value: Float) {
+    override fun set(key: String, value: Float, expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
-        NativeMMKV.mmkvc_setFloat(ptr, key, value)
+        NativeMMKV.mmkvc_setFloat(ptr, key, value,expire)
     }
 
-    override fun set(key: String, value: Double) {
+    override fun set(key: String, value: Double, expire: Int) {
         if (!alive) throw MMKVException("MMKV instance $ptr was destroyed")
-        NativeMMKV.mmkvc_setDouble(ptr, key, value)
+        NativeMMKV.mmkvc_setDouble(ptr, key, value,expire)
     }
 
     override fun getInt(key: String): Int {
@@ -160,7 +160,9 @@ actual val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader by lazy {
 
         if (tmp.exists()) {
             val sha256 = tmp.sha256()
-            val resourceSha256 = MMKV::class.java.getResourceAsStream("/build-${jvmTarget.name.lowercase()}.hash")!!.readAllBytes().decodeToString()
+            val resourceSha256 =
+                MMKV::class.java.getResourceAsStream("/build-${jvmTarget.name.lowercase()}.hash")!!
+                    .readAllBytes().decodeToString()
             if (sha256 != resourceSha256) {
                 tmp.parentFile!!.mkdirs()
                 val stream = MMKV::class.java.getResourceAsStream("/$name.$ext")!!

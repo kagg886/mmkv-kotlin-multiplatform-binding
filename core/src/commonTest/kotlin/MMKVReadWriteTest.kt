@@ -1,8 +1,11 @@
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import okio.FileSystem
 import okio.Path.Companion.toPath
 import okio.SYSTEM
 import top.kagg886.mkmb.*
 import kotlin.test.*
+import kotlin.time.Duration.Companion.seconds
 
 class MMKVReadWriteTest {
     @BeforeTest
@@ -91,7 +94,90 @@ class MMKVReadWriteTest {
     fun testMMKVRemove() {
         val mmkv = MMKV.mmkvWithID("test-remove-store")
         assertFalse(mmkv.remove("key"))
-        mmkv.set("key",1)
+        mmkv.set("key", 1)
         assertTrue(mmkv.remove("key"))
+    }
+
+    @Test
+    fun testMMKVExpireIntTest() = runBlocking {
+        val mmkv = MMKV.mmkvWithID("test-expire-int-store")
+        assertFalse(mmkv.exists("key"))
+        mmkv.set("key", 1, 3)
+        assertEquals(1, mmkv.getInt("key"))
+        delay(3.seconds)
+        assertFalse(mmkv.exists("key"))
+    }
+
+    @Test
+    fun testMMKVExpireStringTest() = runBlocking {
+        val target = "UTF-8测试字符串"
+        val mmkv = MMKV.mmkvWithID("test-expire-string-store")
+        assertFalse(mmkv.exists("key"))
+        mmkv.set("key", target, 3)
+        assertEquals(target, mmkv.getString("key"))
+        delay(3.seconds)
+        assertFalse(mmkv.exists("key"))
+    }
+
+    @Test
+    fun testMMKVExpireBooleanTest() = runBlocking {
+        val mmkv = MMKV.mmkvWithID("test-expire-boolean-store")
+        assertFalse(mmkv.exists("key"))
+        mmkv.set("key", true, 3)
+        assertEquals(true, mmkv.getBoolean("key"))
+        delay(3.seconds)
+        assertFalse(mmkv.exists("key"))
+    }
+
+    @Test
+    fun testMMKVExpireLongTest() = runBlocking {
+        val mmkv = MMKV.mmkvWithID("test-expire-long-store")
+        assertFalse(mmkv.exists("key"))
+        mmkv.set("key", 2L, 3)
+        assertEquals(2L, mmkv.getLong("key"))
+        delay(3.seconds)
+        assertFalse(mmkv.exists("key"))
+    }
+
+    @Test
+    fun testMMKVExpireFloatTest() = runBlocking {
+        val mmkv = MMKV.mmkvWithID("test-expire-float-store")
+        assertFalse(mmkv.exists("key"))
+        mmkv.set("key", 2.5f, 3)
+        assertEquals(2.5f, mmkv.getFloat("key"))
+        delay(3.seconds)
+        assertFalse(mmkv.exists("key"))
+    }
+
+    @Test
+    fun testMMKVExpireDoubleTest() = runBlocking {
+        val mmkv = MMKV.mmkvWithID("test-expire-double-store")
+        assertFalse(mmkv.exists("key"))
+        mmkv.set("key", 2.5, 3)
+        assertEquals(2.5, mmkv.getDouble("key"))
+        delay(3.seconds)
+        assertFalse(mmkv.exists("key"))
+    }
+
+    @Test
+    fun testMMKVExpireByteArrayTest() = runBlocking {
+        val dest = byteArrayOf(1, 2, 3, 4, 5)
+        val mmkv = MMKV.mmkvWithID("test-expire-bytes-store")
+        assertFalse(mmkv.exists("key"))
+        mmkv.set("key", dest, 3)
+        assertContentEquals(dest, mmkv.getByteArray("key"))
+        delay(3.seconds)
+        assertFalse(mmkv.exists("key"))
+    }
+
+    @Test
+    fun testMMKVExpireStringListTest() = runBlocking {
+        val target = listOf("qww", "UTF-8", "字符串？")
+        val mmkv = MMKV.mmkvWithID("test-expire-string-list-store")
+        assertFalse(mmkv.exists("key"))
+        mmkv.set("key", target, 3)
+        assertContentEquals(target, mmkv.getStringList("key"))
+        delay(3.seconds)
+        assertFalse(mmkv.exists("key"))
     }
 }

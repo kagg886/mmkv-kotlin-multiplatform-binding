@@ -59,8 +59,8 @@ extern "C" __declspec(dllexport) int mmkvc_getInt(MMKV* mmkv,const char* key) {
    return mmkv->getInt32(key);
 }
 
-extern "C" __declspec(dllexport) void mmkvc_setInt(MMKV* mmkv,const char* key,int value) {
-    mmkv->set(value,key);
+extern "C" __declspec(dllexport) void mmkvc_setInt(MMKV* mmkv,const char* key,int value,int expire) {
+    mmkv->set(value,key,expire);
 }
 
 extern "C" __declspec(dllexport) const char* mmkvc_getString(MMKV* mmkv,const char* key) {
@@ -70,40 +70,41 @@ extern "C" __declspec(dllexport) const char* mmkvc_getString(MMKV* mmkv,const ch
     return stringToChar(ptr);
 }
 
-extern "C" __declspec(dllexport) void mmkvc_setString(MMKV* mmkv, const char* key, char* value) {
-    mmkv->set(value, key);
+extern "C" __declspec(dllexport) void mmkvc_setString(MMKV* mmkv, const char* key, char* value,int expire) {
+    auto str = std::string(value);
+    mmkv->set(str, key,expire);
 }
 
 extern "C" __declspec(dllexport) float mmkvc_getFloat(MMKV* mmkv, const char* key) {
     return mmkv->getFloat(key);
 }
 
-extern "C" __declspec(dllexport) void mmkvc_setFloat(MMKV* mmkv, const char* key, float value) {
-    mmkv->set(value, key);
+extern "C" __declspec(dllexport) void mmkvc_setFloat(MMKV* mmkv, const char* key, float value,int expire) {
+    mmkv->set(value, key,expire);
 }
 
 extern "C" __declspec(dllexport) long mmkvc_getLong(MMKV* mmkv, const char* key) {
     return mmkv->getInt64(key);
 }
 
-extern "C" __declspec(dllexport) void mmkvc_setLong(MMKV* mmkv, const char* key, int64_t value) {
-    mmkv->set(value, key);
+extern "C" __declspec(dllexport) void mmkvc_setLong(MMKV* mmkv, const char* key, int64_t value,int expire) {
+    mmkv->set(value, key,expire);
 }
 
 extern "C" __declspec(dllexport) double mmkvc_getDouble(MMKV* mmkv, const char* key) {
     return mmkv->getDouble(key);
 }
 
-extern "C" __declspec(dllexport) void mmkvc_setDouble(MMKV* mmkv, const char* key, double value) {
-    mmkv->set(value, key);
+extern "C" __declspec(dllexport) void mmkvc_setDouble(MMKV* mmkv, const char* key, double value,int expire) {
+    mmkv->set(value, key,expire);
 }
 
 extern "C" __declspec(dllexport) bool mmkvc_getBool(MMKV* mmkv, const char* key) {
     return mmkv->getBool(key);
 }
 
-extern "C" __declspec(dllexport) void mmkvc_setBool(MMKV* mmkv, const char* key, bool value) {
-    mmkv->set(value, key);
+extern "C" __declspec(dllexport) void mmkvc_setBool(MMKV* mmkv, const char* key, bool value,int expire) {
+    mmkv->set(value, key,expire);
 }
 
 extern "C" __declspec(dllexport) uint8_t* mmkvc_getByteArray(MMKV* mmkv,
@@ -116,12 +117,9 @@ extern "C" __declspec(dllexport) uint8_t* mmkvc_getByteArray(MMKV* mmkv,
     return rtn;
 }
 
-extern "C" __declspec(dllexport) void mmkvc_setByteArray(MMKV* mmkv,
-                                   const char* key,
-                                   uint8_t* value,
-                                   size_t size) {
+extern "C" __declspec(dllexport) void mmkvc_setByteArray(MMKV* mmkv,const char* key,uint8_t* value,size_t size,int expire) {
     auto buffer = mmkv::MMBuffer(value, size, mmkv::MMBufferNoCopy);
-    mmkv->set(buffer, key);
+    mmkv->set(buffer, key, expire);
 }
 
 struct MMKVCStringListReturn {
@@ -151,7 +149,7 @@ extern "C" __declspec(dllexport) MMKVCStringListReturn* mmkvc_getStringList(MMKV
     return rtn;
 }
 
-extern "C" __declspec(dllexport) void mmkvc_setStringList(MMKV* mmkv, const char* key,const char** value,size_t size) {
+extern "C" __declspec(dllexport) void mmkvc_setStringList(MMKV* mmkv, const char* key,const char** value,size_t size,int expire) {
     std::vector<std::string> vector;
 
     for (size_t i = 0; i < size; i++) {
@@ -159,7 +157,7 @@ extern "C" __declspec(dllexport) void mmkvc_setStringList(MMKV* mmkv, const char
         vector.push_back(tmp);
     }
 
-    mmkv->set(vector, key);
+    mmkv->set(vector, key,expire);
 }
 
 extern "C" __declspec(dllexport) bool mmkvc_remove(MMKV* mmkv, const char* key) {
