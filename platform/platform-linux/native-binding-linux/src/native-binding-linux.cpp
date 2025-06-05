@@ -40,7 +40,7 @@ extern "C" MMKV* mmkvc_defaultMMKV() {
 }
 
 extern "C" MMKV* mmkvc_mmkvWithID(char* id) {
-    auto mmkv = MMKV::mmkvWithID();
+    auto mmkv = MMKV::mmkvWithID(id);
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return mmkv;
 }
