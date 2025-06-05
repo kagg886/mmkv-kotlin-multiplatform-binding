@@ -8,6 +8,7 @@ import kotlinx.cinterop.ObjCClass
 import kotlinx.cinterop.readBytes
 import kotlinx.cinterop.toKString
 import mmkv.MMKV
+import mmkv.MMKVExpireNever
 import mmkv.MMKVHandlerProtocol
 import mmkv.MMKVLogLevel
 import platform.Foundation.NSMutableArray
@@ -16,11 +17,15 @@ import platform.darwin.NSObject
 @OptIn(ExperimentalForeignApi::class)
 object NativeMMKVImpl {
     fun defaultMMKV(): NSObject {
-        return MMKV.defaultMMKV()!!
+        val mmkv = MMKV.defaultMMKV()!!
+        mmkv.enableAutoKeyExpire(MMKVExpireNever)
+        return mmkv
     }
 
     fun mmkvWithID(id: String): NSObject {
-        return MMKV.mmkvWithID(id)!!
+        val mmkv = MMKV.mmkvWithID(id)!!
+        mmkv.enableAutoKeyExpire(MMKVExpireNever)
+        return mmkv
     }
 
     fun initialize(path: String, level: ULong, log: (ULong, String, String) -> Unit) {
