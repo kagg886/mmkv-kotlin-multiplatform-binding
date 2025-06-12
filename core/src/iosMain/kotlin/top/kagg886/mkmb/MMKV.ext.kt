@@ -11,7 +11,7 @@ fun MMKV.getNSCoding(key:String, clazz: ObjCClass): Any? {
     return NativeMMKVImpl.getNSCoding(apple.handle,key,clazz)
 }
 
-fun MMKV.set(key:String,value:NSObject?) {
+fun MMKV.set(key:String,value:NSObject?,expire:Int = 0) {
     val apple = this as AppleMMKV
-    NativeMMKVImpl.setNSCoding(apple.handle,key,value)
+    NativeMMKVImpl.setNSCoding(apple.handle,key,value,expire)
 }

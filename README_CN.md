@@ -129,7 +129,9 @@ MKMB计划支持：
 - 销毁MMKV及其本地存储
 - 检测MMKV实例是否被销毁
 
+### 迁移操作
 
+- 从 `SharePreferences`迁移数据
 
 
 

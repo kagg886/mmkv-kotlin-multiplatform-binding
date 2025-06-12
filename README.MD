@@ -112,6 +112,10 @@ MKMB plans to support:
 
 - An object which implements `Parcelable` interface
 
+#### 3. iOS
+
+- An object which implements `NSCoding` protocol
+
 ### Collection Operations
 
 - Remove Value by Key
@@ -124,3 +128,7 @@ MKMB plans to support:
 
 - Destroy MMKV and its local storage
 - Check if MMKV instance has been destroyed
+
+### Migrate Operation
+
+- migrate from `SharePreferences`

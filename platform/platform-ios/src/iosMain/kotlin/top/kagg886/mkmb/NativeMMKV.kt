@@ -139,10 +139,10 @@ object NativeMMKVImpl {
         return mmkv.getObjectOfClass(clazz,key)
     }
 
-    fun setNSCoding(handle: NSObject,key: String,value: NSObject?) {
+    fun setNSCoding(handle: NSObject,key: String,value: NSObject?,expire: Int) {
         val mmkv = handle as MMKV
 
-        mmkv.setObject(value,key)
+        mmkv.setObject(value,key,expire.toUInt())
     }
 
     fun remove(handle: NSObject, key: String): Boolean {
