@@ -14,7 +14,6 @@ import top.kagg886.mkmb.MMKV
 import top.kagg886.mkmb.MMKVOptions
 import top.kagg886.mkmb.initialize
 import top.kagg886.mkmb.mmkvWithID
-import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
@@ -31,14 +30,6 @@ class MMKVMultiThreadTest {
             MMKV.initialize(FileSystem.SYSTEM.canonicalize(testFile.normalized()).toString()) {
                 logLevel = MMKVOptions.LogLevel.Debug
             }
-        }
-    }
-
-    @AfterTest
-    fun afterAll() {
-        val testFile = "mmkv-alive-test".toPath()
-        if (FileSystem.SYSTEM.exists(testFile)) {
-            FileSystem.SYSTEM.deleteRecursively(testFile)
         }
     }
 

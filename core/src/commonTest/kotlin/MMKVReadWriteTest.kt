@@ -23,14 +23,6 @@ class MMKVReadWriteTest {
         }
     }
 
-    @AfterTest
-    fun afterAll() {
-        val testFile = "mmkv-alive-test".toPath()
-        if (FileSystem.SYSTEM.exists(testFile)) {
-            FileSystem.SYSTEM.deleteRecursively(testFile)
-        }
-    }
-
     @Test
     fun testMMKVIntStore() {
         val mmkv = MMKV.mmkvWithID("test-int-store")

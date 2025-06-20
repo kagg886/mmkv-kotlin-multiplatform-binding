@@ -4,7 +4,6 @@ import data.TestParcel
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,13 +29,6 @@ class MMKVReadWriteTest {
             }
         }
     }
-
-    @After
-    fun afterAll() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        appContext.cacheDir.listFiles()?.forEach(File::deleteRecursively)
-    }
-
 
     @Test
     fun testMMKVIntStore() {
