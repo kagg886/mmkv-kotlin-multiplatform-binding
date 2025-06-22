@@ -54,7 +54,7 @@ val prepareMMKVIosArm64Build = tasks.register<Exec>("processIosArm64Build") {
     }
     workingDir(rootProject.file("MMKV/iOS/MMKV"))
     val cmd = "xcodebuild -configuration Release -sdk iphoneos ARCHS=arm64 BUILD_DIR=${project.file("build/mmkv")}"
-    commandLine("bash","-c",cmd)
+    commandLine("zsh","-c",cmd)
 }
 
 tasks.named("cinteropMmkvIosArm64") {
@@ -71,7 +71,7 @@ val prepareMMKVIosSimulatorArm64Build = tasks.register<Exec>("prepareMMKVIosSimu
     }
     workingDir(rootProject.file("MMKV/iOS/MMKV"))
     val cmd = "xcodebuild -configuration Release -sdk iphonesimulator ARCHS=arm64 BUILD_DIR=${project.file("build/mmkv")}"
-    commandLine("bash","-c",cmd)
+    commandLine("zsh","-c",cmd)
 }
 
 tasks.named("cinteropMmkvIosSimulatorArm64") {

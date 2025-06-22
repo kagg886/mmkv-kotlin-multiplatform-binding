@@ -29,7 +29,7 @@ val processBuild = tasks.register<Exec>("processBuild") {
     }
     workingDir = project.file("native-binding-macos")
     commandLine(
-        "bash", "-c",
+        "zsh", "-c",
         """
             mkdir -p build && \
             cd build && \

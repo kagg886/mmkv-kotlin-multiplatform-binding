@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(FORCE_POSIX)
 
 # Add MMKV as a subdirectory
-add_subdirectory(../../../MMKV/POSIX/src mmkv)
+add_subdirectory(../../MMKV_POSIX_FORK mmkv)
 
 # Create shared library
 add_library(mmkv_binding SHARED src/native-binding-macos.cpp)
