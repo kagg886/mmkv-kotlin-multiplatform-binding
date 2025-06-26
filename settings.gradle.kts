@@ -50,3 +50,5 @@ findProject(":platform:platform-android")?.name = "platform-android"
 
 include("platform:platform-ios")
 findProject(":platform:platform-ios")?.name = "platform-ios"
+
+include(":sample:composeApp")
