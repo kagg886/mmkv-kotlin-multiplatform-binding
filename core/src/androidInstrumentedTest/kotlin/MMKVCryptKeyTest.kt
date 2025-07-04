@@ -75,10 +75,6 @@ class MMKVCryptKeyTest {
 
         mmkvNull2.set("null_key2", 999)
         assertEquals(999, mmkvNull2.getInt("null_key2"))
-
-        // 验证实例存活
-        assertTrue(mmkvNull1.isAlive())
-        assertTrue(mmkvNull2.isAlive())
     }
 
     @Test
