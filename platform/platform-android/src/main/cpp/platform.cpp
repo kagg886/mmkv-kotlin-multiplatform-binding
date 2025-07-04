@@ -109,7 +109,7 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1mmkvWithID(JNIEnv* env,
     if (cryptKey != nullptr) {
         auto cryptKeyStr = jstring2cppstring(env, cryptKey);
         if (!cryptKeyStr.empty()) {
-            mmkv = MMKV::mmkvWithID(mmapIDStr, MMKV_SINGLE_PROCESS, &cryptKeyStr);
+            mmkv = MMKV::mmkvWithID(mmapIDStr, mmkv::DEFAULT_MMAP_SIZE, MMKV_SINGLE_PROCESS, &cryptKeyStr);
         } else {
             mmkv = MMKV::mmkvWithID(mmapIDStr);
         }

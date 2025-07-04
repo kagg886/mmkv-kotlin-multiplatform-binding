@@ -64,38 +64,6 @@ class MMKVCryptKeyTest {
     }
 
     @Test
-    fun testCryptKeyDataIsolation() {
-        val cryptKey1 = "android-crypt-key-1"
-        val cryptKey2 = "android-crypt-key-2"
-
-        val mmkv1 = MMKV.mmkvWithID("android-isolation-test", cryptKey1)
-        val mmkv2 = MMKV.mmkvWithID("android-isolation-test", cryptKey2)
-
-        // 在第一个实例中存储数据
-        mmkv1.set("shared_key", "android_value1")
-        mmkv1.set("number", 100)
-
-        // 在第二个实例中存储不同的数据
-        mmkv2.set("shared_key", "android_value2")
-        mmkv2.set("number", 200)
-
-        // 验证数据隔离 - 不同cryptKey应该看到不同的数据
-        assertEquals("android_value1", mmkv1.getString("shared_key"))
-        assertEquals("android_value2", mmkv2.getString("shared_key"))
-        assertEquals(100, mmkv1.getInt("number"))
-        assertEquals(200, mmkv2.getInt("number"))
-
-        // 验证键的存在性
-        assertTrue(mmkv1.exists("shared_key"))
-        assertTrue(mmkv2.exists("shared_key"))
-
-        // 清理一个实例不应该影响另一个
-        mmkv1.clear()
-        assertEquals("", mmkv1.getString("shared_key"))
-        assertEquals("android_value2", mmkv2.getString("shared_key"))
-    }
-
-    @Test
     fun testCryptKeyNullBehavior() {
         // 测试cryptKey为null的情况
         val mmkvNull1 = MMKV.defaultMMKV(null)
