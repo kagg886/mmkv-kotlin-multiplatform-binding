@@ -1,12 +1,6 @@
 package top.kagg886.mkmb
 
-import kotlinx.cinterop.BetaInteropApi
-import kotlinx.cinterop.ByteVar
-import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.ObjCClass
-import kotlinx.cinterop.readBytes
-import kotlinx.cinterop.toKString
+import kotlinx.cinterop.*
 import mmkv.MMKV
 import mmkv.MMKVExpireNever
 import mmkv.MMKVHandlerProtocol
@@ -16,14 +10,26 @@ import platform.darwin.NSObject
 
 @OptIn(ExperimentalForeignApi::class)
 object NativeMMKVImpl {
-    fun defaultMMKV(): NSObject {
-        val mmkv = MMKV.defaultMMKV()!!
+    fun defaultMMKV(cryptKey: String?): NSObject {
+        val mmkv = if (cryptKey != null) {
+            cryptKey.encodeToByteArray().useAsNSData {
+                MMKV.defaultMMKVWithCryptKey(this)!!
+            }
+        } else {
+            MMKV.defaultMMKV()!!
+        }
         mmkv.enableAutoKeyExpire(MMKVExpireNever)
         return mmkv
     }
 
-    fun mmkvWithID(id: String): NSObject {
-        val mmkv = MMKV.mmkvWithID(id)!!
+    fun mmkvWithID(id: String, cryptKey: String?): NSObject {
+        val mmkv = if (cryptKey != null) {
+            cryptKey.encodeToByteArray().useAsNSData {
+                MMKV.mmkvWithID(id, this)!!
+            }
+        } else {
+            MMKV.mmkvWithID(id)!!
+        }
         mmkv.enableAutoKeyExpire(MMKVExpireNever)
         return mmkv
     }
@@ -34,19 +40,19 @@ object NativeMMKVImpl {
 
     fun setInt(handle: NSObject, key: String, value: Int, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setInt32(value,key,expire.toUInt())
+        mmkv.setInt32(value, key, expire.toUInt())
     }
 
     fun setString(handle: NSObject, key: String, value: String, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setString(value,key,expire.toUInt())
+        mmkv.setString(value, key, expire.toUInt())
     }
 
     fun setData(handle: NSObject, key: String, value: ByteArray, expire: Int) {
         val mmkv = handle as MMKV
 
         value.useAsNSData {
-            mmkv.setData(this, key,expire.toUInt())
+            mmkv.setData(this, key, expire.toUInt())
         }
     }
 
@@ -56,27 +62,27 @@ object NativeMMKVImpl {
         for (i in value) {
             arr.addObject(i)
         }
-        mmkv.setObject(arr,key,expire.toUInt())
+        mmkv.setObject(arr, key, expire.toUInt())
     }
 
     fun setBool(handle: NSObject, key: String, value: Boolean, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setBool(value, key,expire.toUInt())
+        mmkv.setBool(value, key, expire.toUInt())
     }
 
     fun setLong(handle: NSObject, key: String, value: Long, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setInt64(value, key,expire.toUInt())
+        mmkv.setInt64(value, key, expire.toUInt())
     }
 
     fun setFloat(handle: NSObject, key: String, value: Float, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setFloat(value, key,expire.toUInt())
+        mmkv.setFloat(value, key, expire.toUInt())
     }
 
     fun setDouble(handle: NSObject, key: String, value: Double, expire: Int) {
         val mmkv = handle as MMKV
-        mmkv.setDouble(value, key,expire.toUInt())
+        mmkv.setDouble(value, key, expire.toUInt())
     }
 
     fun getInt(handle: NSObject, key: String): Int {
@@ -99,7 +105,7 @@ object NativeMMKVImpl {
     fun getStringList(handle: NSObject, key: String): List<String> {
         val mmkv = handle as MMKV
 
-        val arr = mmkv.getObjectOfClass(NSMutableArray.`class`()!!,key) as NSMutableArray?
+        val arr = mmkv.getObjectOfClass(NSMutableArray.`class`()!!, key) as NSMutableArray?
         if (arr == null) {
             return emptyList()
         }
@@ -136,13 +142,13 @@ object NativeMMKVImpl {
     @OptIn(BetaInteropApi::class)
     fun getNSCoding(handle: NSObject, key: String, clazz: ObjCClass): Any? {
         val mmkv = handle as MMKV
-        return mmkv.getObjectOfClass(clazz,key)
+        return mmkv.getObjectOfClass(clazz, key)
     }
 
-    fun setNSCoding(handle: NSObject,key: String,value: NSObject?,expire: Int) {
+    fun setNSCoding(handle: NSObject, key: String, value: NSObject?, expire: Int) {
         val mmkv = handle as MMKV
 
-        mmkv.setObject(value,key,expire.toUInt())
+        mmkv.setObject(value, key, expire.toUInt())
     }
 
     fun remove(handle: NSObject, key: String): Boolean {
@@ -161,12 +167,12 @@ object NativeMMKVImpl {
 
     fun destroy(handle: NSObject): Boolean {
         val mmkv = handle as MMKV
-        return MMKV.removeStorage(mmkv.mmapID(),MMKV.mmkvBasePath())
+        return MMKV.removeStorage(mmkv.mmapID(), MMKV.mmkvBasePath())
     }
 
     fun isAlive(handle: NSObject): Boolean {
         val mmkv = handle as MMKV
-        return MMKV.checkExist(mmkv.mmapID(),MMKV.mmkvBasePath())
+        return MMKV.checkExist(mmkv.mmapID(), MMKV.mmkvBasePath())
     }
 
     fun size(handle: NSObject): Int {

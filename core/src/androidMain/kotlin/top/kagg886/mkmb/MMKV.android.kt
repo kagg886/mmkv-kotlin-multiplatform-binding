@@ -142,7 +142,7 @@ actual fun MMKV.Companion.initialize(
     NativeMMKV.mmkvc_init(path, options.logLevel.ordinal, data)
 }
 
-actual fun MMKV.Companion.defaultMMKV(): MMKV = JNIPointerMMKV(NativeMMKV.mmkvc_defaultMMKV())
+actual fun MMKV.Companion.defaultMMKV(cryptKey: String?): MMKV = JNIPointerMMKV(NativeMMKV.mmkvc_defaultMMKV(cryptKey))
 
-actual fun MMKV.Companion.mmkvWithID(id: String): MMKV =
-    JNIPointerMMKV(NativeMMKV.mmkvc_mmkvWithID(id))
+actual fun MMKV.Companion.mmkvWithID(id: String, cryptKey: String?): MMKV =
+    JNIPointerMMKV(NativeMMKV.mmkvc_mmkvWithID(id, cryptKey))

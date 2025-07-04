@@ -12,10 +12,10 @@ object NativeMMKV {
     external fun mmkvc_init(path: String, level: Int, callback: MMKVInternalLog)
 
     @JvmStatic
-    external fun mmkvc_defaultMMKV(): Long
+    external fun mmkvc_defaultMMKV(cryptKey: String?): Long
 
     @JvmStatic
-    external fun mmkvc_mmkvWithID(id: String): Long
+    external fun mmkvc_mmkvWithID(id: String, cryptKey: String?): Long
 
 
     @JvmStatic

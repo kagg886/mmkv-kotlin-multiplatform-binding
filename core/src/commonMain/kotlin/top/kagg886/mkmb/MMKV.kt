@@ -264,13 +264,15 @@ expect fun MMKV.Companion.initialize(path: String, options: MMKVOptions)
 
 /**
  * 获取默认的MMKV实例
+ * @param cryptKey 加密密钥，可选参数
  * @return 默认的MMKV实例
  */
-expect fun MMKV.Companion.defaultMMKV(): MMKV
+expect fun MMKV.Companion.defaultMMKV(cryptKey: String? = null): MMKV
 
 /**
  * 根据ID获取MMKV实例
  * @param id 实例ID
+ * @param cryptKey 加密密钥，可选参数
  * @return 对应的MMKV实例
  */
-expect fun MMKV.Companion.mmkvWithID(id: String): MMKV
+expect fun MMKV.Companion.mmkvWithID(id: String, cryptKey: String? = null): MMKV

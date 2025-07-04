@@ -83,8 +83,18 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1init(JNIEnv* env,
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1defaultMMKV(JNIEnv* env, jclass clazz) {
-    auto mmkv = MMKV::defaultMMKV();
+Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1defaultMMKV(JNIEnv* env, jclass clazz, jstring cryptKey) {
+    MMKV* mmkv = nullptr;
+    if (cryptKey != nullptr) {
+        auto cryptKeyStr = jstring2cppstring(env, cryptKey);
+        if (!cryptKeyStr.empty()) {
+            mmkv = MMKV::defaultMMKV(MMKV_SINGLE_PROCESS, &cryptKeyStr);
+        } else {
+            mmkv = MMKV::defaultMMKV();
+        }
+    } else {
+        mmkv = MMKV::defaultMMKV();
+    }
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return (jlong)mmkv;
 }
@@ -92,9 +102,20 @@ Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1defaultMMKV(JNIEnv* env, jclass clazz) {
 extern "C" JNIEXPORT jlong JNICALL
 Java_top_kagg886_mkmb_NativeMMKV_mmkvc_1mmkvWithID(JNIEnv* env,
                                                    jclass clazz,
-                                                   jstring id) {
+                                                   jstring id,
+                                                   jstring cryptKey) {
     auto mmapIDStr = jstring2cppstring(env, id);
-    auto mmkv = MMKV::mmkvWithID(mmapIDStr);
+    MMKV* mmkv = nullptr;
+    if (cryptKey != nullptr) {
+        auto cryptKeyStr = jstring2cppstring(env, cryptKey);
+        if (!cryptKeyStr.empty()) {
+            mmkv = MMKV::mmkvWithID(mmapIDStr, MMKV_SINGLE_PROCESS, &cryptKeyStr);
+        } else {
+            mmkv = MMKV::mmkvWithID(mmapIDStr);
+        }
+    } else {
+        mmkv = MMKV::mmkvWithID(mmapIDStr);
+    }
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return (jlong)mmkv;
 }

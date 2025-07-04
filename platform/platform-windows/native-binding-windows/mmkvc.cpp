@@ -43,14 +43,26 @@ extern "C" __declspec(dllexport) void mmkvc_init(char* path,int level,Logger* lo
     MMKV::initializeMMKV(stringToWString(path), (MMKVLogLevel)level,LogCallback);
 }
 
-extern "C" __declspec(dllexport) MMKV* mmkvc_defaultMMKV() {
-    auto mmkv = MMKV::defaultMMKV();
+extern "C" __declspec(dllexport) MMKV* mmkvc_defaultMMKV(char* cryptKey) {
+    MMKV* mmkv = nullptr;
+    if (cryptKey != nullptr && strlen(cryptKey) > 0) {
+        std::string crypt(cryptKey);
+        mmkv = MMKV::defaultMMKV(MMKV_SINGLE_PROCESS, &crypt);
+    } else {
+        mmkv = MMKV::defaultMMKV();
+    }
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return mmkv;
 }
 
-extern "C" __declspec(dllexport) MMKV* mmkvc_mmkvWithID(char* id) {
-    auto mmkv = MMKV::mmkvWithID(id);
+extern "C" __declspec(dllexport) MMKV* mmkvc_mmkvWithID(char* id, char* cryptKey) {
+    MMKV* mmkv = nullptr;
+    if (cryptKey != nullptr && strlen(cryptKey) > 0) {
+        std::string crypt(cryptKey);
+        mmkv = MMKV::mmkvWithID(id, MMKV_SINGLE_PROCESS, &crypt);
+    } else {
+        mmkv = MMKV::mmkvWithID(id);
+    }
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return mmkv;
 }
