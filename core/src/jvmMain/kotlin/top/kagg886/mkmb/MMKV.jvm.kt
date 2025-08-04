@@ -137,12 +137,12 @@ actual fun MMKV.Companion.initialize(path: String, options: MMKVOptions) {
     initialized = true
 }
 
-actual fun MMKV.Companion.defaultMMKV(cryptKey: String?): MMKV {
-    return NativeMMKV.mmkvc_defaultMMKV(cryptKey)
+actual fun MMKV.Companion.defaultMMKV(mode: MMKVMode, cryptKey: String?): MMKV {
+    return NativeMMKV.mmkvc_defaultMMKV(mode.value, cryptKey)
 }
 
-actual fun MMKV.Companion.mmkvWithID(id: String, cryptKey: String?): MMKV {
-    return NativeMMKV.mmkvc_mmkvWithID(id, cryptKey)
+actual fun MMKV.Companion.mmkvWithID(id: String, mode: MMKVMode, cryptKey: String?): MMKV {
+    return NativeMMKV.mmkvc_mmkvWithID(id, mode.value, cryptKey)
 }
 
 actual val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader by lazy {

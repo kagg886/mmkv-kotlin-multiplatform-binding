@@ -243,6 +243,35 @@ class MMKVOptions {
 }
 
 /**
+ * MMKV进程模式枚举
+ */
+enum class MMKVMode(val value: Int) {
+    /**
+     * 单进程模式（默认）
+     */
+    SINGLE_PROCESS(1 shl 0),
+
+    /**
+     * 多进程模式
+     */
+    MULTI_PROCESS(1 shl 1),
+
+    /**
+     * 只读模式
+     */
+    READ_ONLY(1 shl 5);
+
+    companion object {
+        /**
+         * 根据值获取对应的模式
+         */
+        fun fromValue(value: Int): MMKVMode? {
+            return entries.find { it.value == value }
+        }
+    }
+}
+
+/**
  * 默认的C库加载器
  */
 expect val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader
@@ -264,15 +293,17 @@ expect fun MMKV.Companion.initialize(path: String, options: MMKVOptions)
 
 /**
  * 获取默认的MMKV实例
+ * @param mode 进程模式，默认为单进程模式
  * @param cryptKey 加密密钥，可选参数
  * @return 默认的MMKV实例
  */
-expect fun MMKV.Companion.defaultMMKV(cryptKey: String? = null): MMKV
+expect fun MMKV.Companion.defaultMMKV(mode: MMKVMode = MMKVMode.SINGLE_PROCESS, cryptKey: String? = null): MMKV
 
 /**
  * 根据ID获取MMKV实例
  * @param id 实例ID
+ * @param mode 进程模式，默认为单进程模式
  * @param cryptKey 加密密钥，可选参数
  * @return 对应的MMKV实例
  */
-expect fun MMKV.Companion.mmkvWithID(id: String, cryptKey: String? = null): MMKV
+expect fun MMKV.Companion.mmkvWithID(id: String, mode: MMKVMode = MMKVMode.SINGLE_PROCESS, cryptKey: String? = null): MMKV

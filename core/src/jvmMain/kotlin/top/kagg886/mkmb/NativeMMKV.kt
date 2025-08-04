@@ -62,31 +62,31 @@ internal object NativeMMKV {
         }
     }
 
-    val mmkvc_defaultMMKV: (String?) -> MMKV by lazy {
+    val mmkvc_defaultMMKV: (Int, String?) -> MMKV by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_defaultMMKV").orElseThrow(),
-            FunctionDescriptor.of(ADDRESS, ADDRESS)
+            FunctionDescriptor.of(ADDRESS, ValueLayout.JAVA_INT, ADDRESS)
         )
 
-        return@lazy { cryptKey ->
+        return@lazy { mode, cryptKey ->
             val ptr = useArena {
                 val cCryptKey = if (cryptKey != null) allocateFrom(cryptKey) else MemorySegment.NULL
-                funcHandle.invoke(cCryptKey) as? MemorySegment ?: error("mmkvc_defaultMMKV return null")
+                funcHandle.invoke(mode, cCryptKey) as? MemorySegment ?: error("mmkvc_defaultMMKV return null")
             }
             PanamaMMKV(ptr)
         }
     }
-    val mmkvc_mmkvWithID: (String, String?) -> MMKV by lazy {
+    val mmkvc_mmkvWithID: (String, Int, String?) -> MMKV by lazy {
         val funcHandle = Linker.nativeLinker().downcallHandle(
             dll!!.find("mmkvc_mmkvWithID").orElseThrow(),
-            FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS)
+            FunctionDescriptor.of(ADDRESS, ADDRESS, ValueLayout.JAVA_INT, ADDRESS)
         )
 
-        return@lazy { id, cryptKey ->
+        return@lazy { id, mode, cryptKey ->
             val ptr = useArena {
                 val cId = allocateFrom(id)
                 val cCryptKey = if (cryptKey != null) allocateFrom(cryptKey) else MemorySegment.NULL
-                funcHandle.invoke(cId, cCryptKey) as? MemorySegment ?: error("mmkvc_mmkvWithID return null")
+                funcHandle.invoke(cId, mode, cCryptKey) as? MemorySegment ?: error("mmkvc_mmkvWithID return null")
             }
             PanamaMMKV(ptr)
         }

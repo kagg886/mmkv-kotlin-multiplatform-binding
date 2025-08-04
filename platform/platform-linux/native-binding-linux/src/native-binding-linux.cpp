@@ -33,29 +33,30 @@ extern "C" void mmkvc_init(char* path, int level, Logger* logger) {
     MMKV::initializeMMKV(path, (MMKVLogLevel)level, LogCallback);
 }
 
-extern "C" MMKV* mmkvc_defaultMMKV(char* cryptKey) {
+extern "C" MMKV* mmkvc_defaultMMKV(int mode, char* cryptKey) {
     MMKV* mmkv = nullptr;
     if (cryptKey != nullptr && strlen(cryptKey) > 0) {
         std::string crypt(cryptKey);
-        mmkv = MMKV::defaultMMKV(MMKV_SINGLE_PROCESS, &crypt);
+        mmkv = MMKV::defaultMMKV((MMKVMode)mode, &crypt);
     } else {
-        mmkv = MMKV::defaultMMKV();
+        mmkv = MMKV::defaultMMKV((MMKVMode)mode);
     }
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return mmkv;
 }
 
-extern "C" MMKV* mmkvc_mmkvWithID(char* id, char* cryptKey) {
+extern "C" MMKV* mmkvc_mmkvWithID(char* id, int mode, char* cryptKey) {
     MMKV* mmkv = nullptr;
     if (cryptKey != nullptr && strlen(cryptKey) > 0) {
         std::string crypt(cryptKey);
-        mmkv = MMKV::mmkvWithID(id, MMKV_SINGLE_PROCESS, &crypt);
+        mmkv = MMKV::mmkvWithID(id, (MMKVMode)mode, &crypt);
     } else {
-        mmkv = MMKV::mmkvWithID(id);
+        mmkv = MMKV::mmkvWithID(id, (MMKVMode)mode);
     }
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return mmkv;
 }
+
 
 extern "C" int mmkvc_getInt(MMKV* mmkv, const char* key) {
     return mmkv->getInt32(key);

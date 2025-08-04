@@ -2,36 +2,20 @@ package top.kagg886.mkmb
 
 import kotlinx.cinterop.*
 import mmkv.MMKV
-import mmkv.MMKVExpireNever
 import mmkv.MMKVHandlerProtocol
 import mmkv.MMKVLogLevel
+import mmkv.MMKVMode
 import platform.Foundation.NSMutableArray
 import platform.darwin.NSObject
 
 @OptIn(ExperimentalForeignApi::class)
 object NativeMMKVImpl {
-    fun defaultMMKV(cryptKey: String?): NSObject {
-        val mmkv = if (cryptKey != null) {
-            cryptKey.encodeToByteArray().useAsNSData {
-                MMKV.defaultMMKVWithCryptKey(this)!!
-            }
-        } else {
-            MMKV.defaultMMKV()!!
-        }
-        mmkv.enableAutoKeyExpire(MMKVExpireNever)
-        return mmkv
-    }
+    fun defaultMMKV(mode: MMKVMode, cryptKey: String?): NSObject = mmkvWithID("mmkv.default", mode, cryptKey)
 
-    fun mmkvWithID(id: String, cryptKey: String?): NSObject {
-        val mmkv = if (cryptKey != null) {
-            cryptKey.encodeToByteArray().useAsNSData {
-                MMKV.mmkvWithID(id, this)!!
-            }
-        } else {
-            MMKV.mmkvWithID(id)!!
-        }
-        mmkv.enableAutoKeyExpire(MMKVExpireNever)
-        return mmkv
+    fun mmkvWithID(id: String, mode: MMKVMode, cryptKey: String?): NSObject {
+        return cryptKey?.encodeToByteArray()?.useAsNSData {
+            MMKV.mmkvWithID(mmapID = id, cryptKey = this, mode = mode)!!
+        } ?: MMKV.mmkvWithID(mmapID = id, cryptKey = null, mode = mode)!!
     }
 
     fun initialize(path: String, level: ULong, log: (ULong, String, String) -> Unit) {

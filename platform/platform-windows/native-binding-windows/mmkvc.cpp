@@ -43,25 +43,25 @@ extern "C" __declspec(dllexport) void mmkvc_init(char* path,int level,Logger* lo
     MMKV::initializeMMKV(stringToWString(path), (MMKVLogLevel)level,LogCallback);
 }
 
-extern "C" __declspec(dllexport) MMKV* mmkvc_defaultMMKV(char* cryptKey) {
+extern "C" __declspec(dllexport) MMKV* mmkvc_defaultMMKV(int mode, char* cryptKey) {
     MMKV* mmkv = nullptr;
     if (cryptKey != nullptr && strlen(cryptKey) > 0) {
         std::string crypt(cryptKey);
-        mmkv = MMKV::defaultMMKV(MMKV_SINGLE_PROCESS, &crypt);
+        mmkv = MMKV::defaultMMKV((MMKVMode)mode, &crypt);
     } else {
-        mmkv = MMKV::defaultMMKV();
+        mmkv = MMKV::defaultMMKV((MMKVMode)mode);
     }
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return mmkv;
 }
 
-extern "C" __declspec(dllexport) MMKV* mmkvc_mmkvWithID(char* id, char* cryptKey) {
+extern "C" __declspec(dllexport) MMKV* mmkvc_mmkvWithID(char* id, int mode, char* cryptKey) {
     MMKV* mmkv = nullptr;
     if (cryptKey != nullptr && strlen(cryptKey) > 0) {
         std::string crypt(cryptKey);
-        mmkv = MMKV::mmkvWithID(id, MMKV_SINGLE_PROCESS, &crypt);
+        mmkv = MMKV::mmkvWithID(id, (MMKVMode)mode, &crypt);
     } else {
-        mmkv = MMKV::mmkvWithID(id);
+        mmkv = MMKV::mmkvWithID(id, (MMKVMode)mode);
     }
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return mmkv;

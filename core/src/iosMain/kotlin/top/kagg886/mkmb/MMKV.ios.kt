@@ -127,12 +127,12 @@ class AppleMMKV(internal val handle: NSObject) : MMKV {
 
 }
 
-actual fun MMKV.Companion.defaultMMKV(cryptKey: String?): MMKV {
-    return AppleMMKV(NativeMMKVImpl.defaultMMKV(cryptKey))
+actual fun MMKV.Companion.defaultMMKV(mode: MMKVMode, cryptKey: String?): MMKV {
+    return AppleMMKV(NativeMMKVImpl.defaultMMKV(mode, cryptKey))
 }
 
-actual fun MMKV.Companion.mmkvWithID(id: String, cryptKey: String?): MMKV {
-    return AppleMMKV(NativeMMKVImpl.mmkvWithID(id, cryptKey))
+actual fun MMKV.Companion.mmkvWithID(id: String, mode: MMKVMode, cryptKey: String?): MMKV {
+    return AppleMMKV(NativeMMKVImpl.mmkvWithID(id, mode, cryptKey))
 }
 
 actual fun MMKV.Companion.initialize(path: String, options: MMKVOptions) {
