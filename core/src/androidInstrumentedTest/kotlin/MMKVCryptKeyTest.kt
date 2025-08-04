@@ -28,7 +28,7 @@ class MMKVCryptKeyTest {
     @Test
     fun testDefaultMMKVWithCryptKey() {
         val cryptKey = "test-crypt-key-123"
-        val mmkv = MMKV.defaultMMKV(cryptKey)
+        val mmkv = MMKV.defaultMMKV(cryptKey = cryptKey)
 
         // 测试基本的读写功能
         assertEquals(0, mmkv.getInt("key"))
@@ -47,7 +47,7 @@ class MMKVCryptKeyTest {
     @Test
     fun testMMKVWithIDAndCryptKey() {
         val cryptKey = "test-id-crypt-key-456"
-        val mmkv = MMKV.mmkvWithID("test-crypt-id", cryptKey)
+        val mmkv = MMKV.mmkvWithID("test-crypt-id", cryptKey = cryptKey)
 
         // 测试基本的读写功能
         assertEquals(false, mmkv.getBoolean("bool_key"))
@@ -66,8 +66,8 @@ class MMKVCryptKeyTest {
     @Test
     fun testCryptKeyNullBehavior() {
         // 测试cryptKey为null的情况
-        val mmkvNull1 = MMKV.defaultMMKV(null)
-        val mmkvNull2 = MMKV.mmkvWithID("null-test", null)
+        val mmkvNull1 = MMKV.defaultMMKV(cryptKey = null)
+        val mmkvNull2 = MMKV.mmkvWithID("null-test",cryptKey =  null)
 
         // 测试基本功能
         mmkvNull1.set("null_key", "null_value")
@@ -83,7 +83,7 @@ class MMKVCryptKeyTest {
         val testId = "persistence-test"
 
         // 第一次创建实例并存储数据
-        val mmkv1 = MMKV.mmkvWithID(testId, cryptKey)
+        val mmkv1 = MMKV.mmkvWithID(testId, cryptKey = cryptKey)
         mmkv1.set("persistent_string", "持久化测试")
         mmkv1.set("persistent_int", 12345)
         mmkv1.set("persistent_bool", true)
@@ -95,7 +95,7 @@ class MMKVCryptKeyTest {
         assertEquals(3, mmkv1.size())
 
         // 重新创建相同ID和cryptKey的实例
-        val mmkv2 = MMKV.mmkvWithID(testId, cryptKey)
+        val mmkv2 = MMKV.mmkvWithID(testId, cryptKey = cryptKey)
 
         // 验证数据持久化
         assertEquals("持久化测试", mmkv2.getString("persistent_string"))
@@ -111,7 +111,7 @@ class MMKVCryptKeyTest {
     @Test
     fun testCryptKeyWithDifferentDataTypes() {
         val cryptKey = "data-types-test"
-        val mmkv = MMKV.mmkvWithID("data-types-test", cryptKey)
+        val mmkv = MMKV.mmkvWithID("data-types-test", cryptKey = cryptKey)
 
         // 测试各种数据类型的加密存储
         mmkv.set("long_key", 9876543210L)
