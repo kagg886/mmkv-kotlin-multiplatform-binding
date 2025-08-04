@@ -2,6 +2,7 @@ package top.kagg886.mkmb
 
 import kotlinx.cinterop.*
 import mmkv.MMKV
+import mmkv.MMKVExpireNever
 import mmkv.MMKVHandlerProtocol
 import mmkv.MMKVLogLevel
 import mmkv.MMKVMode
@@ -13,9 +14,13 @@ object NativeMMKVImpl {
     fun defaultMMKV(mode: MMKVMode, cryptKey: String?): NSObject = mmkvWithID("mmkv.default", mode, cryptKey)
 
     fun mmkvWithID(id: String, mode: MMKVMode, cryptKey: String?): NSObject {
-        return cryptKey?.encodeToByteArray()?.useAsNSData {
+        val mmkv =  cryptKey?.encodeToByteArray()?.useAsNSData {
             MMKV.mmkvWithID(mmapID = id, cryptKey = this, mode = mode)!!
         } ?: MMKV.mmkvWithID(mmapID = id, cryptKey = null, mode = mode)!!
+
+        mmkv.enableAutoKeyExpire(MMKVExpireNever)
+
+        return mmkv
     }
 
     fun initialize(path: String, level: ULong, log: (ULong, String, String) -> Unit) {
