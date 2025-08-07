@@ -1,5 +1,5 @@
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
-import com.vanniktech.maven.publish.SonatypeHost
+
 
 plugins {
     alias(libs.plugins.android.library)
@@ -59,7 +59,7 @@ android {
 
 mavenPublishing {
     configure(AndroidSingleVariantLibrary())
-    publishToMavenCentral(SonatypeHost.S01)
+    publishToMavenCentral(true)
     if (!SKIP_SIGN) {
         signAllPublications()
     }

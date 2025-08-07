@@ -1,5 +1,5 @@
 import com.vanniktech.maven.publish.KotlinJvm
-import com.vanniktech.maven.publish.SonatypeHost
+
 import java.io.FileInputStream
 import java.security.MessageDigest
 
@@ -49,7 +49,7 @@ tasks.named<ProcessResources>("processResources") {
 
 mavenPublishing {
     configure(KotlinJvm())
-    publishToMavenCentral(SonatypeHost.S01)
+    publishToMavenCentral(true)
     if (!SKIP_SIGN) {
         signAllPublications()
     }

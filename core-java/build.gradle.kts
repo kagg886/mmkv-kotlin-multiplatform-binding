@@ -1,6 +1,6 @@
 import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
-import com.vanniktech.maven.publish.SonatypeHost
+
 
 plugins {
     java
@@ -35,7 +35,7 @@ tasks.test {
 
 mavenPublishing {
     configure(JavaLibrary(javadocJar = JavadocJar.Empty()))
-    publishToMavenCentral(SonatypeHost.S01)
+    publishToMavenCentral(true)
     if (!SKIP_SIGN) {
         signAllPublications()
     }

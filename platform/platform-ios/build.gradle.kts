@@ -1,5 +1,5 @@
 import com.vanniktech.maven.publish.KotlinMultiplatform
-import com.vanniktech.maven.publish.SonatypeHost
+
 
 plugins {
     alias(libs.plugins.multiplatform)
@@ -101,7 +101,7 @@ mavenPublishing {
             sourcesJar = true,
         )
     )
-    publishToMavenCentral(SonatypeHost.S01)
+    publishToMavenCentral(true)
     if (!SKIP_SIGN) {
         signAllPublications()
     }
