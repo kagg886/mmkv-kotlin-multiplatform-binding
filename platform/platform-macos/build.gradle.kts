@@ -4,20 +4,12 @@ import java.io.FileInputStream
 import java.security.MessageDigest
 
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.maven.publish)
-}
-
-val SKIP_SIGN = (System.getenv("SKIP_SIGN") ?: project.findProperty("SKIP_SIGN") as? String ?: "false").toBooleanStrict()
-val LIB_PLATFORM_JVM_MACOS_VERSION = System.getenv("LIB_PLATFORM_JVM_MACOS_VERSION") ?: project.findProperty("LIB_PLATFORM_JVM_MACOS_VERSION") as? String ?: "unsetted."
-check(LIB_PLATFORM_JVM_MACOS_VERSION.startsWith("v")) {
-    "LIB_PLATFORM_JVM_MACOS_VERSION not supported, current is $LIB_PLATFORM_JVM_MACOS_VERSION"
+    id("org.jetbrains.kotlin.jvm")
+    id("com.vanniktech.maven.publish")
 }
 
 group = "top.kagg886.mkmb"
-version = LIB_PLATFORM_JVM_MACOS_VERSION.substring(1)
-
-println("LIB_PLATFORM_JVM_MACOS_VERSION: $version")
+version()
 
 kotlin {
     jvmToolchain(22)
@@ -48,36 +40,4 @@ tasks.named<ProcessResources>("processResources") {
 }
 
 
-mavenPublishing {
-    configure(KotlinJvm())
-    publishToMavenCentral(true)
-    if (!SKIP_SIGN) {
-        signAllPublications()
-    }
-    coordinates(group.toString(), project.name, version.toString())
-    pom {
-        name = "MMKV-multiplatform-binding"
-        description = "An api accesser wrapped tencent-mmkv by kotlin "
-        inceptionYear = "2025"
-        url = "https://github.com/kagg886/mmkv-kotlin-multiplatform-binding"
-        licenses {
-            license {
-                name = "The Apache License, Version 2.0"
-                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
-                distribution = "https://www.apache.org/licenses/LICENSE-2.0.txt"
-            }
-        }
-        developers {
-            developer {
-                id = "kagg886"
-                name = "kagg886"
-                url = "https://github.com/kagg886/"
-            }
-        }
-        scm {
-            url = "https://github.com/kagg886/mmkv-kotlin-multiplatform-binding"
-            connection = "scm:git:git://github.com/kagg886/mmkv-kotlin-multiplatform-binding.git"
-            developerConnection = "scm:git:ssh://git@github.com/kagg886/mmkv-kotlin-multiplatform-binding.git"
-        }
-    }
-}
+publishing(KotlinJvm())

@@ -1,10 +1,10 @@
 plugins {
-    alias(libs.plugins.multiplatform).apply(false)
-    alias(libs.plugins.android.library).apply(false)
-    alias(libs.plugins.kotlin.android.parcelize).apply(false)
-    alias(libs.plugins.kotlin.android).apply(false)
-    alias(libs.plugins.kotlin.jvm).apply(false)
-    alias(libs.plugins.android.application).apply(false)
+    id("org.jetbrains.kotlin.multiplatform").apply(false)
+    id("com.android.library").apply(false)
+    id("org.jetbrains.kotlin.plugin.parcelize").apply(false)
+    id("org.jetbrains.kotlin.android").apply(false)
+    id("org.jetbrains.kotlin.jvm").apply(false)
+    id("com.android.application").apply(false)
     alias(libs.plugins.kotlinx.atomicfu).apply(false)
-    alias(libs.plugins.maven.publish).apply(false)
+    id("com.vanniktech.maven.publish").apply(false)
 }

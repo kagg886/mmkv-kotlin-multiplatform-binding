@@ -1,28 +1,11 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    alias(libs.plugins.multiplatform)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.compose)
-    alias(libs.plugins.android.application)
+    id("org.jetbrains.kotlin.multiplatform")
+    id("org.jetbrains.kotlin.plugin.compose")
+    id("org.jetbrains.compose")
+    id("com.android.application")
 }
-
-private fun props(key: String): String = System.getenv(key) ?: project.findProperty(key) as? String ?: throw NullPointerException("Property $key not found")
-
-//# SYSTEM
-//LIB_CORE_VERSION=v1.1.0
-//LIB_CORE_JAVA_VERSION=v1.1.0
-//LIB_PLATFORM_JVM_WINDOWS_VERSION=v1.1.0
-//LIB_PLATFORM_JVM_LINUX_VERSION=v1.1.0
-//LIB_PLATFORM_JVM_MACOS_VERSION=v1.1.0
-//LIB_PLATFORM_ANDROID_VERSION=v1.1.0
-//LIB_PLATFORM_IOS_VERSION=v1.1.0
-
-val coreVersion = props("LIB_CORE_VERSION").substring(1)
-val coreJavaVersion = props("LIB_CORE_JAVA_VERSION").substring(1)
-val platformJvmWindowsVersion = props("LIB_PLATFORM_JVM_WINDOWS_VERSION").substring(1)
-val platformJvmLinuxVersion = props("LIB_PLATFORM_JVM_LINUX_VERSION").substring(1)
-val platformJvmMacosVersion = props("LIB_PLATFORM_JVM_MACOS_VERSION").substring(1)
 
 kotlin {
     jvmToolchain(22)
