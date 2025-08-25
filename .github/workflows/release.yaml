@@ -12,17 +12,17 @@ on:
         required: false
         default: false
         type: boolean
-      RELEASE_LIB_PLATFORM_JVM_WINDOWS:
+      RELEASE_LIB_PLATFORM_WINDOWS:
         description: 'Release JVM Windows Platform'
         required: false
         default: false
         type: boolean
-      RELEASE_LIB_PLATFORM_JVM_LINUX:
+      RELEASE_LIB_PLATFORM_LINUX:
         description: 'Release JVM Linux Platform'
         required: false
         default: false
         type: boolean
-      RELEASE_LIB_PLATFORM_JVM_MACOS:
+      RELEASE_LIB_PLATFORM_MACOS:
         description: 'Release JVM macOS Platform'
         required: false
         default: false
@@ -40,7 +40,7 @@ on:
         type: boolean
 jobs:
   test-jvm-windows:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
     runs-on: windows-latest
     permissions:
       contents: read
@@ -57,7 +57,7 @@ jobs:
         uses: ./.github/actions/test-jvm
 
   test-jvm-linux:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -72,7 +72,7 @@ jobs:
         uses: ./.github/actions/test-jvm
 
   test-jvm-macos:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_MACOS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_MACOS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
     runs-on: macos-15
     permissions:
       contents: read
@@ -169,7 +169,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
   release-platform-jvm-windows:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_WINDOWS }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_WINDOWS }}
     needs:
       - test-jvm-windows
     runs-on: windows-latest
@@ -195,7 +195,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
   release-platform-jvm-linux:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_LINUX }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_LINUX }}
     needs:
       - test-jvm-linux
     runs-on: ubuntu-latest
@@ -219,7 +219,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
   release-platform-jvm-macos:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_JVM_MACOS }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_MACOS }}
     needs:
       - test-jvm-macos
     runs-on: macos-15
