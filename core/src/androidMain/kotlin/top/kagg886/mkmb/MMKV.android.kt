@@ -7,7 +7,7 @@ actual val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader by lazy {
 }
 
 @OptIn(ExperimentalStdlibApi::class)
-class JNIPointerMMKV(private val handle: Long) : MMKV {
+internal class JNIPointerMMKV(private val handle: Long) : MMKV {
     private var alive by atomic(true)
 
     override fun set(key: String, value: Int,expire:Int) {

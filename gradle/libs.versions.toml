@@ -1,5 +1,6 @@
 [versions]
 atomicfu = "0.27.0"
+dokka-gradle-plugin-version = "2.0.0"
 kotlin = "2.1.0"
 kotlinx-atomicfu = "0.27.0"
 agp = "8.6.1"
@@ -13,6 +14,7 @@ androidx-activity-compose = "1.10.1"
 maven-publish = "0.34.0"
 [libraries]
 atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
+dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka-gradle-plugin-version" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit-version" }

@@ -1,4 +1,5 @@
 import com.vanniktech.maven.publish.KotlinMultiplatform
+import org.jetbrains.dokka.gradle.DokkaTask
 
 
 plugins {
@@ -7,6 +8,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.parcelize")
     alias(libs.plugins.kotlinx.atomicfu)
     id("com.vanniktech.maven.publish")
+    id("org.jetbrains.dokka")
 }
 
 group = "top.kagg886.mkmb"

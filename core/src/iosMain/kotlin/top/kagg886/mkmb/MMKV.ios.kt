@@ -3,7 +3,7 @@ package top.kagg886.mkmb
 import kotlinx.atomicfu.atomic
 import platform.darwin.NSObject
 
-class AppleMMKV(internal val handle: NSObject) : MMKV {
+internal class AppleMMKV(internal val handle: NSObject) : MMKV {
     private var alive by atomic(true)
 
     override fun set(key: String, value: Int, expire: Int) {

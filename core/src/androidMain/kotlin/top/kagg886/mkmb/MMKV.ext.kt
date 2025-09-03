@@ -17,6 +17,10 @@ fun <T : Parcelable> MMKV.set(key: String, value: T, expire: Int = 0) {
     set(key, value.writeToParcelable(), expire)
 }
 
+/**
+ * 导入SharedPreferences数据
+ * @param preferences SharedPreferences数据
+ */
 fun MMKV.importFromSharedPreferences(preferences: SharedPreferences): Int {
     val kvs = preferences.all
     if (kvs.isNullOrEmpty()) return 0

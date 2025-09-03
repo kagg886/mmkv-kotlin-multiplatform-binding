@@ -20,7 +20,7 @@ internal val jvmTarget by lazy {
     }
 }
 
-enum class JvmTarget {
+internal enum class JvmTarget {
     MACOS,
     WINDOWS,
     LINUX;

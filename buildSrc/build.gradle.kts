@@ -26,4 +26,5 @@ dependencies {
     api(libs.compose.multiplatfrom.gradle.plugin)
     api(libs.kotlin.compose.compiler.gradle.plugin)
     api(libs.maven.publish.plugin)
+    api(libs.dokka.gradle.plugin)
 }
