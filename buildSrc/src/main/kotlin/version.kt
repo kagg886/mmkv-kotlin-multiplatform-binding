@@ -15,5 +15,5 @@ fun Project.version(): String {
     }
     this.version = version.removePrefix("v")
     println("$key version: $version")
-    return version
+    return version.removePrefix("v")
 }

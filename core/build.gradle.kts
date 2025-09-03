@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.KotlinMultiplatform
-import org.jetbrains.dokka.gradle.DokkaTask
 
 
 plugins {
@@ -12,7 +11,7 @@ plugins {
 }
 
 group = "top.kagg886.mkmb"
-version()
+val coreVersion = version()
 
 library {
     sourceSets {
@@ -48,3 +47,16 @@ library {
 }
 
 publishing(KotlinMultiplatform(sourcesJar = true))
+
+dokka {
+    moduleName.set("mmkv-multiplatform-binding:core")
+    pluginsConfiguration {
+        versioning {
+            version.set(coreVersion)
+        }
+    }
+
+    dokkaSourceSets.configureEach {
+        includes.from("Module.md")
+    }
+}
