@@ -33,7 +33,7 @@ kotlin {
 //            implementation("top.kagg886.mkmb:core:$coreVersion")
         }
 
-        //不同操作系统引入不同的二进制文件，若要引入所有平台就写3个implementation。
+        // Include different binaries per OS; to include all, add 3 implementations.
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(project(":platform:platform-windows"))

@@ -26,7 +26,7 @@ val processBuild = tasks.register<Exec>("processBuild") {
     """.trimIndent())
 }
 
-// 配置JVM的processResources任务
+// Configure JVM processResources task
 tasks.named<ProcessResources>("processResources") {
     dependsOn(processBuild)
     from(project.file("native-binding-windows/x64/Release/mmkvc.dll"))

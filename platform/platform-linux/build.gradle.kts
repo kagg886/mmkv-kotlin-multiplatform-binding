@@ -33,7 +33,7 @@ val processBuild = tasks.register<Exec>("processBuild") {
     )
 }
 
-// 配置JVM的processResources任务
+// Configure JVM processResources task
 tasks.named<ProcessResources>("processResources") {
     dependsOn(processBuild)
     from(project.file("native-binding-linux/build/libmmkvc.so"))

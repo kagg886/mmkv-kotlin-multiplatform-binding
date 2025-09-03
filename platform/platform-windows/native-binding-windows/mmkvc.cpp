@@ -3,17 +3,17 @@
 static std::wstring stringToWString(const std::string& str) {
     const char* mbStr = str.c_str();
 
-    // 获取所需的大小
+    // Get required size
     size_t size;
     mbstowcs_s(&size, nullptr, 0, mbStr, 0);
 
-    // 分配适当大小的wstring
-    std::wstring wStr(size - 1, L'\0');  // size包含null终止符，所以要减1
+    // Allocate wstring with proper size
+    std::wstring wStr(size - 1, L'\0');  // size includes null terminator, subtract 1
 
-    // 执行实际转换
+    // Do the actual conversion
     mbstowcs_s(&size, &wStr[0], size, mbStr, _TRUNCATE);
 
-    return wStr;  // 原函数缺少返回语句
+    return wStr;  // The original function missed a return statement
 }
 
 static char* stringToChar(const std::string& ptr) {

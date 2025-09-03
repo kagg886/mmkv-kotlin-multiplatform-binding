@@ -1,5 +1,5 @@
 /**
- * 直接 fork 自 MMKV.java
+ * Directly forked from MMKV.java
  */
 package top.kagg886.mkmb
 
@@ -8,18 +8,18 @@ import android.os.Parcelable
 import kotlin.reflect.KClass
 
 /**
- * 设置Parcelable对象值
- * @param key 键
- * @param value 值
- * @param expire 过期时间，单位：秒。默认为0，表示不过期
+ * Set a Parcelable value
+ * @param key key
+ * @param value value
+ * @param expire expiration in seconds; 0 means never expires
  */
 fun <T : Parcelable> MMKV.set(key: String, value: T, expire: Int = 0) {
     set(key, value.writeToParcelable(), expire)
 }
 
 /**
- * 导入SharedPreferences数据
- * @param preferences SharedPreferences数据
+ * Import data from SharedPreferences
+ * @param preferences SharedPreferences data
  */
 fun MMKV.importFromSharedPreferences(preferences: SharedPreferences): Int {
     val kvs = preferences.all
@@ -43,9 +43,9 @@ fun MMKV.importFromSharedPreferences(preferences: SharedPreferences): Int {
 }
 
 /**
- * 获取Parcelable对象值
- * @param key 键
- * @return 对应的值
+ * Get a Parcelable value
+ * @param key key
+ * @return corresponding value
  */
 inline fun <reified T : Parcelable> MMKV.get(key: String): T? = get(key, T::class)
 

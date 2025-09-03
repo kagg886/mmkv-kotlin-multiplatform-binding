@@ -299,7 +299,7 @@ internal object NativeMMKV {
             dll!!.find("mmkvc_getStringList").orElseThrow(),
             FunctionDescriptor.of(ADDRESS, ADDRESS, ADDRESS)
         )
-        // 获取字段的偏移量
+        // Get field offsets
         val itemOffset =
             MMKVC_STRING_SET_RETURN_STRUCT.byteOffset(MemoryLayout.PathElement.groupElement("items"))
         val lenOffset =
@@ -313,7 +313,7 @@ internal object NativeMMKV {
                 ) ?: error("mmkvc_getStringList return null")
             }
 
-            // 获取字符串数组指针和数组长度
+            // Get the pointer to the string array and the array length
             val len = segment.get(JAVA_LONG, lenOffset)
             val itemsPtr = segment.get(ADDRESS, itemOffset).reinterpret(len * ADDRESS.byteSize());
 
@@ -326,7 +326,7 @@ internal object NativeMMKV {
             }
             free(itemsPtr)
             free(segment)
-            // 返回结果List
+            // Return the result list
             result
         }
     }
@@ -424,7 +424,7 @@ internal object NativeMMKV {
                 )
                     ?: error("mmkvc_allKeys return null")
 
-            // 获取字符串数组指针和数组长度
+            // Get the pointer to the string array and the array length
             val len = segment.get(JAVA_LONG, lenOffset)
             val itemsPtr = segment.get(ADDRESS, itemOffset).reinterpret(len * ADDRESS.byteSize());
 
@@ -437,7 +437,7 @@ internal object NativeMMKV {
             }
             free(itemsPtr)
             free(segment)
-            // 返回结果List
+            // Return the result list
             result
         }
     }

@@ -30,17 +30,17 @@ class MMKVCryptKeyTest {
         val cryptKey = "test-crypt-key-123"
         val mmkv = MMKV.defaultMMKV(cryptKey = cryptKey)
 
-        // 测试基本的读写功能
+        // Test basic read/write
         assertEquals(0, mmkv.getInt("key"))
         mmkv.set("key", 42)
         assertEquals(42, mmkv.getInt("key"))
 
-        // 测试字符串存储
+        // Test string storage
         val testString = "加密测试字符串"
         mmkv.set("string_key", testString)
         assertEquals(testString, mmkv.getString("string_key"))
 
-        // 验证实例存活
+        // Verify instance is alive
         assertTrue(mmkv.isAlive())
     }
 
@@ -49,27 +49,27 @@ class MMKVCryptKeyTest {
         val cryptKey = "test-id-crypt-key-456"
         val mmkv = MMKV.mmkvWithID("test-crypt-id", cryptKey = cryptKey)
 
-        // 测试基本的读写功能
+        // Test basic read/write
         assertEquals(false, mmkv.getBoolean("bool_key"))
         mmkv.set("bool_key", true)
         assertEquals(true, mmkv.getBoolean("bool_key"))
 
-        // 测试字节数组存储
+        // Test byte array storage
         val testBytes = byteArrayOf(1, 2, 3, 4, 5)
         mmkv.set("bytes_key", testBytes)
         assertContentEquals(testBytes, mmkv.getByteArray("bytes_key"))
 
-        // 验证实例存活
+        // Verify instance is alive
         assertTrue(mmkv.isAlive())
     }
 
     @Test
     fun testCryptKeyNullBehavior() {
-        // 测试cryptKey为null的情况
+        // Test behavior when cryptKey is null
         val mmkvNull1 = MMKV.defaultMMKV(cryptKey = null)
         val mmkvNull2 = MMKV.mmkvWithID("null-test",cryptKey =  null)
 
-        // 测试基本功能
+        // Test basic behavior
         mmkvNull1.set("null_key", "null_value")
         assertEquals("null_value", mmkvNull1.getString("null_key"))
 
@@ -82,28 +82,28 @@ class MMKVCryptKeyTest {
         val cryptKey = "persistence-test-key"
         val testId = "persistence-test"
 
-        // 第一次创建实例并存储数据
+        // First create instance and store data
         val mmkv1 = MMKV.mmkvWithID(testId, cryptKey = cryptKey)
         mmkv1.set("persistent_string", "持久化测试")
         mmkv1.set("persistent_int", 12345)
         mmkv1.set("persistent_bool", true)
 
-        // 验证数据存在
+        // Verify data exists
         assertEquals("持久化测试", mmkv1.getString("persistent_string"))
         assertEquals(12345, mmkv1.getInt("persistent_int"))
         assertEquals(true, mmkv1.getBoolean("persistent_bool"))
         assertEquals(3, mmkv1.size())
 
-        // 重新创建相同ID和cryptKey的实例
+        // Recreate instance with the same id and cryptKey
         val mmkv2 = MMKV.mmkvWithID(testId, cryptKey = cryptKey)
 
-        // 验证数据持久化
+        // Verify data persistence
         assertEquals("持久化测试", mmkv2.getString("persistent_string"))
         assertEquals(12345, mmkv2.getInt("persistent_int"))
         assertEquals(true, mmkv2.getBoolean("persistent_bool"))
         assertEquals(3, mmkv2.size())
 
-        // 验证键列表
+        // Verify key list
         val keys = mmkv2.allKeys().sorted()
         assertContentEquals(listOf("persistent_bool", "persistent_int", "persistent_string"), keys)
     }
@@ -113,7 +113,7 @@ class MMKVCryptKeyTest {
         val cryptKey = "data-types-test"
         val mmkv = MMKV.mmkvWithID("data-types-test", cryptKey = cryptKey)
 
-        // 测试各种数据类型的加密存储
+        // Test encrypted storage of various data types
         mmkv.set("long_key", 9876543210L)
         mmkv.set("float_key", 3.14f)
         mmkv.set("double_key", 2.718281828)
@@ -121,13 +121,13 @@ class MMKVCryptKeyTest {
         val stringList = listOf("加密", "字符串", "列表")
         mmkv.set("list_key", stringList)
 
-        // 验证读取
+        // Verify reads
         assertEquals(9876543210L, mmkv.getLong("long_key"))
         assertEquals(3.14f, mmkv.getFloat("float_key"))
         assertEquals(2.718281828, mmkv.getDouble("double_key"))
         assertContentEquals(stringList, mmkv.getStringList("list_key"))
 
-        // 验证所有键都存在
+        // Verify all keys exist
         assertTrue(mmkv.exists("long_key"))
         assertTrue(mmkv.exists("float_key"))
         assertTrue(mmkv.exists("double_key"))

@@ -3,13 +3,13 @@ package top.kagg886.mkmb
 import kotlinx.atomicfu.atomic
 
 /**
- * # MMKV多平台接口
- * 为各个平台提供的门面，实现由具体的target进行提供。
+ * # MMKV multiplatform interface
+ * Facade for all platforms; implemented by each specific target.
  */
 interface MMKV {
     companion object {
         /**
-         * 是否已经初始化
+         * Whether MMKV is initialized
          * @see initialize
          * @see destroy
          */
@@ -18,192 +18,192 @@ interface MMKV {
     }
 
     /**
-     * 设置整型值
-     * @param key 键
-     * @param value 值
-     * @param expire 过期时间，单位：秒。默认为0，表示不过期
+     * Set an integer value
+     * @param key key
+     * @param value value
+     * @param expire expiration in seconds; 0 means never expires
      */
     fun set(key: String, value: Int, expire: Int = 0)
 
     /**
-     * 获取整型值
-     * @param key 键
-     * @return 对应的整型值
+     * Get an integer value
+     * @param key key
+     * @return the integer value
      */
     fun getInt(key: String): Int
 
     /**
-     * 设置字符串值
-     * @param key 键
-     * @param value 值
-     * @param expire 过期时间，单位：秒。默认为0，表示不过期
+     * Set a string value
+     * @param key key
+     * @param value value
+     * @param expire expiration in seconds; 0 means never expires
      */
     fun set(key: String, value: String,expire: Int = 0)
 
     /**
-     * 获取字符串值
-     * @param key 键
-     * @return 对应的字符串值
+     * Get a string value
+     * @param key key
+     * @return the string value
      */
     fun getString(key: String): String
 
     /**
-     * 设置字节数组值
-     * @param key 键
-     * @param value 值
-     * @param expire 过期时间，单位：秒。默认为0，表示不过期
+     * Set a byte array value
+     * @param key key
+     * @param value value
+     * @param expire expiration in seconds; 0 means never expires
      */
     fun set(key: String, value: ByteArray,expire: Int = 0)
 
     /**
-     * 获取字节数组值
-     * @param key 键
-     * @return 对应的字节数组值
+     * Get a byte array value
+     * @param key key
+     * @return the byte array value
      */
     fun getByteArray(key: String): ByteArray
 
     /**
-     * 设置字符串列表值
-     * @param key 键
-     * @param value 值
-     * @param expire 过期时间，单位：秒。默认为0，表示不过期
+     * Set a list of strings
+     * @param key key
+     * @param value value
+     * @param expire expiration in seconds; 0 means never expires
      */
     fun set(key: String, value: List<String>,expire: Int = 0)
 
     /**
-     * 获取字符串列表值
-     * @param key 键
-     * @return 对应的字符串列表值
+     * Get a list of strings
+     * @param key key
+     * @return the list of strings
      */
     fun getStringList(key: String): List<String>
 
     /**
-     * 设置布尔值
-     * @param key 键
-     * @param value 值
-     * @param expire 过期时间，单位：秒。默认为0，表示不过期
+     * Set a boolean value
+     * @param key key
+     * @param value value
+     * @param expire expiration in seconds; 0 means never expires
      */
     fun set(key: String, value: Boolean,expire: Int = 0)
 
     /**
-     * 获取布尔值
-     * @param key 键
-     * @return 对应的布尔值
+     * Get a boolean value
+     * @param key key
+     * @return the boolean value
      */
     fun getBoolean(key: String): Boolean
 
     /**
-     * 设置长整型值
-     * @param key 键
-     * @param value 值
-     * @param expire 过期时间，单位：秒。默认为0，表示不过期
+     * Set a long value
+     * @param key key
+     * @param value value
+     * @param expire expiration in seconds; 0 means never expires
      */
     fun set(key: String, value: Long,expire: Int = 0)
 
     /**
-     * 获取长整型值
-     * @param key 键
-     * @return 对应的长整型值
+     * Get a long value
+     * @param key key
+     * @return the long value
      */
     fun getLong(key: String): Long
 
     /**
-     * 设置浮点型值
-     * @param key 键
-     * @param value 值
-     * @param expire 过期时间，单位：秒。默认为0，表示不过期
+     * Set a float value
+     * @param key key
+     * @param value value
+     * @param expire expiration in seconds; 0 means never expires
      */
     fun set(key: String, value: Float,expire: Int = 0)
 
     /**
-     * 获取浮点型值
-     * @param key 键
-     * @return 对应的浮点型值
+     * Get a float value
+     * @param key key
+     * @return the float value
      */
     fun getFloat(key: String): Float
 
     /**
-     * 设置双精度浮点型值
-     * @param key 键
-     * @param value 值
-     * @param expire 过期时间，单位：秒。默认为0，表示不过期
+     * Set a double value
+     * @param key key
+     * @param value value
+     * @param expire expiration in seconds; 0 means never expires
      */
     fun set(key: String, value: Double,expire: Int = 0)
 
     /**
-     * 获取双精度浮点型值
-     * @param key 键
-     * @return 对应的双精度浮点型值
+     * Get a double value
+     * @param key key
+     * @return the double value
      */
     fun getDouble(key: String): Double
 
     /**
-     * 移除指定键的值
-     * @param key 键
-     * @return 是否移除成功
+     * Remove the value for the specified key
+     * @param key key
+     * @return whether removal succeeded
      */
     fun remove(key: String): Boolean
 
     /**
-     * # 清空MMKV实例内的所有内容
-     * 注意：不会删除存储在本地磁盘上的文件。
+     * # Clear all data inside the MMKV instance
+     * Note: this does NOT delete files on disk.
      *
-     * 若您要删除本地文件，请使用: [destroy]
+     * To delete files on disk, use: [destroy]
      */
     fun clear()
 
     /**
-     * # 销毁MMKV实例
-     * 注意：不仅会销毁内存中的MMKV实例，还会删除存储在本地磁盘上的文件。
+     * # Destroy the MMKV instance
+     * Note: this destroys the in-memory instance AND deletes files on disk.
      *
-     * 若您要仅清空数据但销毁实例，请使用: [clear]
+     * If you only want to clear data without deleting files, use: [clear]
      */
     fun destroy(): Boolean
 
     /**
-     * # 实例是否存在
-     * @return 实例是否存在
+     * # Whether the instance is alive
+     * @return whether the instance exists
      */
     fun isAlive(): Boolean
 
     /**
-     * 获取存储的键值对数量
-     * @return 键值对数量
+     * Get the number of stored key-value pairs
+     * @return number of key-value pairs
      */
     fun size(): Int
 
     /**
-     * 获取所有键
-     * @return 所有键的列表
+     * Get all keys
+     * @return list of all keys
      */
     fun allKeys(): List<String>
 
     /**
-     * 检查指定键是否存在
-     * @param key 键
-     * @return 键是否存在
+     * Check whether the specified key exists
+     * @param key key
+     * @return whether the key exists
      */
     fun exists(key: String): Boolean
 }
 
 /**
- * MMKV配置选项类
+ * MMKV configuration options
  */
 class MMKVOptions {
 
     /**
-     * MMKV C库加载器接口
+     * MMKV C library loader interface
      */
     fun interface MMKVCLibLoader {
         /**
-         * 加载C库
-         * @return 加载的库路径
+         * Load the C library
+         * @return the loaded library path
          */
         fun load(): String
     }
 
     /**
-     * 日志级别枚举
+     * Log level enum
      */
     enum class LogLevel(val level: Int) {
         Debug(0),
@@ -214,10 +214,10 @@ class MMKVOptions {
 
         companion object {
             /**
-             * 根据级别值获取对应的日志级别
-             * @param level 级别值
-             * @return 对应的日志级别
-             * @throws IllegalArgumentException 如果级别值无效
+             * Get the log level by its numeric value
+             * @param level numeric level value
+             * @return corresponding log level
+             * @throws IllegalArgumentException if the value is invalid
              */
             fun from(level: Int): LogLevel =
                 entries.find { it.level == level }
@@ -226,44 +226,44 @@ class MMKVOptions {
     }
 
     /**
-     * C库加载器
+     * C library loader
      */
     var libLoader: MMKVCLibLoader = MMKV.defaultLoader
 
     /**
-     * 日志级别
+     * Log level
      */
     var logLevel: LogLevel = LogLevel.Debug
 
     /**
-     * 日志函数
+     * Log function
      */
     var logFunc: (LogLevel, String, String) -> Unit =
         { level, tag, it -> println("[$tag]: $level - $it") }
 }
 
 /**
- * MMKV进程模式枚举
+ * MMKV process mode enum
  */
 enum class MMKVMode(val value: Int) {
     /**
-     * 单进程模式（默认）
+     * Single process (default)
      */
     SINGLE_PROCESS(1 shl 0),
 
     /**
-     * 多进程模式
+     * Multi-process
      */
     MULTI_PROCESS(1 shl 1),
 
     /**
-     * 只读模式
+     * Read-only
      */
     READ_ONLY(1 shl 5);
 
     companion object {
         /**
-         * 根据值获取对应的模式
+         * Get the mode by value
          */
         fun fromValue(value: Int): MMKVMode? {
             return entries.find { it.value == value }
@@ -272,38 +272,38 @@ enum class MMKVMode(val value: Int) {
 }
 
 /**
- * 默认的C库加载器
+ * Default C library loader
  */
 expect val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader
 
 /**
- * 初始化MMKV
- * @param path 存储路径
- * @param conf 配置选项
+ * Initialize MMKV
+ * @param path storage path
+ * @param conf options
  */
 fun MMKV.Companion.initialize(path: String, conf: MMKVOptions.() -> Unit = {}) =
     MMKV.initialize(path, MMKVOptions().apply(conf))
 
 /**
- * 初始化MMKV
- * @param path 存储路径
- * @param conf 配置选项
+ * Initialize MMKV
+ * @param path storage path
+ * @param conf options
  */
 expect fun MMKV.Companion.initialize(path: String, options: MMKVOptions)
 
 /**
- * 获取默认的MMKV实例
- * @param mode 进程模式，默认为单进程模式
- * @param cryptKey 加密密钥，可选参数
- * @return 默认的MMKV实例
+ * Get the default MMKV instance
+ * @param mode process mode; default is single-process
+ * @param cryptKey encryption key (optional)
+ * @return the default MMKV instance
  */
 expect fun MMKV.Companion.defaultMMKV(mode: MMKVMode = MMKVMode.SINGLE_PROCESS, cryptKey: String? = null): MMKV
 
 /**
- * 根据ID获取MMKV实例
- * @param id 实例ID
- * @param mode 进程模式，默认为单进程模式
- * @param cryptKey 加密密钥，可选参数
- * @return 对应的MMKV实例
+ * Get an MMKV instance by ID
+ * @param id instance ID
+ * @param mode process mode; default is single-process
+ * @param cryptKey encryption key (optional)
+ * @return the MMKV instance
  */
 expect fun MMKV.Companion.mmkvWithID(id: String, mode: MMKVMode = MMKVMode.SINGLE_PROCESS, cryptKey: String? = null): MMKV

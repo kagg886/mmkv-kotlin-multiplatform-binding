@@ -352,7 +352,7 @@ private fun EditKeyValueDialog(
             }
         },
         dismissButton = {
-            // 删除按钮
+            // Delete button
             TextButton(
                 onClick = onDelete,
             ) {

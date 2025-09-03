@@ -32,7 +32,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 
 void GetJNIEnv(JNIEnv*& env) {
     int status = jvm->GetEnv((void**)&env, JNI_VERSION_1_6);
-    // 获取当前native线程是否有没有被附加到jvm环境中
+    // Determine whether the current native thread is attached to the JVM
     switch (status) {
         case JNI_EDETACHED: {
             jvm->AttachCurrentThread(&env, nullptr);
