@@ -319,7 +319,8 @@ jobs:
     name: Deploy
     permissions:
       contents: read
-      id-token: write        # <-- Add this line
+      pages: write
+      id-token: write
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
