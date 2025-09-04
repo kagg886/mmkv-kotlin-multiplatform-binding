@@ -3,6 +3,16 @@ description: 'Runs JVM tests using Gradle'
 runs:
   using: "composite"
   steps:
-    - name: Test it
-      run: ./gradlew jvmTest
-      shell: bash 
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Environment
+      uses: ./.github/actions/setup-base
+
+    - name: Publish
+      run: ./gradlew :core:dokkaGenerate
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: core/build/dokka/html

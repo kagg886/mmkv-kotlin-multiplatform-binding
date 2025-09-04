@@ -1,0 +1,37 @@
+name: dokka.yaml
+on:
+  workflow_dispatch:
+
+jobs:
+  release-dokka:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - name: Publish
+        run: ./gradlew :core:dokkaGenerate
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: core/build/dokka/html
+
+  publish:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs:
+      - release-dokka
+    runs-on: ubuntu-latest
+    name: Deploy
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

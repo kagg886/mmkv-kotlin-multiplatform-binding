@@ -317,6 +317,9 @@ jobs:
       - release-dokka
     runs-on: ubuntu-latest
     name: Deploy
+    permissions:
+      contents: read
+      id-token: write        # <-- Add this line
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
