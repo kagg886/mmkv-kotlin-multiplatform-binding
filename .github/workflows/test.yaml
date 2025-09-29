@@ -36,6 +36,15 @@ jobs:
       - name: Run Test
         uses: ./.github/actions/test-jvm
 
+      - name: Upload crash logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jvm-crash
+          path: |
+            /home/runner/work/**/hs_err_pid*.log
+            /home/runner/work/**/core/core.*
+
   test-jvm-macos:
     runs-on: macos-15
     permissions:
