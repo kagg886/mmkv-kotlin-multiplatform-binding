@@ -13,12 +13,12 @@ jobs:
         uses: ./.github/actions/setup-base
 
       - name: Publish
-        run: ./gradlew :core:dokkaGenerate
+        run: ./gradlew :dokkaGenerate
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: core/build/dokka/html
+          path: build/dokka/html
 
   publish:
     environment:

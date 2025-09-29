@@ -1,6 +1,7 @@
 package top.kagg886.mkmb
 
 import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
 
 actual val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader by lazy {
     MMKVOptions.MMKVCLibLoader { "mmkvc" }
@@ -140,6 +141,8 @@ actual fun MMKV.Companion.initialize(
     }
 
     NativeMMKV.mmkvc_init(path, options.logLevel.ordinal, data)
+
+    _initialized.update { true }
 }
 
 actual fun MMKV.Companion.defaultMMKV(mode: MMKVMode, cryptKey: String?): MMKV = JNIPointerMMKV(NativeMMKV.mmkvc_defaultMMKV(mode.value, cryptKey))

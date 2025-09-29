@@ -1,0 +1,32 @@
+package top.kagg886.mkmb.ext
+
+import android.os.Parcelable
+import top.kagg886.mkmb.MMKV
+import top.kagg886.mkmb.ext.util.asParcelable
+import top.kagg886.mkmb.ext.util.getBuffer
+import top.kagg886.mkmb.ext.util.set
+import top.kagg886.mkmb.ext.util.toBuffer
+import kotlin.reflect.KClass
+
+/**
+ * ================================================
+ * Author:     886kagg
+ * Created on: 2025/9/26 20:51
+ * ================================================
+ */
+
+fun <T : Parcelable> MMKV.set(key: String, value: T, expire: Int) =
+    if (this !is DelegatedMMKV) error("") else delegate.set(key, value.toBuffer(), expire).apply {
+        center[mmapID]?.listener?.forEach { it(key) }
+    }
+
+
+fun <T : Parcelable> MMKV.getParcelable(key: String, clazz: KClass<T>, default: T? = null): T? {
+    if (this !is DelegatedMMKV) {
+        error("")
+    }
+    if (!exists(key)) {
+        return default
+    }
+    return delegate.getBuffer(key).asParcelable(clazz)
+}

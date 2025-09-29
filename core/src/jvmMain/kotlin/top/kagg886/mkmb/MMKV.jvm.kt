@@ -1,6 +1,7 @@
 package top.kagg886.mkmb
 
 import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
 import top.kagg886.mkmb.JvmTarget.*
 import java.io.File
 import java.lang.foreign.Arena
@@ -134,7 +135,7 @@ actual fun MMKV.Companion.initialize(path: String, options: MMKVOptions) {
     NativeMMKV.mmkvc_init(path, options.logLevel.level) { level, tag, it ->
         options.logFunc(MMKVOptions.LogLevel.from(level), tag, it)
     }
-    initialized = true
+    _initialized.update { true }
 }
 
 actual fun MMKV.Companion.defaultMMKV(mode: MMKVMode, cryptKey: String?): MMKV {
