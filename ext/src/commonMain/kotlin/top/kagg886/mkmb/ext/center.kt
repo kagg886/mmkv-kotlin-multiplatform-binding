@@ -60,7 +60,15 @@ fun MMKV.Companion.mmkvWithID(mmapID: String, mode: MMKVMode = MMKVMode.SINGLE_P
  * @param default The value to return when the key does not exist or the buffer is empty.
  * @return The decoded value as [T], or [default] when absent.
  */
-inline fun <reified T : Any> MMKV.get(key: String, default: T? = null): T? = get(key, T::class, default)
+inline fun <reified T : Any> MMKV.get(key: String, default: T): T = get(key, T::class) ?: default
+
+/**
+ * Type-safe inline convenience for [get] using reified type [T].
+ *
+ * @param key The key to read.
+ * @return The decoded value as [T], or null when absent.
+ */
+inline fun <reified T : Any> MMKV.get(key: String): T? = get(key, T::class)
 
 /**
  * Reads a value from MMKV and decodes it as the given Kotlin class [clazz].
