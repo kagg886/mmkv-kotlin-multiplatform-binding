@@ -19,14 +19,3 @@ fun <T : Parcelable> MMKV.set(key: String, value: T, expire: Int) =
     if (this !is DelegatedMMKV) error("") else delegate.set(key, value.toBuffer(), expire).apply {
         center[mmapID]?.listener?.forEach { it(key) }
     }
-
-
-fun <T : Parcelable> MMKV.getParcelable(key: String, clazz: KClass<T>, default: T? = null): T? {
-    if (this !is DelegatedMMKV) {
-        error("")
-    }
-    if (!exists(key)) {
-        return default
-    }
-    return delegate.getBuffer(key).asParcelable(clazz)
-}
