@@ -5,15 +5,12 @@ import platform.Foundation.NSCodingProtocol
 import platform.Foundation.NSURL
 import top.kagg886.mkmb.MMKV
 import top.kagg886.mkmb.MMKVOptions
-import top.kagg886.mkmb.ext.defaultMMKV
 import top.kagg886.mkmb.ext.get
-import top.kagg886.mkmb.ext.getNSCoding
 import top.kagg886.mkmb.ext.mmkvWithID
-import top.kagg886.mkmb.initialize
 import top.kagg886.mkmb.ext.set
+import top.kagg886.mkmb.initialize
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
@@ -42,10 +39,10 @@ class MMKViOSStoreTest {
 
         val mmkv = MMKV.mmkvWithID("test-nscoding")
 
-        assertNull(mmkv.getNSCoding<NSURL>("data"))
+        assertNull(mmkv.get<NSURL>("data"))
 
         mmkv.set("data", url as NSCodingProtocol)
 
-        assertEquals(url,mmkv.getNSCoding<NSURL>("data"))
+        assertEquals(url,mmkv.get<NSURL>("data"))
     }
 }

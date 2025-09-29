@@ -19,14 +19,3 @@ fun <T : NSCodingProtocol> MMKV.set(key: String, value: T, expire: Int = 0) =
     if (this !is DelegatedMMKV) error("") else delegate.set(key, value.toBuffer(), expire).apply {
         center[mmapID]?.listener?.forEach { it(key) }
     }
-
-
-inline fun <reified T: NSCodingProtocol> MMKV.getNSCoding(key: String, default:T? = null) = getNSCoding(key,T::class, default)
-
-fun <T : NSCodingProtocol> MMKV.getNSCoding(key: String, clazz: KClass<T>, default: T? = null): T? {
-    if (!exists(key)) {
-        return default
-    }
-
-    return getFromPlatform(clazz,getBuffer(key))
-}
