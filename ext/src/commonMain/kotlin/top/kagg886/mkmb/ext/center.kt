@@ -127,4 +127,4 @@ fun MMKV.addEventListener(listener: (String) -> Unit): () -> Unit {
     }
 }
 
-expect fun <T: Any> getFromPlatform(clazz: KClass<T>,buffer: Buffer): T
+internal expect fun <T: Any> getFromPlatform(clazz: KClass<T>,buffer: Buffer): T

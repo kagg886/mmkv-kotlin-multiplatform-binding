@@ -92,7 +92,7 @@ private fun NSData.toByteArray(): ByteArray {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-fun ByteArray.toNSData(): NSData = usePinned {
+private fun ByteArray.toNSData(): NSData = usePinned {
     NSData.dataWithBytes(
         bytes = it.addressOf(0),
         length = this.size.toULong(),

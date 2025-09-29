@@ -3,4 +3,4 @@ package top.kagg886.mkmb.ext
 import kotlinx.io.Buffer
 import kotlin.reflect.KClass
 
-actual fun <T : Any> getFromPlatform(clazz: KClass<T>, buffer: Buffer): T = error("unsupported type : ${clazz.simpleName}")
+internal actual fun <T : Any> getFromPlatform(clazz: KClass<T>, buffer: Buffer): T = error("unsupported type : ${clazz.simpleName}")

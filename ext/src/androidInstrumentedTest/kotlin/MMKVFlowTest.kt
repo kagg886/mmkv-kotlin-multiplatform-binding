@@ -1,3 +1,4 @@
+import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.cancelAndJoin
@@ -6,22 +7,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.yield
-import okio.FileSystem
-import okio.Path.Companion.toPath
-import okio.SYSTEM
+import org.junit.Before
+import org.junit.Test
 import top.kagg886.mkmb.MMKV
 import top.kagg886.mkmb.MMKVOptions
 import top.kagg886.mkmb.ext.defaultMMKV
 import top.kagg886.mkmb.ext.flow
 import top.kagg886.mkmb.ext.mmkvWithID
 import top.kagg886.mkmb.initialize
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
-import kotlin.time.Duration.Companion.seconds
+import java.io.File
 
 /**
  * ================================================
@@ -30,24 +24,20 @@ import kotlin.time.Duration.Companion.seconds
  * ================================================
  */
 class MMKVFlowTest {
-    @BeforeTest
+    @Before
     fun beforeAll() {
-        if (!MMKV.initialized) {
-            val testFile = "mmkv-ext-flow-test".toPath().apply {
-                if (FileSystem.SYSTEM.exists(this)) {
-                    FileSystem.SYSTEM.deleteRecursively(this)
-                }
-                FileSystem.SYSTEM.createDirectory(this)
-            }
-            MMKV.initialize(FileSystem.SYSTEM.canonicalize(testFile.normalized()).toString()) {
-                logLevel = MMKVOptions.LogLevel.Debug
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        appContext.cacheDir.listFiles()?.forEach(File::deleteRecursively)
+        MMKV.initialize(appContext.cacheDir.absolutePath) {
+            logFunc = { _,tag,string->
+                println("$tag : $string")
             }
         }
     }
 
     @Test
     fun testMMKVStringFlow() {
-        val data = MMKV.mmkvWithID("test-ext-string-flow")
+        val data = MMKV.mmkvWithID("test-string-flow")
 
         runBlocking {
             val flow = data.flow<String>("test")
@@ -71,7 +61,7 @@ class MMKVFlowTest {
 
     @Test
     fun testMMKVStringFlowError() {
-        val data = MMKV.mmkvWithID("test-ext-error-flow")
+        val data = MMKV.mmkvWithID("test-error-flow")
 
         runBlocking {
             val flow = data.flow<String>("test")

@@ -13,7 +13,7 @@ import kotlin.native.internal.reflect.objCNameOrNull
 import kotlin.reflect.KClass
 
 @OptIn(InternalForKotlinNative::class, BetaInteropApi::class)
-actual fun <T : Any> getFromPlatform(clazz: KClass<T>, buffer: Buffer): T {
+internal actual fun <T : Any> getFromPlatform(clazz: KClass<T>, buffer: Buffer): T {
     if (clazz.objCNameOrNull != null) { //FIXME：只对kotlin类有效
         val objClass = NSClassFromString(clazz.objCNameOrNull!!) ?: error("only the @BindClassToObjCName annotation can work correctly")
 
