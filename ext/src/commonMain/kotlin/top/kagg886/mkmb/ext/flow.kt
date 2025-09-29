@@ -26,13 +26,13 @@ import top.kagg886.mkmb.MMKV
  */
 inline fun <reified T : Any> MMKV.flow(key: String, default: T? = null) = callbackFlow {
     val dispose = addEventListener {
-        val data = get<T>(key, default)
+        val data = get<T>(key) ?: default
         if (trySend(data).isFailure) {
             error("send failed")
         }
     }
 
-    trySend(get<T>(key, default))
+    trySend(get<T>(key) ?: default)
 
     awaitClose {
         dispose()
