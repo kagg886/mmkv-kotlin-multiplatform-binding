@@ -14,10 +14,12 @@ import kotlin.reflect.KClass
 
 @OptIn(InternalForKotlinNative::class, BetaInteropApi::class)
 internal actual fun <T : Any> getFromPlatform(clazz: KClass<T>, buffer: Buffer): T {
-    if (clazz.objCNameOrNull != null) { //FIXME：只对kotlin类有效
-        val objClass = NSClassFromString(clazz.objCNameOrNull!!) ?: error("only the @BindClassToObjCName annotation can work correctly")
+    val nsClass = (clazz.objCNameOrNull ?: clazz.qualifiedName ?: clazz.simpleName)?.let {
+        NSClassFromString(it)
+    }
 
-        return buffer.asNSCodingProtocol(objClass) as T
+    if (nsClass != null) {
+        return buffer.asNSCodingProtocol(nsClass) as T
     }
 
     error("unsupported type : ${clazz.simpleName}")
