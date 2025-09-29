@@ -33,6 +33,7 @@ dependencyResolutionManagement {
 }
 include(":core")
 include(":core-java")
+include(":ext")
 include(":benchmark")
 
 include("platform:platform-windows")

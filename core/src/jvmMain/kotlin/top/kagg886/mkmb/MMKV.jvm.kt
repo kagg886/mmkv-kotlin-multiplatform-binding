@@ -1,11 +1,13 @@
 package top.kagg886.mkmb
 
 import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
 import top.kagg886.mkmb.JvmTarget.*
 import java.io.File
 import java.lang.foreign.Arena
 import java.lang.foreign.MemorySegment
 import java.lang.foreign.SymbolLookup
+import java.nio.file.Files
 
 internal class PanamaMMKV(private val ptr: MemorySegment) : MMKV {
     private var alive by atomic(true)
@@ -134,7 +136,7 @@ actual fun MMKV.Companion.initialize(path: String, options: MMKVOptions) {
     NativeMMKV.mmkvc_init(path, options.logLevel.level) { level, tag, it ->
         options.logFunc(MMKVOptions.LogLevel.from(level), tag, it)
     }
-    initialized = true
+    _initialized.update { true }
 }
 
 actual fun MMKV.Companion.defaultMMKV(mode: MMKVMode, cryptKey: String?): MMKV {
@@ -156,31 +158,18 @@ actual val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader by lazy {
             LINUX -> "so"
             WINDOWS -> "dll"
         }
-        val tmp = File(System.getProperty("user.home")).resolve(".cache").resolve("$name.$ext")
 
-        if (tmp.exists()) {
-            val sha256 = tmp.sha256()
-            val resourceSha256 =
-                MMKV::class.java.getResourceAsStream("/build-${jvmTarget.name.lowercase()}.hash")!!
-                    .readAllBytes().decodeToString()
-            if (sha256 != resourceSha256) {
-                tmp.parentFile!!.mkdirs()
-                val stream = MMKV::class.java.getResourceAsStream("/$name.$ext")!!
-                tmp.createNewFile()
-                stream.use {
-                    tmp.writeBytes(it.readAllBytes())
-                }
-            }
-        } else {
-            tmp.parentFile!!.mkdirs()
-            val stream = MMKV::class.java.getResourceAsStream("/$name.$ext")!!
-            tmp.createNewFile()
-            stream.use {
-                tmp.writeBytes(it.readAllBytes())
-            }
-        }
+        val tmpFile: File = Files.createTempFile(
+            "mmkv",
+            ".$ext"
+        ).toFile()
 
-        tmp.absolutePath
+        tmpFile.deleteOnExit()
+
+        // 将资源里的库写到临时文件
+        val stream = MMKV::class.java.getResourceAsStream("/$name.$ext") ?: error("Library resource /$name.$ext not found")
+        stream.use { tmpFile.writeBytes(it.readAllBytes()) }
+
+        tmpFile.absolutePath
     }
 }
-

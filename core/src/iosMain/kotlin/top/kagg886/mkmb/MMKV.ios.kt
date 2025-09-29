@@ -1,6 +1,7 @@
 package top.kagg886.mkmb
 
 import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
 import platform.darwin.NSObject
 
 internal class AppleMMKV(internal val handle: NSObject) : MMKV {
@@ -139,6 +140,7 @@ actual fun MMKV.Companion.initialize(path: String, options: MMKVOptions) {
     NativeMMKVImpl.initialize(path, options.logLevel.ordinal.toULong()) { level, tag, it ->
         options.logFunc(MMKVOptions.LogLevel.from(level.toInt()), tag, it)
     }
+    _initialized.update { true }
 }
 
 actual val MMKV.Companion.defaultLoader: MMKVOptions.MMKVCLibLoader by lazy {

@@ -13,8 +13,8 @@ interface MMKV {
          * @see initialize
          * @see destroy
          */
-        var initialized: Boolean by atomic(false)
-            internal set
+        internal val _initialized = atomic(false)
+        val initialized: Boolean get() = _initialized.value
     }
 
     /**
