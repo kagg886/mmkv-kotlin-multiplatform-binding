@@ -15,7 +15,7 @@ import kotlin.reflect.KClass
  * ================================================
  */
 
-fun <T : Parcelable> MMKV.set(key: String, value: T, expire: Int) =
+fun <T : Parcelable> MMKV.set(key: String, value: T, expire: Int = 0) =
     if (this !is DelegatedMMKV) error("") else delegate.set(key, value.toBuffer(), expire).apply {
         center[mmapID]?.listener?.forEach { it(key) }
     }

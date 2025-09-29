@@ -10,7 +10,7 @@ import top.kagg886.mkmb.ext.defaultMMKV
 import top.kagg886.mkmb.ext.get
 import top.kagg886.mkmb.ext.mmkvWithID
 import top.kagg886.mkmb.initialize
-import top.kagg886.mkmb.set
+import top.kagg886.mkmb.ext.set
 import java.io.File
 import kotlin.collections.listOf
 
@@ -115,7 +115,7 @@ class MMKVCenterTest {
 
         val mmkv = MMKV.mmkvWithID("test-parcelable-store")
         assertNull(mmkv.get("key"))
-        mmkv.set("key",data)
+        mmkv.set("key", data)
         assertEquals(data,mmkv.get("key"))
     }
 }
