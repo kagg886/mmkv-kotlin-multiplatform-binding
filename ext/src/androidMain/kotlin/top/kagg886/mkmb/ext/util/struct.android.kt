@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
  */
 
 
-private const val TAG_PARCELABLE: Byte = 8
+private const val TAG_PARCELABLE: Byte = 9
 
 internal fun <T : Parcelable> T.toBuffer(): Buffer = Buffer().apply {
     writeByte(TAG_PARCELABLE)

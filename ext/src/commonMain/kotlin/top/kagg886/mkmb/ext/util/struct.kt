@@ -30,9 +30,9 @@ private const val TAG_STRING_LIST: Byte = 6
 private const val TAG_BYTE_ARRAY: Byte = 7
 private const val TAG_BOOLEAN: Byte = 8
 
-private const val TAG_PARCELABLE: Byte = 8
+private const val TAG_PARCELABLE: Byte = 9
 
-private const val TAG_OBJC_OBJECT: Byte = 9
+private const val TAG_OBJC_OBJECT: Byte = 10
 
 internal fun Byte.tagToString() = when (this) {
     TAG_INT -> "INT"
@@ -93,7 +93,7 @@ internal fun Boolean.toBuffer() = Buffer().apply {
 }
 
 internal fun Buffer.asInt() = readByte().let {
-    if (it == TAG_INT) readInt() else error("can't be read as long because the tag is ${it.tagToString()}")
+    if (it == TAG_INT) readInt() else error("can't be read as int because the tag is ${it.tagToString()}")
 }
 
 internal fun Buffer.asLong() = readByte().let {
@@ -115,7 +115,6 @@ internal fun Buffer.asStringList() = readByte().let {
         error("can't be read as string-list because the tag is $TAG_STRING_LIST")
     }
     val size = readInt()
-    println("size: $size")
 
     List(size) {
         readByteArray(readInt()).decodeToString()

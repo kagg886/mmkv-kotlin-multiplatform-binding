@@ -29,7 +29,7 @@ import platform.posix.memcpy
  * ================================================
  */
 
-private const val TAG_OBJC_OBJECT: Byte = 9
+private const val TAG_OBJC_OBJECT: Byte = 10
 
 
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
