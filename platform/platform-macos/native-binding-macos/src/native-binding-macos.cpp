@@ -41,6 +41,11 @@ extern "C" MMKV* mmkvc_defaultMMKV(int mode, char* cryptKey) {
     } else {
         mmkv = MMKV::defaultMMKV((MMKVMode)mode);
     }
+
+    if (mmkv == nullptr) {
+        return nullptr;
+    }
+
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return mmkv;
 }
@@ -53,6 +58,10 @@ extern "C" MMKV* mmkvc_mmkvWithID(char* id, int mode, char* cryptKey) {
     } else {
         mmkv = MMKV::mmkvWithID(id, (MMKVMode)mode);
     }
+    if (mmkv == nullptr) {
+        return nullptr;
+    }
+    
     mmkv->enableAutoKeyExpire(MMKV::ExpireNever);
     return mmkv;
 }
