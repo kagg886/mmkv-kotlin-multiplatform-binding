@@ -7,6 +7,10 @@ on:
         required: false
         default: false
         type: boolean
+      RELEASE_LIB_CORE_EXT:
+        description: 'Release Core Ext Library'
+        required: false
+        default: false
       RELEASE_LIB_CORE_JAVA:
         description: 'Release Core Java Library'
         required: false
@@ -134,6 +138,34 @@ jobs:
 
       - name: Publish
         run: ./gradlew :core:publishAndReleaseToMavenCentral
+        env:
+          org.gradle.configuration-cache: false
+          SKIP_SIGN: false
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+
+  release-core-ext:
+    if: ${{ inputs.RELEASE_LIB_CORE_EXT }}
+    needs:
+      - test-jvm-windows
+      - test-jvm-linux
+      - test-jvm-macos
+      - test-android
+      - test-ios
+    runs-on: macos-15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-base
+
+      - name: Publish
+        run: ./gradlew :ext:publishAndReleaseToMavenCentral
         env:
           org.gradle.configuration-cache: false
           SKIP_SIGN: false
@@ -293,6 +325,7 @@ jobs:
   release-dokka:
     needs:
       - release-core
+      - release-core-ext
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -302,7 +335,7 @@ jobs:
         uses: ./.github/actions/setup-base
 
       - name: Publish
-        run: ./gradlew :core:dokkaGenerate
+        run: ./gradlew :dokkaGenerate
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
