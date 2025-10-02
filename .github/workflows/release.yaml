@@ -45,7 +45,7 @@ on:
         type: boolean
 jobs:
   test-jvm-windows:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA || inputs.RELEASE_LIB_CORE_EXT }}
     runs-on: windows-latest
     permissions:
       contents: read
@@ -62,7 +62,7 @@ jobs:
         uses: ./.github/actions/test-jvm
 
   test-jvm-linux:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_WINDOWS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA || inputs.RELEASE_LIB_CORE_EXT }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -77,7 +77,7 @@ jobs:
         uses: ./.github/actions/test-jvm
 
   test-jvm-macos:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_MACOS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_MACOS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_JAVA || inputs.RELEASE_LIB_CORE_EXT }}
     runs-on: macos-15
     permissions:
       contents: read
@@ -91,7 +91,7 @@ jobs:
         uses: ./.github/actions/test-jvm
 
   test-android:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_ANDROID || inputs.RELEASE_LIB_CORE }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_ANDROID || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_EXT }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -105,7 +105,7 @@ jobs:
         uses: ./.github/actions/test-android
 
   test-ios:
-    if: ${{ inputs.RELEASE_LIB_PLATFORM_IOS || inputs.RELEASE_LIB_CORE }}
+    if: ${{ inputs.RELEASE_LIB_PLATFORM_IOS || inputs.RELEASE_LIB_CORE || inputs.RELEASE_LIB_CORE_EXT }}
     runs-on: macos-15
     permissions:
       contents: read
@@ -322,40 +322,3 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVENCENTRALPASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRETKEYRING }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
-
-  release-dokka:
-    needs:
-      - release-core
-      - release-core-ext
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Environment
-        uses: ./.github/actions/setup-base
-
-      - name: Publish
-        run: ./gradlew :dokkaGenerate
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: core/build/dokka/html
-
-  publish:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs:
-      - release-dokka
-    runs-on: ubuntu-latest
-    name: Deploy
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
