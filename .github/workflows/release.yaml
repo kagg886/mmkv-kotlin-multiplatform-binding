@@ -11,6 +11,7 @@ on:
         description: 'Release Core Ext Library'
         required: false
         default: false
+        type: boolean
       RELEASE_LIB_CORE_JAVA:
         description: 'Release Core Java Library'
         required: false
